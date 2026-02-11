@@ -1,0 +1,630 @@
+
+AI INFRASTRUCTURE
+UPGRADE PLAYBOOK
+Digital Transformation, Cloud Integration, Cost Optimization & Safety
+Prepared for: Tommie | Kuraray America Home Data Center
+Date: February 7, 2026
+Version: 2.0 — Corrected & Tailored to Actual Infrastructure
+Built with Claude Opus 4.6 | Stripped of ChatGPT Hallucinations
+
+Table of Contents
+
+
+
+Section 0: Corrections from the Original Guide
+The ChatGPT-generated guide contained several fabrications and inaccuracies that must be corrected before any implementation. This section documents what was wrong so the bot never acts on false information.
+
+0.1 Hallucinated Model Names
+The original guide referenced models that do not exist:
+Fake Name in Guide
+Reality
+Correct Alternative
+GPT-5.1-nano
+Does not exist
+gpt-4o-mini or local Ollama model
+GPT-5.2-mini
+Does not exist
+gpt-4o-mini via OpenRouter
+Gemini 3 Pro
+Gemini 3 is real (Nov 2025)
+gemini-3-pro (correct name)
+HuggingFace falcon-7b
+Exists but deprecated/weak
+Qwen 2.5, Llama 3.1, Mistral v0.3
+
+0.2 Fabricated Projects and Claims
+	•	"Nanobot" from HKU: No verifiable open-source project matching this description exists with the features described. The config examples were fabricated.
+	•	Broken citations (the ï¿¼ symbols): Every inline citation in the original guide was a broken reference marker, not actual sourced claims. None of the numbered references pointed to real sources.
+	•	"$0.05 per 1M tokens" pricing: This pricing was invented. Actual cheap models via OpenRouter include Gemini Flash at ~$0.075/1M input tokens, or Llama models at similar rates. Always check openrouter.ai/models for current pricing.
+	•	"97% cost reduction" claim: Unverified. Realistic savings from model routing and heartbeat optimization are 50–80%, which is still excellent.
+
+0.3 What Was Accurate
+The following tools and platforms referenced in the guide are real and verified:
+	•	OpenClaw (formerly Clawdbot/Moltbot) — Real, 150K+ GitHub stars, runs locally via Node.js
+	•	just-bash by Vercel Labs — Real sandboxed bash environment for AI agents (npm package)
+	•	Google Antigravity IDE — Real, launched Nov 18, 2025, free preview with Gemini 3 Pro
+	•	Gemini CLI — Real Google tool with agent skills, hooks, and consent prompts
+	•	n8n workflow automation — Real, self-hosted, excellent for scheduling AI tasks
+	•	OpenRouter — Real multi-model API router at openrouter.ai
+	•	ElevenLabs TTS — Real voice synthesis API with free tier
+	•	Ollama, LocalAI, Stable Diffusion, Whisper — All real and well-established
+
+Section 1: The Digital Transformation Administrator Role
+This is the most critical role in the entire AI administrator ecosystem. It is the strategic intelligence layer that drives continuous improvement across every aspect of the infrastructure. This role must use the most capable model available (Claude Opus 4.6 or equivalent) because its job is to think, evaluate, recommend, and orchestrate change.
+
+1.1 Role Definition
+Role Name: Digital Transformation Administrator (DTA)
+Model Requirement: Claude Opus 4.6 (or highest-tier model available via API)
+Execution Mode: Cloud-based API calls (not local inference — this role needs maximum intelligence, not speed)
+Scope: Entire infrastructure — hardware, software, AI models, APIs, automation, networking, cost efficiency, security posture, and emerging technology adoption
+
+1.2 Core Responsibilities
+The DTA is not a passive monitor. It is an active scout, analyst, and recommender. Its responsibilities span seven domains:
+
+Domain 1: Technology Scouting & Intelligence Gathering
+The DTA continuously scans for improvements across:
+	•	New AI models (open-source and commercial) — evaluating benchmarks, cost, and fit for specific admin roles
+	•	New tools and frameworks (agent platforms, orchestration tools, sandboxed environments)
+	•	Infrastructure improvements (better hardware utilization, new self-hosted services)
+	•	Security advisories and patches relevant to our stack
+	•	Community developments around OpenClaw, Ollama, Tailscale, and other tools we use
+
+YouTube Intelligence Feed: The DTA should routinely review Tommie’s YouTube liked videos for AI/IT content. Filter out music and non-tech content. Extract actionable insights from videos covering topics like:
+	•	AI agent automation and orchestration
+	•	Self-hosted AI tool configurations
+	•	Cost optimization techniques for API usage
+	•	New model releases and benchmark comparisons
+	•	Home lab and data center architecture
+
+Domain 2: Model Selection & Optimization
+The DTA evaluates and recommends which models serve which roles:
+Admin Role
+Current Model
+Recommended Tier
+Rationale
+Digital Transformation
+Claude Opus 4.6
+Highest available
+Strategic thinking, complex analysis
+Security Admin
+TBD by DTA
+High (Sonnet 4.5+)
+Threat analysis needs strong reasoning
+Network Admin
+TBD by DTA
+Medium (Sonnet/local)
+Config tasks are more procedural
+Systems Admin
+TBD by DTA
+Medium (Sonnet/local)
+Monitoring, log analysis
+Heartbeat/Cron
+Local Ollama
+Cheapest possible
+Simple check/trigger tasks
+
+The DTA must never select embedding models for generative tasks. This was a specific bug encountered in our system — model selection logic must verify the model type before assignment.
+
+Domain 3: Token Management & Cost Efficiency
+	•	Monitor daily/weekly/monthly API token consumption across all roles
+	•	Identify wasteful patterns (oversized contexts, unnecessary heartbeats, redundant API calls)
+	•	Recommend heartbeat interval adjustments based on activity patterns
+	•	Evaluate OpenRouter pricing changes and recommend model swaps when cheaper equivalent options appear
+	•	Set and enforce monthly API budget caps with alerting thresholds (e.g., alert at 60%, hard stop at 90%)
+
+Domain 4: Infrastructure Architecture
+	•	Evaluate cloud VM options (Azure free tier, AWS free tier, GCP $300 credit) for failover and offloaded tasks
+	•	Design the local vs. cloud task division (keep private/low-latency tasks local, offload web scraping and heavy inference to cloud)
+	•	Plan and recommend Tailscale VPN topology for secure multi-node communication
+	•	Assess multi-node AI orchestration opportunities (distributed inference across Mac Mini + other hardware)
+
+Domain 5: Automation & Workflow Design
+	•	Design n8n workflows for recurring tasks (morning briefings, email triage, system monitoring)
+	•	Identify manual tasks that can be automated and propose implementation plans
+	•	Evaluate new OpenClaw skills and integrations as they become available
+	•	Design approval workflows for destructive operations (delete, restart, send)
+
+Domain 6: Security Posture Review
+	•	Coordinate with Security Admin on vulnerability assessments
+	•	Review and recommend API key rotation schedules
+	•	Evaluate agent permission boundaries (what each admin role can and cannot do)
+	•	Monitor for supply chain risks in dependencies (especially OpenClaw plugins)
+
+Domain 7: Performance & Efficiency Metrics
+	•	Track response latency across different models and providers
+	•	Monitor Ollama model performance on local hardware
+	•	Benchmark new models against current ones before recommending swaps
+	•	Report on automation ROI (time saved vs. token cost)
+
+1.3 DTA Operating Schedule
+Frequency
+Task
+Token Budget
+Daily
+Scan for critical updates, check API costs, review system health reports from other admins
+~5K tokens
+Weekly
+Full technology scan, model pricing review, YouTube intelligence review, generate weekly improvement report
+~25K tokens
+Monthly
+Architecture review, cost optimization report, benchmark current models against new releases, recommend infrastructure changes
+~50K tokens
+Quarterly
+Full infrastructure audit, roadmap update, evaluate major platform changes (new Ollama models, OpenClaw releases, cloud pricing)
+~100K tokens
+
+1.4 DTA Output Format
+Every DTA report should follow this structure:
+	•	Executive Summary (2–3 sentences of what changed and what’s recommended)
+	•	Findings (categorized by domain, with severity: Critical / Important / Nice-to-Have)
+	•	Recommendations (specific, actionable steps with estimated cost and effort)
+	•	Metrics (token usage, cost trends, performance benchmarks)
+	•	Next Review Date
+
+Section 2: Current Infrastructure Map
+Before implementing changes, the bot must understand the existing environment it operates in.
+
+2.1 Hardware
+	•	Central Hub: Mac Mini (primary AI orchestration node)
+	•	Additional Hardware: Dell Mini PC (secondary node, potential for distributed workloads)
+	•	Network: Home LAN with Tailscale VPN overlay for secure node-to-node communication
+
+2.2 Current Software Stack
+	•	AI Runtime: Ollama (local model serving, already installed and running)
+	•	Communication: Telegram bot (Moltbot) for user interaction
+	•	VPN: Tailscale for secure multi-node connectivity
+	•	Enterprise Context: CrowdStrike-monitored work environment at Kuraray America (Intune package deployment)
+
+2.3 AI Admin Roles (Existing/Planned)
+	•	Digital Transformation Administrator (this document’s primary focus)
+	•	Security Admin — monitors threats, manages API keys, reviews access
+	•	Network Admin — manages Tailscale topology, DNS, network health
+	•	Systems Admin — monitors hardware health, disk, CPU, services
+	•	InnoBot — digital transformation scout for social media and tech platforms
+
+2.4 Known Issues to Address
+	•	Model selection bug: system has incorrectly chosen embedding models instead of generative models for chat tasks
+	•	macOS Gatekeeper issues blocking Ollama (resolved but should be monitored)
+	•	Previous connection/auth issues with Clawdbot and Claude Code installations
+	•	Gmail account with 129K+ messages needs ongoing management
+
+Section 3: Cloud-Based Failover & Always-On Capability
+The goal is to ensure the AI assistant remains available even when the Mac Mini goes offline. This section provides the actual implementation steps, not theory.
+
+3.1 Cloud Provider Selection (Free Tier)
+Provider
+Free Offer
+VM Spec
+Duration
+Best For
+Microsoft Azure
+$200 credit + free tier
+B1s (1 vCPU, 1GB)
+12 months + credit
+Familiar to Tommie (work context)
+Google Cloud
+$300 credit
+e2-micro (shared, 1GB)
+90 days credit
+Best credit amount
+AWS
+Free tier
+t2.micro (1 vCPU, 1GB)
+12 months
+Most documentation available
+Oracle Cloud
+Always Free
+ARM (4 OCPU, 24GB!)
+Indefinite
+Best specs, truly free forever
+
+DTA Recommendation: Start with Oracle Cloud Always Free for the cloud failover node. The ARM instance with 24GB RAM can actually run small Ollama models. Use Azure as secondary since Tommie already works in that ecosystem at Kuraray.
+
+3.2 Failover Architecture
+Implement a heartbeat-based failover system:
+	•	Mac Mini (primary) sends a heartbeat ping every 5 minutes to a simple health endpoint on the cloud VM
+	•	Cloud VM runs a lightweight watchdog script that monitors the heartbeat
+	•	If heartbeat is missing for 15 minutes (3 missed pings), cloud agent activates
+	•	Cloud agent sends Telegram alert: "⚠️ Local server unreachable. Cloud failover active."
+	•	When Mac Mini comes back online, it resumes as primary and cloud goes back to standby
+
+3.3 Security Requirements
+	•	Connect cloud VM to home network exclusively via Tailscale (no open ports on home network)
+	•	Store API keys in environment variables or cloud secret managers, never in code
+	•	Enable UFW firewall on cloud VM, allow only Tailscale traffic + SSH
+	•	Use SSH key authentication only, disable password auth
+
+Section 4: Tools Integration Plan
+
+4.1 Sandboxed Shell Access (just-bash)
+just-bash is a verified Vercel Labs project that provides a sandboxed bash environment for AI agents. It runs entirely in-memory with no access to the real filesystem unless explicitly granted.
+
+Installation
+npm install -g just-bash
+
+Key Capabilities
+	•	File operations (read, write, search) in virtual filesystem
+	•	Text processing (grep, sed, awk, sort) for log analysis and data manipulation
+	•	SQLite queries via sql.js (WASM-based, fully sandboxed)
+	•	Controlled network access via curl with URL allow-lists (disabled by default)
+
+Security Model
+	•	No access to real filesystem by default (in-memory only)
+	•	No network access by default (must explicitly enable with allow-list)
+	•	Protected against infinite loops
+	•	No binary execution (pure TypeScript interpretation)
+
+Note: The ChatGPT guide showed incorrect API usage. The correct import is from 'just-bash', and the class is either Bash (simple) or Sandbox (Vercel SDK compatible). See github.com/vercel-labs/just-bash for current API.
+
+4.2 Web Scraping & Information Retrieval
+Give the agent controlled ability to fetch web content:
+
+Implementation Approach
+	•	Build a fetch_url() function with URL allow-listing
+	•	Default allowed domains: GitHub API, OpenRouter API, weather APIs, news APIs, YouTube Data API
+	•	Strip HTML to text for processing (use readability or similar parser)
+	•	Rate limit: max 10 requests per minute to any single domain
+	•	Cache responses for 1 hour to avoid redundant fetches
+
+DTA-Specific Web Access
+The Digital Transformation Administrator needs broader web access for technology scouting:
+	•	Allow access to: Hacker News API, GitHub trending, ArXiv API, Ollama model registry
+	•	Allow access to: OpenRouter model list, Anthropic docs, Google AI blog
+	•	YouTube Data API access for reviewing liked videos (requires YouTube API key)
+
+4.3 Voice Integration (ElevenLabs)
+Text-to-speech for critical alerts and briefings:
+	•	API Key: Store as ELEVENLABS_API_KEY environment variable
+	•	Free tier: ~10,000 characters/month (sufficient for alerts and short briefings)
+	•	Use case: Morning briefing audio sent via Telegram voice message
+	•	Use case: Critical security alerts delivered as voice for immediate attention
+
+4.4 Workflow Automation (n8n)
+n8n is the orchestration backbone for scheduled tasks:
+
+Deploy via Docker
+docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n n8nio/n8n
+
+Priority Workflows to Build
+Workflow
+Description
+Priority
+Morning Briefing
+7 AM: Calendar + Weather + Email summary + AI news digest → Telegram
+P1 - Do First
+System Health Check
+Every hour: CPU, disk, memory, service status → alert only on issues
+P1 - Do First
+Email Triage
+Every 5 min: Classify, draft replies, flag urgent → Telegram for urgent
+P2 - Do Next
+DTA Weekly Scan
+Sunday 9 PM: Full tech scan, pricing review, generate report
+P2 - Do Next
+API Cost Monitor
+Daily: Aggregate token usage, alert if approaching budget threshold
+P2 - Do Next
+Failover Heartbeat
+Every 5 min: Ping cloud VM with status
+P3 - After Cloud Setup
+
+Section 5: Model Routing & Cost Optimization
+
+5.1 Multi-Model Architecture
+The single biggest cost savings comes from routing tasks to the cheapest model that can handle them. This is the DTA’s primary ongoing optimization target.
+
+Model Routing Strategy
+Task Type
+Model
+Provider
+Est. Cost
+Strategic analysis (DTA)
+Claude Opus 4.6
+Anthropic API
+$15/1M input
+Complex reasoning
+Claude Sonnet 4.5
+Anthropic/OpenRouter
+$3/1M input
+Routine admin tasks
+Llama 3.1 8B
+Ollama (local)
+$0 (electricity only)
+Heartbeat/cron checks
+Qwen 2.5 3B
+Ollama (local)
+$0 (electricity only)
+Quick classifications
+Gemini Flash
+OpenRouter
+~$0.075/1M input
+Embeddings
+nomic-embed-text
+Ollama (local)
+$0 (electricity only)
+
+Critical: Always verify model type before assignment. Embedding models (nomic-embed-text, mxbai-embed-large) must NEVER be selected for generative/chat tasks. Implement a type check in the routing logic.
+
+5.2 OpenRouter Configuration
+OpenRouter (openrouter.ai) provides a single API key to access multiple model providers. Set up:
+	•	Create account at openrouter.ai and generate API key
+	•	Store key as OPENROUTER_API_KEY environment variable
+	•	Configure as fallback provider: Local Ollama → OpenRouter (cheap model) → Direct API (expensive model)
+	•	Set monthly spending limit in OpenRouter dashboard
+
+5.3 Memory & Context Optimization
+These settings apply if using OpenClaw or similar agent frameworks:
+
+Memory Compaction
+	•	Enable memory flush to vector store when context exceeds threshold
+	•	Use local embedding model (nomic-embed-text via Ollama) for memory embeddings — this costs $0
+	•	Implement session-based vector search so flushed memories can be recalled when relevant
+	•	Set context pruning with cache-TTL mode to auto-expire old context entries
+
+Heartbeat Optimization
+	•	Increase heartbeat interval to 60 minutes during off-peak hours (10 PM – 7 AM)
+	•	Use the smallest local model for heartbeat tasks (Qwen 2.5 3B or similar)
+	•	Heartbeat should only check: is it time to run a scheduled task? If not, do nothing.
+	•	Never use Claude Opus or any paid API model for heartbeat checks
+
+5.4 Monthly Budget Target
+Category
+Monthly Budget
+Notes
+DTA (Claude Opus 4.6)
+$15–25
+Weekly scans + monthly report
+Other Admin Roles (Sonnet)
+$5–10
+Security/Network/Systems tasks
+OpenRouter fallback
+$5–10
+Cheap models for overflow
+Local Ollama
+$0
+Electricity only
+Cloud VM
+$0
+Free tier/credits
+TOTAL TARGET
+$25–45/month
+With proper routing
+
+Section 6: Safety Guardrails & Governance
+Autonomous AI agents with system access are powerful but dangerous. These guardrails are non-negotiable.
+
+6.1 Confirmation Requirements
+Action Category
+Approval Required?
+Method
+Read files/logs
+No
+Automatic
+Send Telegram notification
+No
+Automatic
+Draft email reply
+No (draft only)
+Save as draft, notify user
+Send email
+YES
+Telegram confirmation button
+Delete files
+YES
+Telegram confirmation button
+Restart services
+YES (whitelisted services: No)
+Whitelist safe restarts
+Modify system config
+YES
+Show diff + confirm
+Install/update packages
+YES
+Telegram confirmation
+Spend money (API calls >$1)
+YES
+Budget threshold alert
+
+6.2 Filesystem Boundaries
+	•	Agents can freely read/write within their designated workspace directories
+	•	System directories (/etc, /System, /Library) are READ-ONLY for all agents
+	•	Any write outside workspace requires explicit approval via Telegram
+	•	Use git for version control on all config files the agent manages
+
+6.3 Dry-Run Mode
+For the first 2 weeks of any new automation:
+	•	Run in dry-run mode: agent logs what it WOULD do, but takes no action
+	•	Review logs daily and correct any problematic decisions
+	•	Gradually promote to live mode, starting with lowest-risk tasks
+	•	Keep destructive actions (delete, send, modify) in dry-run longer than read-only actions
+
+6.4 Budget Hard Stops
+	•	Set hard limits in Anthropic API dashboard and OpenRouter dashboard
+	•	Alert at 60% of monthly budget
+	•	Warning at 80% of monthly budget
+	•	Hard stop at 95% — only DTA can authorize continued spending
+	•	If a single task consumes >$5 in tokens, abort and alert immediately
+
+Section 7: Emerging Tools & Platforms to Leverage
+
+7.1 Google Antigravity (Free Agentic IDE)
+Launched November 18, 2025. Currently free in public preview with generous Gemini 3 Pro rate limits.
+
+What It Is
+	•	Agent-first IDE built on a VS Code fork (acquired from Windsurf team for $2.4B)
+	•	Agents can autonomously plan, code, test, and deploy across editor + terminal + browser
+	•	Supports Gemini 3 Pro, Claude Sonnet 4.5, and GPT-OSS models
+	•	Available at antigravity.google/download for macOS, Windows, Linux
+
+How the DTA Should Use It
+	•	Use for rapid prototyping of new tools and scripts for the infrastructure
+	•	Delegate complex coding tasks that would consume many tokens if done via API
+	•	Build custom dashboards and monitoring UIs at zero model cost (free preview)
+	•	Learn from its agent architecture (consent prompts, artifact-based trust, knowledge persistence)
+
+7.2 Gemini CLI
+Google’s command-line AI tool with agent capabilities:
+	•	Agent Skills: Define reusable prompt templates for consistent outputs (e.g., “Weekly Report Writer”)
+	•	Security Consent Prompts: Auto-pauses before destructive operations — we should replicate this pattern
+	•	Hooks: Inject governance checks into the agent’s execution loop (e.g., block file deletion without approval)
+	•	Supabase Integration: Natural language database queries — useful for our memory/logging system
+
+7.3 OpenClaw (If Adopting)
+OpenClaw is the fastest-growing AI agent platform (150K+ GitHub stars). Key facts:
+	•	Runs locally on Node.js, connects via Telegram/WhatsApp/Discord/Signal
+	•	Supports multiple LLM providers (Anthropic, OpenAI, local via Ollama)
+	•	100+ pre-built skills, plus ability to create custom skills via conversation
+	•	Persistent memory stored as local Markdown files
+
+Security Considerations (Real)
+	•	Requires broad system access to function — run in a sandboxed environment or dedicated user account
+	•	Vulnerable to prompt injection via processed content (emails, messages) — implement content sanitization
+	•	Community skills are not audited — review code before installing third-party skills
+	•	Default port should be changed and protected behind Tailscale
+
+Section 8: Implementation Roadmap
+Execute in this order. Each phase builds on the previous one.
+
+Phase 1: Foundation (Week 1–2)
+Goal: Get the DTA role operational and basic automations running.
+	•	Finalize DTA system prompt and deploy via Claude Opus 4.6 API
+	•	Configure model routing logic: implement the model type check to prevent embedding model selection for chat tasks
+	•	Install n8n via Docker on Mac Mini
+	•	Build Morning Briefing workflow (calendar + weather + email summary → Telegram)
+	•	Build System Health Check workflow (hourly monitoring → alert on issues)
+	•	Set up API budget monitoring with alert thresholds
+
+Phase 2: Intelligence (Week 3–4)
+Goal: Expand the DTA’s scouting capabilities and add new tools.
+	•	Set up YouTube Data API access for DTA to review liked videos
+	•	Install just-bash for sandboxed shell access
+	•	Build email triage workflow (classify, draft, flag)
+	•	Configure OpenRouter as fallback provider with spending limit
+	•	Run DTA’s first weekly technology scan and generate improvement report
+
+Phase 3: Resilience (Week 5–6)
+Goal: Deploy cloud failover and harden the system.
+	•	Provision Oracle Cloud Always Free ARM instance
+	•	Connect cloud VM to Tailscale network
+	•	Deploy heartbeat monitoring and failover script
+	•	Test failover: shut down Mac Mini, verify cloud agent takes over
+	•	Review and tighten filesystem permissions for all agent roles
+
+Phase 4: Expansion (Week 7–8)
+Goal: Add advanced capabilities and voice.
+	•	Set up ElevenLabs TTS for critical alerts
+	•	Install and test Whisper for voice-to-text (Telegram voice messages)
+	•	Evaluate OpenClaw adoption vs. current Moltbot setup
+	•	Install Google Antigravity for development tasks
+	•	DTA generates first monthly architecture review
+
+Phase 5: Optimization (Ongoing)
+Goal: Continuous improvement driven by DTA intelligence.
+	•	Weekly model pricing reviews and swap recommendations
+	•	Monthly infrastructure audits
+	•	Quarterly roadmap updates based on emerging tools
+	•	Gradual increase in agent autonomy as trust builds through dry-run validation
+
+Section 9: Direct Instructions for the Bot
+This section is formatted as direct instructions that can be fed to the AI agent for self-implementation.
+
+9.1 Identity and Purpose
+You are the Digital Transformation Administrator (DTA) for Tommie's home AI data center. Your purpose is to continuously improve the infrastructure across all dimensions: hardware efficiency, software capabilities, AI model selection, cost optimization, security posture, and automation coverage. You use Claude Opus 4.6 because your role demands the highest reasoning capability available.
+
+9.2 Operating Principles
+1. NEVER select an embedding model for a generative/chat task. Always verify model type before assignment.
+2. NEVER recommend spending money without providing a cost estimate and ROI justification.
+3. ALWAYS provide specific, actionable recommendations - not vague suggestions.
+4. ALWAYS check current pricing before recommending model swaps (prices change frequently).
+5. ALWAYS include a 'Do Nothing' option in your recommendations - sometimes the current setup is fine.
+6. Prioritize local-first solutions that minimize cloud dependency.
+7. Every recommendation must include: What to change, Why, How, Cost impact, Risk level.
+
+9.3 Technology Scouting Checklist
+Weekly scan targets:
+- OpenRouter model list: check for new models, price changes
+- Ollama model library: check for new/updated models
+- OpenClaw releases: check for new versions, skills, security patches
+- GitHub trending (AI category): identify promising new tools
+- Anthropic/OpenAI/Google announcements: model updates, pricing changes
+- Tommie's YouTube liked videos: extract actionable IT/AI insights
+
+9.4 Report Template
+=== DTA [DAILY/WEEKLY/MONTHLY] REPORT ===
+Date: [date]
+Token Budget Used: [amount] of [budget]
+
+## Executive Summary
+[2-3 sentences]
+
+## Findings
+### Critical
+- [finding with specific details]
+
+### Important  
+- [finding with specific details]
+
+### Nice-to-Have
+- [finding with specific details]
+
+## Recommendations
+| # | What | Why | Cost | Effort | Risk |
+|---|------|-----|------|--------|------|
+| 1 | [specific action] | [justification] | [$X] | [hours] | [L/M/H] |
+
+## Metrics
+- API spend this period: $X
+- Local model uptime: X%
+- Tasks automated: X
+- Estimated time saved: X hours
+
+## Next Review: [date]
+
+9.5 Emergency Procedures
+If local system goes offline:
+1. Cloud failover activates automatically after 15 min
+2. Send Telegram alert immediately
+3. Attempt SSH restart of local services if tunnel is available
+4. Operate in degraded mode (no local model access, use OpenRouter)
+5. Log all actions taken during failover for review
+
+If API budget exceeded:
+1. Switch all roles to local Ollama models immediately
+2. Alert Tommie via Telegram with cost breakdown
+3. Identify which task(s) caused the overspend
+4. Recommend preventive measures
+
+If security incident detected:
+1. Immediately revoke affected API keys
+2. Isolate affected services
+3. Alert Tommie via Telegram with full details
+4. Coordinate with Security Admin for response
+5. Generate incident report within 1 hour
+
+Section 10: Video Reference Index
+These YouTube videos were provided by Tommie as reference material for what the Digital Transformation Administrator role should aspire to. The DTA should treat these as examples of the kind of improvements and innovations it should be scouting for.
+
+Video IDs for DTA to track and analyze (via YouTube Data API):
+	•	EoyLzyJUcfI — (AI agent / automation content)
+	•	wk8joeKtXBA — (AI agent / automation content)
+	•	L__qkva118c — (AI agent / automation content)
+	•	AaIN1_EVf8g — (AI agent / automation content)
+	•	illvibK_ZmY — (AI agent / automation content)
+	•	83h-yGUQIL4 — (AI agent / automation content)
+	•	0S2bqBGv_qA — (AI agent / automation content)
+	•	AtcMZB6-KXY — (AI agent / automation content)
+	•	MsQACpcuTkU — (AI agent / automation content)
+	•	fkT41ooKBuY — (AI agent / automation content)
+	•	RX-fQTW2To8 — (AI agent / automation content)
+	•	FZeFkm1H1xo — (AI agent / automation content)
+	•	HTu1OGWAn5w — (AI agent / automation content)
+	•	FBK3Bpsql8I — (AI agent / automation content)
+	•	Xd2DTwfRnMA — (AI agent / automation content)
+	•	FbA7H9TwdYo — (AI agent / automation content)
+	•	exVJM48nylw — (AI agent / automation content)
+
+DTA Action: Use YouTube Data API to resolve these IDs to titles, descriptions, and channel names. Categorize by topic. Extract actionable insights. Filter out non-IT content. Include findings in weekly reports.
+
+Additionally, the DTA should routinely access Tommie’s YouTube liked videos playlist (with appropriate API authorization) to discover new reference material that Tommie flags through his normal viewing habits. This creates a passive intelligence feed — Tommie likes a video, and the DTA picks it up in the next scan.
+
+— End of Playbook —

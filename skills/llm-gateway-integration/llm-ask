@@ -1,0 +1,3 @@
+#!/bin/bash
+# Quick LLM Gateway query wrapper
+exec ~/dta/gateway/ask "$@"

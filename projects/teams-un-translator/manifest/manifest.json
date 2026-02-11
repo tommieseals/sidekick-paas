@@ -1,0 +1,51 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "0.1.0",
+  "id": "{{MICROSOFT_APP_ID}}",
+  "packageName": "com.clawdbot.un-translator",
+  "developer": {
+    "name": "Clawdbot",
+    "websiteUrl": "https://github.com/clawdbot",
+    "privacyUrl": "https://github.com/clawdbot",
+    "termsOfUseUrl": "https://github.com/clawdbot"
+  },
+  "name": {
+    "short": "UN Translator",
+    "full": "UN-Style Real-Time Translation Bot"
+  },
+  "description": {
+    "short": "Real-time translation for multilingual Teams meetings",
+    "full": "UN-style simultaneous interpretation for Microsoft Teams meetings. Supports German, English, Spanish, and French. Each participant hears the meeting in their chosen language in real-time."
+  },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
+  "accentColor": "#0078D4",
+  "bots": [
+    {
+      "botId": "{{MICROSOFT_APP_ID}}",
+      "scopes": ["team", "personal", "groupChat"],
+      "supportsFiles": false,
+      "isNotificationOnly": false,
+      "commandLists": [
+        {
+          "scopes": ["team", "personal", "groupChat"],
+          "commands": [
+            {
+              "title": "status",
+              "description": "Show meeting translation status"
+            },
+            {
+              "title": "help",
+              "description": "Show help information"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": []
+}

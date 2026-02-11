@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏗️ System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h2 {
+            color: #f5576c;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .system {
+            background: #f8f9fa;
+            border-left: 4px solid #f5576c;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .system h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .system-detail {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .code {
+            background: #2d2d2d;
+            color: #0f0;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 8px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .emoji {
+            font-size: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+        .badge-green {
+            background: #28a745;
+        }
+        .badge-yellow {
+            background: #ffc107;
+        }
+        .badge-red {
+            background: #dc3545;
+        }
+        .badge-blue {
+            background: #17a2b8;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #f5576c;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ System Architecture</h1>
+            <p>Infrastructure Overview • Updated Feb 11, 2026</p>
+        </div>
+        
+        <div class="content">
+            <!-- Overview -->
+            <div class="section">
+                <h2>🌐 Infrastructure Overview</h2>
+                <div class="diagram">
+┌─────────────────────────────────────────────────────┐
+│              YOUR INFRASTRUCTURE                    │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  🏠 Mac Mini          ☁️  Google Cloud    🚫 Dell  │
+│  100.82.234.66       100.107.231.87    100.119.87..│
+│  ├─ Main Host        ├─ Reserved        ├─ WORK PC │
+│  ├─ Ollama (3B)      │   for 7B         │   OFF    │
+│  ├─ Clawdbot         │   models         │   LIMITS │
+│  ├─ LLM Gateway      │                  │          │
+│  └─ Free AI          └─ Not active      └─ Avoid!  │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+</div>
+                <div class="info">
+                    <strong>3 Systems Total:</strong><br>
+                    • 1 Primary (Mac Mini) - Active production<br>
+                    • 1 Reserved (Google Cloud) - Future use<br>
+                    • 1 Restricted (Dell) - Work computer, NO ACCESS
+                </div>
+            </div>
+
+            <!-- Mac Mini -->
+            <div class="section">
+                <h2>🏠 Mac Mini (Primary Host)</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">💻</span> System Specifications</h3>
+                    <div class="system-detail"><span class="badge badge-green">ACTIVE</span><span class="badge badge-green">PRIMARY</span></div>
+                    <div class="system-detail"><strong>IP:</strong> 100.82.234.66</div>
+                    <div class="system-detail"><strong>Architecture:</strong> ARM/Apple Silicon</div>
+                    <div class="system-detail"><strong>OS:</strong> macOS</div>
+                    <div class="system-detail"><strong>Role:</strong> Main development & AI host</div>
+                </div>
+
+                <div class="system">
+                    <h3><span class="emoji">🤖</span> Services Running</h3>
+                    <table>
+                        <tr>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Ollama</td>
+                            <td><span class="badge badge-green">RUNNING</span></td>
+                            <td>Local AI inference</td>
+                        </tr>
+                        <tr>
+                            <td>Clawdbot</td>
+                            <td><span class="badge badge-green">RUNNING</span></td>
+                            <td>AI agent framework</td>
+                        </tr>
+                        <tr>
+                            <td>LLM Gateway</td>
+                            <td><span class="badge badge-green">RUNNING</span></td>
+                            <td>Multi-model routing</td>
+                        </tr>
+                        <tr>
+                            <td>Telegram Bot</td>
+                            <td><span class="badge badge-green">RUNNING</span></td>
+                            <td>Chat interface</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="system">
+                    <h3><span class="emoji">🧠</span> AI Models Deployed</h3>
+                    <div class="system-detail">
+                        <strong>Ollama Local:</strong><br>
+                        • qwen2.5:3b-instruct-q8_0<br>
+                        • Size: 3GB (fits ARM memory limits)<br>
+                        • Speed: Very fast, unlimited usage<br>
+                        • Cost: FREE
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Memory Constraint:</strong><br>
+                    Max model size: 3GB (ARM architecture limit)<br>
+                    Do NOT attempt to load larger models!
+                </div>
+
+                <div class="system">
+                    <h3><span class="emoji">📁</span> Key Directories</h3>
+                    <div class="code">~/clawd/
+├── memory/                 # Daily logs & context
+├── scripts/                # Automation scripts
+├── skills/                 # Clawdbot capabilities
+└── MASTER_KNOWLEDGE.md     # System docs
+
+~/dta/
+├── gateway/                # LLM Gateway v2.0
+│   ├── llm-gateway.py      # Main router
+│   ├── ask                 # Quick query script
+│   ├── think-deep          # Reasoning mode
+│   └── llm-usage           # Usage tracker
+└── work-automation/        # Work tools
+    └── change-requests/    # CR automation
+
+~/shared-memory/            # Cross-session state
+├── network.json            # Network status
+├── systems.json            # System health
+└── security.json           # Security audit</div>
+                </div>
+            </div>
+
+            <!-- Google Cloud -->
+            <div class="section">
+                <h2>☁️ Google Cloud (Reserved)</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">🌩️</span> System Specifications</h3>
+                    <div class="system-detail"><span class="badge badge-yellow">RESERVED</span><span class="badge badge-yellow">INACTIVE</span></div>
+                    <div class="system-detail"><strong>IP:</strong> 100.107.231.87</div>
+                    <div class="system-detail"><strong>Architecture:</strong> x86_64</div>
+                    <div class="system-detail"><strong>Purpose:</strong> 7B model hosting</div>
+                </div>
+
+                <div class="info">
+                    <strong>Future Use:</strong><br>
+                    Reserved for running larger 7B parameter models that don't fit on Mac Mini.<br>
+                    Currently not in active use - all AI workloads handled by Mac Mini + NVIDIA API.
+                </div>
+            </div>
+
+            <!-- Dell -->
+            <div class="section">
+                <h2>🚫 Dell (Work Computer)</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">⛔</span> System Specifications</h3>
+                    <div class="system-detail"><span class="badge badge-red">OFF LIMITS</span><span class="badge badge-red">RESTRICTED</span></div>
+                    <div class="system-detail"><strong>IP:</strong> 100.119.87.108</div>
+                    <div class="system-detail"><strong>Purpose:</strong> Work computer</div>
+                    <div class="system-detail"><strong>Security:</strong> CrowdStrike monitored</div>
+                </div>
+
+                <div class="danger">
+                    ⛔ <strong>CRITICAL WARNING:</strong><br><br>
+                    DO NOT use this system for:<br>
+                    • Personal projects<br>
+                    • AI experiments<br>
+                    • Clawdbot operations<br>
+                    • Any non-work activity<br><br>
+                    System is actively monitored by corporate security (CrowdStrike).<br>
+                    All activity is logged and reviewed.
+                </div>
+            </div>
+
+            <!-- Model Distribution -->
+            <div class="section">
+                <h2>🤖 AI Model Distribution</h2>
+                
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>Location</th>
+                        <th>Provider</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td>Ollama (qwen2.5:3b)</td>
+                        <td>Mac Mini</td>
+                        <td>Local</td>
+                        <td>FREE</td>
+                    </tr>
+                    <tr>
+                        <td>Kimi K2.5</td>
+                        <td>NVIDIA API</td>
+                        <td>Remote</td>
+                        <td>50/day limit</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 90B Vision</td>
+                        <td>NVIDIA API</td>
+                        <td>Remote</td>
+                        <td>50/day limit</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 11B Vision</td>
+                        <td>NVIDIA API</td>
+                        <td>Remote</td>
+                        <td>50/day limit</td>
+                    </tr>
+                    <tr>
+                        <td>Qwen Coder 32B</td>
+                        <td>NVIDIA API</td>
+                        <td>Remote</td>
+                        <td>50/day limit</td>
+                    </tr>
+                </table>
+
+                <div class="info">
+                    <strong>Note:</strong> The 50/day limit is shared across all NVIDIA API models.<br>
+                    Use Ollama for simple queries to conserve API credits.
+                </div>
+            </div>
+
+            <!-- Network Topology -->
+            <div class="section">
+                <h2>🌐 Network Topology</h2>
+                
+                <div class="diagram">
+                    Internet
+                        │
+                        ├─── Tailscale VPN (100.x.x.x)
+                        │
+                        ├─ 100.82.234.66 (Mac Mini)
+                        │   └─ Primary AI Host
+                        │
+                        ├─ 100.107.231.87 (Google Cloud)
+                        │   └─ Reserved (7B models)
+                        │
+                        └─ 100.119.87.108 (Dell)
+                            └─ Work PC (OFF LIMITS)
+</div>
+
+                <div class="success">
+                    <strong>✅ Secure Communication:</strong><br>
+                    All systems connected via Tailscale VPN for secure peer-to-peer networking.<br>
+                    No port forwarding or public exposure required.
+                </div>
+            </div>
+
+            <!-- Access & Control -->
+            <div class="section">
+                <h2>🔐 Access & Control</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">📱</span> Control Interfaces</h3>
+                    <div class="system-detail">
+                        <strong>Telegram Bot:</strong> @YourBot<br>
+                        • Commands: /ask, /code, /vision, /analyze, etc.<br>
+                        • Direct AI interaction<br>
+                        • Remote control of Mac Mini<br><br>
+                        
+                        <strong>SSH Access:</strong><br>
+                        • Mac Mini: ssh rusty@100.82.234.66<br>
+                        • Google Cloud: ssh rusty@100.107.231.87<br><br>
+                        
+                        <strong>Clawdbot CLI:</strong><br>
+                        • Direct terminal access on Mac Mini<br>
+                        • Full system control<br>
+                        • Skill management
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage & Backups -->
+            <div class="section">
+                <h2>💾 Storage & Data</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">📦</span> Data Locations</h3>
+                    <table>
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Location</th>
+                            <th>Backup</th>
+                        </tr>
+                        <tr>
+                            <td>Clawdbot workspace</td>
+                            <td>~/clawd/</td>
+                            <td>Git repo</td>
+                        </tr>
+                        <tr>
+                            <td>Memory files</td>
+                            <td>~/clawd/memory/</td>
+                            <td>Local only</td>
+                        </tr>
+                        <tr>
+                            <td>LLM Gateway</td>
+                            <td>~/dta/gateway/</td>
+                            <td>Local only</td>
+                        </tr>
+                        <tr>
+                            <td>Shared state</td>
+                            <td>~/shared-memory/</td>
+                            <td>Local only</td>
+                        </tr>
+                        <tr>
+                            <td>Ollama models</td>
+                            <td>~/.ollama/</td>
+                            <td>Re-downloadable</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Backup Strategy:</strong><br>
+                    Most data is local only. Consider setting up automated backups<br>
+                    for critical directories (memory/, gateway configs, etc.)
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="section">
+                <h2>⚡ Performance Characteristics</h2>
+                
+                <div class="system">
+                    <h3><span class="emoji">🏃</span> Speed Comparison</h3>
+                    <table>
+                        <tr>
+                            <th>Model</th>
+                            <th>Speed</th>
+                            <th>Best For</th>
+                        </tr>
+                        <tr>
+                            <td>Ollama qwen2.5:3b</td>
+                            <td>⚡⚡⚡ Very Fast</td>
+                            <td>Quick queries, simple tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Kimi K2.5</td>
+                            <td>⚡⚡ Fast</td>
+                            <td>Reasoning, vision tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Llama 11B Vision</td>
+                            <td>⚡⚡ Fast</td>
+                            <td>Quick image analysis</td>
+                        </tr>
+                        <tr>
+                            <td>Qwen Coder 32B</td>
+                            <td>⚡⚡ Fast</td>
+                            <td>Code generation</td>
+                        </tr>
+                        <tr>
+                            <td>Llama 90B Vision</td>
+                            <td>⚡ Medium</td>
+                            <td>Deep analysis, long docs</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Reference -->
+            <div class="section">
+                <h2>📋 Quick Reference</h2>
+                
+                <div class="info">
+                    <strong>SSH Connections:</strong>
+                    <div class="code">ssh rusty@100.82.234.66  # Mac Mini
+ssh rusty@100.107.231.87  # Google Cloud</div>
+                </div>
+
+                <div class="info">
+                    <strong>Key Files:</strong>
+                    <div class="code">~/clawd/MASTER_KNOWLEDGE.md  # Complete docs
+~/clawd/TOOLS.md             # Tool reference
+~/dta/gateway/llm-gateway.py # AI router
+~/shared-memory/*.json       # System state</div>
+                </div>
+
+                <div class="info">
+                    <strong>Check System Health:</strong>
+                    <div class="code">cat ~/shared-memory/systems.json    # System stats
+cat ~/shared-memory/network.json    # Network status
+cat ~/shared-memory/security.json   # Security audit
+~/dta/gateway/llm-usage             # AI usage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Last Updated: Feb 11, 2026 • System Architecture v1.0<br>
+            3 Systems • 5 AI Models • 1 Tailscale Network
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "live-translation",
+  "version": "1.0.0",
+  "description": "Real-time phone translation service for Clawdbot",
+  "main": "translation-service.js",
+  "scripts": {
+    "test": "node translation-service.js test-audio.wav es en"
+  },
+  "keywords": ["translation", "voice", "real-time", "phone"],
+  "author": "Clawdbot",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  }
+}

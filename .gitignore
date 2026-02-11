@@ -1,0 +1,39 @@
+# Secrets and credentials
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# 1Password service account tokens
+.op-service-account-token
+
+# API keys and tokens
+*_api_key*
+*_token*
+*_secret*
+
+# Session logs (may contain sensitive data)
+*.jsonl
+
+# Temporary files
+*.tmp
+*.log
+tmp/
+temp/
+
+# Node modules
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

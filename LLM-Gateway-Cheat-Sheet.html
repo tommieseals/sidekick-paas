@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 LLM Gateway Quick Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .model {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .model h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .model-detail {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .command {
+            background: #2d2d2d;
+            color: #0f0;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 8px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .emoji {
+            font-size: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .tip {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 LLM Gateway v2.0</h1>
+            <p>Quick Reference Guide • Updated Feb 11, 2026</p>
+        </div>
+        
+        <div class="content">
+            <!-- Models Section -->
+            <div class="section">
+                <h2>📚 Available Models (5 Total)</h2>
+                
+                <div class="model">
+                    <h3><span class="emoji">🏠</span> Ollama Local (qwen2.5:3b)</h3>
+                    <div class="model-detail"><span class="badge">FREE</span><span class="badge">FAST</span></div>
+                    <div class="model-detail">✅ Best for: Quick simple queries</div>
+                    <div class="model-detail">💰 Cost: $0</div>
+                </div>
+
+                <div class="model">
+                    <h3><span class="emoji">🧠</span> Kimi K2.5</h3>
+                    <div class="model-detail"><span class="badge">VISION</span><span class="badge">REASONING</span></div>
+                    <div class="model-detail">✅ Best for: Screenshot debugging, reasoning</div>
+                    <div class="model-detail">📊 Part of 50 daily NVIDIA calls</div>
+                </div>
+
+                <div class="model">
+                    <h3><span class="emoji">🦙💪</span> Llama 90B Vision</h3>
+                    <div class="model-detail"><span class="badge">HUGE</span><span class="badge">DEEP</span></div>
+                    <div class="model-detail">✅ Best for: Long docs, complex analysis</div>
+                    <div class="model-detail">📊 Part of 50 daily NVIDIA calls</div>
+                </div>
+
+                <div class="model">
+                    <h3><span class="emoji">🦙⚡</span> Llama 11B Vision</h3>
+                    <div class="model-detail"><span class="badge">FAST</span><span class="badge">VISION</span></div>
+                    <div class="model-detail">✅ Best for: Quick image analysis</div>
+                    <div class="model-detail">📊 Part of 50 daily NVIDIA calls</div>
+                </div>
+
+                <div class="model">
+                    <h3><span class="emoji">💻</span> Qwen Coder 32B</h3>
+                    <div class="model-detail"><span class="badge">CODE</span><span class="badge">SPECIALIST</span></div>
+                    <div class="model-detail">✅ Best for: Python, JS, bash, debugging</div>
+                    <div class="model-detail">📊 Part of 50 daily NVIDIA calls</div>
+                </div>
+            </div>
+
+            <!-- Telegram Commands -->
+            <div class="section">
+                <h2>💬 Telegram Commands</h2>
+                <div class="command">/ask &lt;question&gt;
+Smart routing - auto-picks best model</div>
+                <div class="command">/code &lt;task&gt;
+Force Qwen Coder (code specialist)</div>
+                <div class="command">/vision &lt;url&gt; [question]
+Force Llama 11B (fast vision)</div>
+                <div class="command">/analyze &lt;url&gt; [question]
+Force Llama 90B (deep analysis)</div>
+                <div class="command">/screenshot &lt;url&gt; [q]
+Force Kimi (screenshot debugging)</div>
+                <div class="command">/kimi &lt;question&gt;
+Force Kimi K2.5</div>
+                <div class="command">/think &lt;question&gt;
+Deep reasoning mode</div>
+                <div class="command">/usage
+Check daily stats</div>
+                <div class="command">/help
+Show all commands</div>
+            </div>
+
+            <!-- CLI Commands -->
+            <div class="section">
+                <h2>⌨️ Direct CLI Usage</h2>
+                <div class="command"># Quick commands:
+~/dta/gateway/ask "your question"
+~/dta/gateway/think-deep "complex problem"
+~/dta/gateway/analyze-screenshot "image-url"
+~/dta/gateway/llm-usage</div>
+                
+                <div class="command"># Force specific model:
+python3 ~/dta/gateway/llm-gateway.py \
+  --force qwen_coder "write code"
+
+python3 ~/dta/gateway/llm-gateway.py \
+  --force llama_90b --image "url" "analyze"</div>
+            </div>
+
+            <!-- Smart Routing -->
+            <div class="section">
+                <h2>🎯 Smart Routing Logic</h2>
+                <div class="tip">
+                    <strong>Automatic model selection:</strong><br>
+                    • Code keywords → Qwen Coder<br>
+                    • Complex/long docs → Llama 90B<br>
+                    • Screenshots with errors → Kimi + thinking<br>
+                    • Fast vision → Llama 11B<br>
+                    • Simple queries → Ollama (free!)
+                </div>
+            </div>
+
+            <!-- Usage Limits -->
+            <div class="section">
+                <h2>📊 Daily Limits</h2>
+                <div class="warning">
+                    <strong>NVIDIA Models:</strong> 50 calls total/day<br>
+                    (Shared across Kimi, Llama 90B, Llama 11B, Qwen Coder)<br><br>
+                    <strong>Ollama Local:</strong> Unlimited (FREE!)
+                </div>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="section">
+                <h2>💡 Quick Tips</h2>
+                <div class="tip">
+                    • <strong>Code task?</strong> Use <code>/code</code> or it auto-detects<br>
+                    • <strong>Long document?</strong> Use <code>/analyze</code><br>
+                    • <strong>Quick image?</strong> Use <code>/vision</code><br>
+                    • <strong>Screenshot debug?</strong> Use <code>/screenshot</code><br>
+                    • <strong>Complex reasoning?</strong> Use <code>/think</code>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="section">
+                <h2>🏗️ System Architecture</h2>
+                <div class="model-detail">
+                    <strong>Mac Mini (100.82.234.66):</strong> Main host, Ollama (3GB max)<br>
+                    <strong>Google Cloud (100.107.231.87):</strong> Reserved for 7B models<br>
+                    <strong>⛔ Dell (100.119.87.108):</strong> OFF LIMITS (CrowdStrike)
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Last Updated: Feb 11, 2026 • LLM Gateway v2.0<br>
+            Location: ~/dta/gateway/
+        </div>
+    </div>
+</body>
+</html>

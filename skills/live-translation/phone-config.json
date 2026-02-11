@@ -1,0 +1,26 @@
+{
+  "phoneNumbers": {
+    "us": {
+      "number": "+16182030978",
+      "formatted": "+1 618-203-0978",
+      "description": "US number - receives calls in German, speaks English",
+      "route": {
+        "inboundLanguage": "de",
+        "outboundLanguage": "en",
+        "mode": "german-to-english"
+      }
+    },
+    "germany": {
+      "number": "+491733824235",
+      "formatted": "+49 173 3824235",
+      "description": "German number - receives calls in English, speaks German",
+      "route": {
+        "inboundLanguage": "en",
+        "outboundLanguage": "de",
+        "mode": "english-to-german"
+      }
+    }
+  },
+  "defaultLanguagePair": "de-en",
+  "notes": "US number for German speakers calling you, German number for English speakers"
+}

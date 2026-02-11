@@ -1,0 +1,3 @@
+#!/bin/bash
+# Deep reasoning via LLM Gateway
+exec ~/dta/gateway/think-deep "$@"

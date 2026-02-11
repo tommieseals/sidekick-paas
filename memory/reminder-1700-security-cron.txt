@@ -1,0 +1,17 @@
+⏰ REMINDER - 5:00 PM Today (2026-02-03)
+
+Set up the security audit cron job!
+
+Run this command on your Mac mini:
+```
+crontab -e
+```
+
+Then add this line:
+```
+0 5 * * * /Users/tommie/clawd/scripts/security-audit-notify.sh
+```
+
+This enables daily security audits at 5 AM to scan for exposed API keys, secrets, and vulnerabilities.
+
+Or let me know if you want me to help set it up differently!

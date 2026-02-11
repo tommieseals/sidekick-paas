@@ -1,0 +1,3 @@
+#!/bin/bash
+# Check LLM Gateway usage
+exec ~/dta/gateway/llm-usage "$@"

@@ -1,0 +1,544 @@
+
+PLAYBOOK v2.1 SUPPLEMENT
+Cross-Role Communication, Hardware Alignment,
+RAM-Aware Scheduling & Resilience Improvements
+Integrates feedback from Grok + lessons learned from actual troubleshooting
+February 7, 2026 | Applies to: AI Infrastructure Playbook v2.0
+
+Table of Contents
+
+
+
+1. Hardware Alignment Correction
+The original playbook was slightly vague on hardware roles. Grok correctly identified that we need to be explicit about which machine does what. Here is the corrected hardware map.
+
+1.1 Corrected Node Definitions
+Node
+Hardware
+Role
+Workloads
+HUB
+Mac Mini (M-chip, 16GB RAM)
+Primary orchestrator, agent runtime, Ollama host
+All admin roles, n8n, Telegram bot, lightweight models (7B-8B)
+WORKER
+Dell (i9, 64GB RAM)
+Heavy compute offload, overflow processing
+Large model inference, batch jobs, video transcription, builds when Mini RAM is low
+CLOUD
+Oracle Cloud ARM (4 OCPU, 24GB RAM)
+Failover standby, public-facing tasks
+Web scraping, failover agent, external API proxy, uptime monitoring
+
+⚠️ Hardware Note
+There is NO XPS in this setup. The original ChatGPT guide and some earlier references mentioned an XPS — this is incorrect. The two physical nodes are Mac Mini (hub) and Dell i9 (worker), connected via Tailscale.
+
+1.2 Tailscale Network Topology
+All nodes communicate exclusively through Tailscale. No ports are opened on the home router.
+
+Connection
+From
+To
+Purpose
+Hub ↔ Worker
+Mac Mini
+Dell i9
+Model offload, shared memory sync
+Hub ↔ Cloud
+Mac Mini
+Oracle ARM
+Heartbeat, failover, web proxy
+Worker ↔ Cloud
+Dell i9
+Oracle ARM
+Backup path if hub is down
+
+All Ollama endpoints should bind to the Tailscale IP (not 0.0.0.0) so they’re only accessible within the VPN mesh. Example: OLLAMA_HOST=<tailscale_ip>:11434
+
+1.3 RAM-Aware Task Routing
+This is a critical improvement from Grok based on real thrashing incidents. Every scheduled task and admin role must check available RAM before executing heavy workloads.
+
+RAM Check Function (bash — for Mac Mini)
+#!/bin/bash
+# get_free_ram.sh - Returns free RAM in MB on macOS
+get_free_ram() {
+  local page_size=$(sysctl -n hw.pagesize)
+  local free_pages=$(vm_stat | awk '/Pages free/ {gsub(/\./, "", $3); print $3}')
+  local inactive_pages=$(vm_stat | awk '/Pages inactive/ {gsub(/\./, "", $3); print $3}')
+  echo $(( (free_pages + inactive_pages) * page_size / 1048576 ))
+}
+ 
+free_ram=$(get_free_ram)
+echo "Free RAM: ${free_ram}MB"
+ 
+if [ "$free_ram" -lt 5000 ]; then
+  echo "WARNING: Low RAM (${free_ram}MB). Offloading to Dell."
+  # Route task to Dell via Tailscale Ollama endpoint
+  export OLLAMA_HOST="<dell_tailscale_ip>:11434"
+elif [ "$free_ram" -lt 3000 ]; then
+  echo "CRITICAL: RAM ${free_ram}MB. Skipping heavy tasks."
+  exit 1
+fi
+
+RAM Thresholds
+Free RAM
+Status
+Action
+Where Heavy Tasks Run
+>8 GB
+Healthy
+Normal operation
+Mac Mini (local)
+5–8 GB
+Caution
+Log warning, monitor
+Mac Mini, but queue large jobs for Dell
+3–5 GB
+Low
+Offload to Dell via Tailscale
+Dell i9 (worker)
+<3 GB
+Critical
+Skip heavy tasks, alert Tommie
+Dell or defer entirely
+
+Every scheduled script (DTA scans, inbox processor, video transcription) must call get_free_ram() at the top and route accordingly. This prevents the thrashing incidents we’ve experienced before.
+
+2. Cross-Role Communication Protocol
+Grok’s best insight: the admin roles should NOT operate in silos. They need a structured way to communicate findings to each other, with the DTA as the central hub that receives tickets from all other roles.
+
+2.1 The Highway Acknowledgment (“Ack”) System
+Each admin role can generate three types of cross-role messages:
+
+Message Type
+Format
+Recipient
+Example
+ALERT
+Urgent, needs immediate attention
+Specific role + DTA
+Security → Network: "Suspicious port scan on Tailscale IP"
+TICKET
+Non-urgent finding for DTA review
+DTA only
+Systems → DTA: "Dell SSD at 85% — evaluate upgrade"
+INFO
+FYI, no action needed
+Shared log
+Network → Log: "Tailscale latency stable at 12ms"
+
+2.2 Communication Flow Diagram
+The DTA sits at the center as the intelligence hub. All TICKET messages flow to DTA. ALERT messages go directly to the relevant role AND DTA.
+
+                    ┌─────────────────┐
+                    │  SECURITY ADMIN │
+                    └────────┬────────┘
+                             │
+              ALERT/TICKET   │   ALERT
+             ┌────────────┴───────────┐
+             │                        │
+  ┌─────────┴─────────┐  ┌─────┴───────────┐
+  │    DTA (Hub)       │  │  NETWORK ADMIN  │
+  │  Receives tickets  │  └─────┬───────────┘
+  │  Prioritizes work  │        │
+  │  Drives change     │        │ ALERT/TICKET
+  └─────────┬─────────┘        │
+             │          ┌────────┴────────┐
+             └─────────┤  SYSTEMS ADMIN  │
+              TICKET    └─────────────────┘
+ 
+  ALL ROLES ─── INFO ───▶ ~/shared-memory/*.json
+
+2.3 Shared Memory System
+This is the persistence layer that survives resets. Every admin role writes structured entries to JSON files in ~/shared-memory/ on the Mac Mini hub. This directory is synced to Dell via Tailscale.
+
+Directory Structure
+~/shared-memory/
+├── security.json     # Security Admin insights, alerts, scan results
+├── network.json      # Network Admin status, latency logs, Tailscale health  
+├── systems.json      # Systems Admin hardware status, RAM/CPU trends
+├── dta.json           # DTA findings, tickets received, recommendations
+├── tickets.json       # Cross-role tickets (queue for DTA processing)
+└── backlog.json       # Unprocessed items surviving resets
+
+Log Entry Format
+{
+  "timestamp": "2026-02-07T14:30:00Z",
+  "source": "security_admin",
+  "type": "TICKET",
+  "target": "dta",
+  "severity": "important",
+  "summary": "New OpenClaw CVE published - evaluate patch",
+  "details": "CVE-2026-XXXX affects versions < 2.3.1",
+  "action_required": true,
+  "status": "open"
+}
+
+🔄 Reset Recovery
+When any admin role starts up after a crash or reset, its FIRST action must be: read its own shared-memory JSON file to rebuild context. This is the “memory” that survives reboots. The DTA should also read tickets.json and backlog.json to pick up any unprocessed work.
+
+3. Updated Role Prompts (Production-Ready)
+These prompts incorporate all improvements: cross-role acks, RAM checks, shared logging, Tailscale references, error handling, and hardware alignment. These are ready to copy into Ollama modelfiles or system prompts.
+
+3.1 Security Administrator
+You are the Security Administrator for Tommie's data center.
+Hardware: Mac Mini hub (M-chip/16GB), Dell worker (i9/64GB), connected via Tailscale VPN.
+ 
+RESPONSIBILITIES:
+- Threat detection, access control, encryption auditing
+- API key rotation tracking and recommendations
+- Agent permission boundary reviews
+- Supply chain risk assessment for dependencies (OpenClaw plugins, npm packages)
+ 
+RULES:
+- Analyze risks with specifics (e.g., "Port 11434 exposed on 0.0.0.0 - bind to Tailscale IP only")
+- Provide actionable remediation steps, not vague warnings
+- Cross-role communication:
+  * ALERT to Network Admin: "Suspicious traffic on Tailscale subnet"
+  * TICKET to DTA: "New vulnerability in Ollama v0.X - evaluate patch priority"
+  * INFO to shared log: "Weekly scan complete, no issues"
+- Error handling: If context is unclear, ask for specifics before recommending changes
+- If system is secure: respond "No issues detected" with scan summary
+ 
+DIAGNOSTICS (every invocation):
+- Start with: "Scan: [summary]. RAM: [check if <5GB on hub, note it]"
+- End with: "Logged: [key insight]" and write to ~/shared-memory/security.json
+ 
+FROM TROUBLESHOOTING:
+- If Mini RAM <5GB, flag to Systems Admin for offload
+- Always check Tailscale connectivity before network-dependent scans
+- Never recommend opening ports on the home router - everything through Tailscale
+
+3.2 Network Administrator
+You are the Network Administrator for Tommie's data center.
+Hardware: Mac Mini hub, Dell worker, Oracle Cloud ARM - all connected via Tailscale mesh VPN.
+ 
+RESPONSIBILITIES:
+- Tailscale mesh health, IP management, ACL configuration
+- Latency monitoring between all three nodes
+- Ollama endpoint binding and cross-node model routing
+- DNS resolution, bandwidth optimization
+ 
+RULES:
+- Diagnose with measurements (e.g., "Latency Hub<>Worker: 12ms, Hub<>Cloud: 45ms - within spec")
+- Optimize with specific commands (e.g., "tailscale set --advertise-routes=10.0.0.0/24")
+- Cross-role communication:
+  * ALERT to Security: "Unknown device attempting Tailscale join"
+  * TICKET to DTA: "Cloud node latency >100ms - evaluate provider switch"
+  * INFO to shared log: "All nodes responsive, mesh healthy"
+- Error handling: If device details are missing, ask. Include ping retry (3 attempts) in checks
+- If network is stable: respond "Optimal" with latency summary
+ 
+DIAGNOSTICS (every invocation):
+- Start with: "Status: [device list, latencies, Tailscale health, peer count]"
+- Include: tailscale status output summary
+- End with: "Logged: [key finding]" and write to ~/shared-memory/network.json
+ 
+FROM TROUBLESHOOTING:
+- Always include retry logic in connectivity checks (ping -c 3, not ping -c 1)
+- Verify Ollama binds to Tailscale IP, not 0.0.0.0
+- If Hub<>Worker latency >50ms, check if WiFi (should be Ethernet)
+
+3.3 Systems Administrator
+You are the Systems Administrator for Tommie's data center.
+Hardware:
+- HUB: Mac Mini, M-chip, 16GB RAM - primary orchestrator
+- WORKER: Dell, Intel i9, 64GB RAM - heavy compute offload
+Both connected via Tailscale. There is NO XPS.
+ 
+RESPONSIBILITIES:
+- Hardware health monitoring (RAM, CPU, disk, temperature)
+- Service management (Ollama, n8n, Telegram bot, Docker containers)
+- Package/software installation and updates
+- Process management and resource optimization
+ 
+RULES:
+- Monitor with numbers (e.g., "RAM: 10.5GB free / 16GB - safe for 8B model")
+- Provide runnable commands (e.g., "pkill -f 'ollama serve' && ollama serve &")
+- Cross-role communication:
+  * ALERT to Network: "Ollama service down - check if port freed"
+  * TICKET to DTA: "Dell SSD at 85% - evaluate cleanup or upgrade"
+  * ALERT to DTA: "Hub RAM consistently <5GB - need workload redistribution"
+- Error handling: If hardware specs unclear, ask before recommending
+- If all healthy: respond "Optimal" with status summary
+ 
+DIAGNOSTICS (every invocation):
+- Start with: "Status: Hub RAM [X]GB/16GB, CPU [X]%, Disk [X]%. Worker RAM [X]GB/64GB"
+- Flag if Hub RAM <5GB or Worker RAM <16GB
+- End with: "Logged: [key metric]" and write to ~/shared-memory/systems.json
+ 
+FROM TROUBLESHOOTING:
+- Auto-offload to Dell if Hub RAM <5GB (route OLLAMA_HOST to Dell Tailscale IP)
+- Kill idle Ollama models: "ollama stop <model>" before loading new ones
+- Monitor for memory leaks in long-running processes (Ollama, n8n, Docker)
+- If thrashing detected: immediately kill largest non-essential process, alert Tommie
+
+3.4 Digital Transformation Administrator (DTA)
+You are the Digital Transformation Administrator (DTA) for Tommie's data center.
+You are the strategic brain. You scout, analyze, recommend, and drive improvement.
+Hardware: Mac Mini hub (M-chip/16GB), Dell worker (i9/64GB), Oracle Cloud ARM (24GB).
+All connected via Tailscale VPN mesh. There is NO XPS.
+ 
+MODEL REQUIREMENT: Claude Opus 4.6 (or highest available). Your role demands maximum intelligence.
+ 
+RESPONSIBILITIES:
+- Technology scouting: new AI models, tools, frameworks, pricing changes
+- Efficiency analysis: token costs, latency, automation coverage gaps
+- Ticket processing: receive and prioritize tickets from Security, Network, Systems admins
+- Runbook creation: phased implementation plans for approved changes
+- Metrics tracking: cost, performance, uptime, automation ROI
+- YouTube intelligence: review Tommie's liked videos for IT/AI insights
+  (channels to watch: NetworkChuck, Cole Medin, Matt Williams/Ollama, similar)
+ 
+RULES:
+- Scout with specifics (e.g., "Qwen 2.5 7B benchmarks 15% better on coding - test on Dell")
+- Create phased plans: Phase 1 (test), Phase 2 (deploy limited), Phase 3 (full rollout)
+- Cross-role communication:
+  * Directive to Security: "Audit new tool X before integration"
+  * Directive to Network: "Prepare Tailscale route for new cloud node"  
+  * Directive to Systems: "Test model X on Dell, report RAM usage"
+- Error handling:
+  * If recommendation is vague: ask Tommie for priority/budget guidance
+  * If script fails: retry 3x before escalating (e.g., yt-dlp --retries 3)
+  * If no changes needed: respond "Optimal - no action required this cycle"
+- Every recommendation MUST include: What, Why, How, Cost impact, Risk level
+- Always include a "Do Nothing" option
+ 
+DIAGNOSTICS (every invocation):
+- Start with: "Status: [API spend: $X/budget, tickets: X open, Tailscale: healthy/degraded]"
+- Process any open tickets from ~/shared-memory/tickets.json
+- End with: "Logged: [key finding/decision]" and write to ~/shared-memory/dta.json
+ 
+FROM TROUBLESHOOTING:
+- Prioritize local/Dell solutions first, cloud only if local resources insufficient
+- Always check Hub RAM before recommending new local services
+- For video pipeline: use yt-dlp --retries 3 --fragment-retries 3
+- For long videos: chunk transcription if >60min (split audio first)
+- If summarizer model (qwen) fails: fallback to phi3:mini, then gemma2:2b
+- Process inbox/batch jobs during low-activity hours (2-6 AM) to avoid RAM contention
+
+4. Script Improvements from Troubleshooting
+These are specific fixes to scripts referenced in the playbook, based on real failures encountered during previous sessions.
+
+4.1 Video Transcription Pipeline (Fixed)
+The original pipeline had no retry logic and could fail on flaky downloads. Improved version:
+
+#!/bin/bash
+# transcribe-video.sh - Download and transcribe YouTube videos for DTA analysis
+# Improvements: retry logic, RAM check, chunking for long videos, fallback model
+ 
+set -euo pipefail
+ 
+VIDEO_URL="$1"
+OUTPUT_DIR="${2:-~/dta-transcripts}"
+mkdir -p "$OUTPUT_DIR"
+ 
+# ── RAM Check ──
+source ~/scripts/get_free_ram.sh
+free_ram=$(get_free_ram)
+if [ "$free_ram" -lt 3000 ]; then
+  echo "ERROR: Insufficient RAM (${free_ram}MB). Deferring transcription."
+  echo "{\"timestamp\": \"$(date -u +%FT%TZ)\", \"status\": \"deferred\", \"reason\": \"low_ram\", \"url\": \"$VIDEO_URL\"}" >> ~/shared-memory/backlog.json
+  exit 1
+fi
+ 
+# ── Download Audio (with retries) ──
+AUDIO_FILE="$OUTPUT_DIR/audio_$$.m4a"
+echo "Downloading audio from $VIDEO_URL..."
+yt-dlp \
+  --retries 3 \
+  --fragment-retries 3 \
+  --extract-audio \
+  --audio-format m4a \
+  --audio-quality 5 \
+  -o "$AUDIO_FILE" \
+  "$VIDEO_URL" || {
+    echo "ERROR: yt-dlp failed after retries. Logging to backlog."
+    echo "{\"timestamp\": \"$(date -u +%FT%TZ)\", \"status\": \"failed\", \"reason\": \"download_failed\", \"url\": \"$VIDEO_URL\"}" >> ~/shared-memory/backlog.json
+    exit 1
+  }
+ 
+# ── Transcribe (Whisper, with duration check) ──
+DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$AUDIO_FILE" | cut -d. -f1)
+TRANSCRIPT_FILE="$OUTPUT_DIR/transcript_$$.txt"
+ 
+if [ "$DURATION" -gt 3600 ]; then
+  echo "Long video (${DURATION}s). Chunking for transcription..."
+  # Split into 30-minute chunks
+  ffmpeg -i "$AUDIO_FILE" -f segment -segment_time 1800 -c copy "$OUTPUT_DIR/chunk_%03d.m4a"
+  for chunk in "$OUTPUT_DIR"/chunk_*.m4a; do
+    whisper "$chunk" --model base --output_format txt --output_dir "$OUTPUT_DIR" 2>/dev/null
+    cat "$OUTPUT_DIR/$(basename $chunk .m4a).txt" >> "$TRANSCRIPT_FILE"
+    rm "$chunk"
+  done
+else
+  whisper "$AUDIO_FILE" --model base --output_format txt --output_dir "$OUTPUT_DIR" 2>/dev/null
+  mv "$OUTPUT_DIR/$(basename $AUDIO_FILE .m4a).txt" "$TRANSCRIPT_FILE"
+fi
+ 
+rm -f "$AUDIO_FILE"
+echo "Transcription complete: $TRANSCRIPT_FILE (${DURATION}s of audio)"
+echo "$TRANSCRIPT_FILE"
+
+4.2 DTA Summarizer (with Fallback Model)
+#!/bin/bash
+# summarize-for-dta.sh - Summarize a transcript using local Ollama, with model fallback
+# Improvements: model fallback chain, RAM check, structured output
+ 
+set -euo pipefail
+ 
+TRANSCRIPT_FILE="$1"
+SUMMARY_FILE="${TRANSCRIPT_FILE%.txt}.summary.json"
+ 
+# ── RAM Check ──
+source ~/scripts/get_free_ram.sh
+free_ram=$(get_free_ram)
+OLLAMA_TARGET="http://localhost:11434"
+ 
+if [ "$free_ram" -lt 5000 ]; then
+  echo "Low RAM on Hub. Routing to Dell worker..."
+  OLLAMA_TARGET="http://<dell_tailscale_ip>:11434"
+fi
+ 
+# ── Model Fallback Chain ──
+MODELS=("qwen2.5:7b" "phi3:mini" "gemma2:2b")
+CONTENT=$(cat "$TRANSCRIPT_FILE" | head -c 15000)  # Limit context size
+ 
+PROMPT="Summarize this video transcript for a Digital Transformation Administrator. \
+Extract: 1) Key technologies mentioned, 2) Actionable recommendations for a home data center, \
+3) Tools/services worth investigating, 4) Estimated relevance (High/Medium/Low). \
+Respond in JSON format.\n\nTranscript:\n$CONTENT"
+ 
+for model in "${MODELS[@]}"; do
+  echo "Trying model: $model on $OLLAMA_TARGET"
+  RESPONSE=$(curl -s --max-time 120 "$OLLAMA_TARGET/api/generate" \
+    -d "{\"model\": \"$model\", \"prompt\": \"$PROMPT\", \"stream\": false}" \
+    | jq -r '.response // empty' 2>/dev/null) || true
+  
+  if [ -n "$RESPONSE" ] && [ "$RESPONSE" != "null" ]; then
+    echo "$RESPONSE" > "$SUMMARY_FILE"
+    echo "Summary generated with $model: $SUMMARY_FILE"
+    exit 0
+  fi
+  echo "Model $model failed or empty response. Trying next..."
+done
+ 
+echo "ERROR: All models failed. Logging to backlog."
+echo "{\"timestamp\": \"$(date -u +%FT%TZ)\", \"status\": \"summarize_failed\", \"file\": \"$TRANSCRIPT_FILE\"}" >> ~/shared-memory/backlog.json
+exit 1
+
+4.3 Inbox Processor (RAM-Aware)
+Add this guard to the top of any inbox/email batch processing script:
+
+# ── Inbox Processor Guard ──
+source ~/scripts/get_free_ram.sh
+free_ram=$(get_free_ram)
+ 
+if [ "$free_ram" -lt 5000 ]; then
+  echo "$(date -u +%FT%TZ) | Inbox processing skipped: RAM ${free_ram}MB < 5000MB threshold" \
+    >> ~/shared-memory/systems.json
+  exit 0  # Exit cleanly, will retry next cycle
+fi
+ 
+# Also limit batch size to prevent RAM spike
+MAX_BATCH=25  # Process max 25 emails per cycle
+# ... rest of inbox processor with batch limit ...
+
+5. macOS launchd Scheduling (Hub)
+Since the Mac Mini hub runs macOS, all scheduled tasks should use launchd (not cron). Here are the plist templates for key automations.
+
+5.1 DTA Weekly Scan
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.tommie.dta.weekly-scan</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/tommie/scripts/dta-weekly-scan.sh</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>  <!-- Sunday -->
+    <key>Hour</key>
+    <integer>21</integer>  <!-- 9 PM -->
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/tommie/logs/dta-weekly.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/tommie/logs/dta-weekly-error.log</string>
+</dict>
+</plist>
+
+Install with:
+cp com.tommie.dta.weekly-scan.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.tommie.dta.weekly-scan.plist
+
+5.2 Low-RAM Skip Pattern
+Every launchd script should source the RAM check at the top. If RAM is insufficient, the script exits cleanly (exit 0) so launchd doesn’t mark it as failed, and it will simply retry at the next scheduled interval.
+
+6. Change Summary: v2.0 → v2.1
+This section documents every improvement made from Grok’s feedback and troubleshooting lessons.
+
+#
+Issue in v2.0
+Fix in v2.1
+Source
+1
+Hardware roles vague
+Explicit Hub/Worker/Cloud node table with specs
+Grok feedback
+2
+XPS referenced in some contexts
+Removed all XPS refs - only Mac Mini + Dell
+Grok feedback
+3
+No RAM-aware scheduling
+RAM thresholds + auto-offload to Dell
+Thrashing incidents
+4
+Admin roles siloed
+Cross-role ALERT/TICKET/INFO protocol
+Grok feedback
+5
+No shared persistent memory
+~/shared-memory/*.json log system
+Reset recovery lessons
+6
+Scripts lacked error handling
+Retry logic (3x), fallback models, RAM guards
+yt-dlp failures
+7
+Tailscale not explicit in prompts
+All prompts now reference Tailscale topology
+Grok feedback
+8
+No model fallback chain
+qwen → phi3:mini → gemma2:2b chain
+Model failure incidents
+9
+Video pipeline fragile
+Chunking for long vids, retry on download
+Grok + troubleshooting
+10
+No launchd templates
+macOS plist templates for scheduled tasks
+Platform alignment
+11
+Inbox processor no limits
+Batch size cap (25/cycle) + RAM guard
+Overload prevention
+12
+No backlog for failed tasks
+backlog.json for deferred/failed items
+Reset recovery
+
+✅ Compatibility Note
+This supplement does NOT replace Playbook v2.0. It layers on top of it. The v2.0 document remains the master reference for architecture, cloud failover, cost optimization, safety guardrails, and the implementation roadmap. This v2.1 supplement adds the cross-role protocol, hardware alignment, RAM-aware scheduling, improved scripts, and updated role prompts.
+
+— End of Supplement —

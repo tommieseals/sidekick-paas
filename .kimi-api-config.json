@@ -1,0 +1,12 @@
+{
+  "provider": "nvidia",
+  "endpoint": "https://integrate.api.nvidia.com/v1/chat/completions",
+  "api_key": "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",
+  "model": "moonshotai/kimi-k2.5",
+  "max_tokens": 16384,
+  "temperature": 1.00,
+  "top_p": 1.00,
+  "stream": true,
+  "thinking": true,
+  "added": "2026-02-09"
+}
