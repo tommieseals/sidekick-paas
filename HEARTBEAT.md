@@ -1,5 +1,20 @@
 # HEARTBEAT.md
 
+## PRIORITY ZERO: Dell RAM Check (This Machine)
+
+**Check RAM on every heartbeat:**
+```powershell
+$os = Get-CimInstance Win32_OperatingSystem
+$pct = [math]::Round((($os.TotalVisibleMemorySize - $os.FreePhysicalMemory) / $os.TotalVisibleMemorySize) * 100, 0)
+```
+
+**If RAM > 85%: ALERT IMMEDIATELY**
+- Tell Rusty the current RAM usage
+- List top 5 processes by RAM
+- Suggest killing non-essential processes
+
+---
+
 ## FIRST PRIORITY: Read Admin Reports & Act
 
 **BEFORE ANYTHING ELSE:**
