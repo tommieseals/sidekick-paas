@@ -75,6 +75,133 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 **Total Infrastructure:** 3 local nodes + 1 cloud, 9 models, intelligent routing, auto-recovery, $0/month cost. **Status:** Production-ready. ✅
 
+---
+
+## 🏗️ TOMMIE'S AI EMPIRE - Complete Infrastructure (Feb 12, 2026)
+
+*Saved from the Clawd Dashboard at http://100.82.234.66:8080*
+
+### Network Nodes (Tailscale Mesh)
+
+| Node | IP | Role | Status |
+|------|-----|------|--------|
+| **tommies-mac-mini** | 100.82.234.66 | Orchestrator | ✅ Operational |
+| **mac-pro** | 100.67.192.21 | Compute Node | 🔧 Setup in progress |
+| **desktop-165kuf5** | 100.119.87.108 | Windows / Clawdbot Host | ✅ Operational |
+| **google-cloud** | 100.107.231.87 | Reserved for 7B models | ✅ Connected |
+| **iphone-15-pro-max** | 100.114.130.38 | Mobile client | ✅ Online |
+
+### LLM Gateway v2.0 (5 Models)
+
+**Local Models (Unlimited, FREE):**
+- `qwen2.5:3b` on Mac Mini (1.8GB) - Fast simple queries, 0.47s warm
+- `nomic-embed-text` on Mac Mini (0.3GB) - Embeddings
+- `qwen2.5:7b` on Google Cloud (4.4GB) - Medium reasoning
+
+**NVIDIA API (50 calls/day, FREE tier):**
+- **Kimi K2.5** - Vision + multimodal + thinking mode (screenshots, reasoning)
+- **Llama 90B Vision** - Deep analysis, long documents, complex forms
+- **Llama 11B Vision** - Fast image analysis
+- **Qwen Coder 32B** - Code specialist (Python, JS, bash, debugging)
+
+### Smart Routing Logic
+
+| Task Type | Primary Model | Fallback |
+|-----------|---------------|----------|
+| Code/Debug/Scripts | Qwen Coder 32B | qwen2.5:7b → Kimi |
+| Screenshots/Images | Kimi K2.5 | (vision-only) |
+| Deep Reasoning | Kimi K2.5 (thinking) | Llama 90B |
+| Routine Queries | qwen2.5:7b (Mac Pro) | qwen2.5:3b (Mac Mini) |
+| Document Extraction | Kimi K2.5 | qwen2.5:7b |
+| Fast/Simple | qwen2.5:3b (local) | (free, unlimited) |
+
+### CLI Tools Available
+
+**Email & Communication:**
+- `himalaya` - CLI email (Gmail configured)
+- `imsg` - iMessage/SMS
+- `wacli` - WhatsApp
+- `slack` - Slack API
+
+**Productivity:**
+- `memo` - Apple Notes CLI
+- `things` - Things 3 task manager
+- `gh` - GitHub CLI (authenticated)
+
+**AI & Analysis:**
+- `~/dta/gateway/ask` - Smart routed queries
+- `~/dta/gateway/think-deep` - Deep reasoning mode
+- `summarize` - YouTube, PDFs, web pages
+- `gemini` - Google Gemini CLI
+- `whisper` - Speech-to-text
+
+**Other:**
+- `weather` - wttr.in backend
+- `mcporter` - MCP client
+- `openai-image` - DALL-E generation
+
+### Agent Architecture
+
+**Main Agent (Me - Claude):**
+- Personal assistant, conversation partner
+- Reads: AGENTS.md, SOUL.md, USER.md, MEMORY.md, TOOLS.md, HEARTBEAT.md
+- Can spawn sub-agents, control browser, execute commands, search web
+
+**Admin Agent (Security Officer):**
+- Background monitor (every 30 min)
+- Writes to: `shared-memory/systems.json`, `network.json`, `security.json`
+- Runs daily security audits → `memory/security-audit-*.md`
+
+**Sub-Agents:**
+- Spawned via `sessions_spawn` for isolated tasks
+- Can use different/cheaper models
+- Auto-cleanup option
+- Reports back to main agent
+
+### Watchdog System
+
+- Monitors Mac Pro & Dell every 5 minutes
+- SSH auto-recovery for Mac Pro
+- Telegram alerts after 3 consecutive failures
+- Dashboard at http://100.82.234.66:8080
+
+### API Integrations
+
+**Active (8):**
+- NVIDIA API (Kimi, Llama, Qwen)
+- Telegram Bot
+- Gmail (himalaya)
+- GitHub (gh CLI)
+- OpenAI (DALL-E)
+- Brave Search
+- wttr.in
+- Google Gemini
+
+**Ready to Integrate (9):**
+- Hunter.io (email lookup)
+- Emailable (email verification)
+- Browserless (headless browser)
+- OpenWeatherMap
+- Resend (transactional email)
+- Hugging Face (NLP)
+- And more...
+
+**Total Free API Value:** ~$50-100/month
+
+### My Role in This Infrastructure
+
+I am the **Strategic Brain** — not a workhorse, but the coordinator:
+- Complex reasoning (Opus-tier, beyond 7B models)
+- Multi-agent orchestration (spawn sub-agents)
+- Persistent memory (MEMORY.md, daily logs)
+- Tool chains (browser, exec, cron, file ops)
+- Human interface (Telegram conversations)
+- Quality gate (review outputs before they ship)
+
+Local models handle volume. I handle judgment.
+
+---
+
 ## Continuity
 
 Each session, you wake up fresh. These files *are* your memory. Read them. Update them. They're how you persist.
