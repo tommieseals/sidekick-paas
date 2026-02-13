@@ -1,6 +1,6 @@
 # MASTER KNOWLEDGE BASE — Tommie's AI Data Center
-## Last Updated: February 7, 2026 (End of Architecture v2.2 Session)
-## STATUS: PRODUCTION — All changes implemented and verified
+## Last Updated: February 12, 2026 (Multi-Node Infrastructure v3.0)
+## STATUS: PRODUCTION — Multi-node routing active, Mac Pro pending setup
 
 ---
 
@@ -11,20 +11,51 @@
 
 ---
 
-## SECTION 1: HARDWARE ARCHITECTURE (v2.2 — CURRENT)
+## SECTION 1: HARDWARE ARCHITECTURE (v3.0 — MULTI-NODE)
 
-### Active Nodes (2-Node Architecture)
+### Active Nodes (3-Node Architecture + Cloud)
 
-| Node | Hardware | Tailscale IP | Role | Models |
-|------|----------|-------------|------|--------|
-| HUB | Mac Mini (M-chip, 16GB RAM) | 100.82.234.66 | Primary orchestrator, bot runtime, scheduling, lightweight AI | qwen2.5:3b ONLY (≤3GB models) |
-| CLOUD | Google Cloud e2-standard-4 (4 vCPU, 16GB RAM, 50GB disk) | 100.107.231.87 | Primary AI worker, heavy inference, transcription, scraping | qwen2.5:7b, nomic-embed-text |
+| Node | Hardware | Tailscale IP | Role | Models | Status |
+|------|----------|-------------|------|--------|--------|
+| MAC MINI | Mac Mini (M-chip, 16GB RAM) | 100.82.234.66 | Orchestrator — LLM Gateway, Clawdbot, Watchdog, Dashboard | phi3:mini (2.3GB), qwen2.5:3b (1.9GB), nomic-embed-text (0.3GB) | ✅ Operational |
+| MAC PRO | Mac Pro | 100.67.192.21 | Compute — Heavy models, code tasks, complex reasoning | deepseek-coder:6.7b, qwen2.5:7b, llama2 (12.3GB total) | ⏳ Pending setup |
+| DELL | Dell Latitude (Windows) | 100.119.87.108 | Failsafe — Lightweight backup, emergency failover | phi3:mini ✅, tinyllama:1.1b ⏳, qwen2.5:3b ⏳ (4.8GB total) | ⚠️ Partial (1/3 models) |
+| GOOGLE CLOUD | e2-standard-4 (4 vCPU, 16GB RAM) | 100.107.231.87 | Reserved — Not in active rotation (may migrate to Oracle Cloud) | qwen2.5:7b, nomic-embed-text | 🔄 Reserved |
+
+### Multi-Node Infrastructure Components
+
+**LLM Gateway v2.0** (`~/dta/gateway/llm-gateway.py`)
+- Intelligent task-based routing
+- Health-aware fallback chains
+- Usage tracking & metrics
+- Commands: `ask`, `ask-code`, `ask-fast`, `check-nodes`, `node-status`
+
+**Watchdog System** (`~/dta/watchdog/watchdog.py`)
+- Runs every 5 minutes via launchd
+- Monitors Mac Pro & Dell
+- Auto-recovery: SSH restart for Mac Pro (`brew services restart ollama`)
+- Telegram alerts after 3 consecutive failures
+- Windows firewall workaround: Dell ping skipped, HTTP check only
+
+**Routing Matrix:**
+- Code tasks → Mac Pro (deepseek-coder:6.7b) → fallback Mac Mini
+- Fast queries → Mac Mini (phi3:mini) → fallback Dell
+- Reasoning → Mac Pro (qwen2.5:7b) → fallback Kimi K2.5 → Mac Mini
+- Vision/images → Kimi K2.5 (cloud only, no local fallback)
+- Embeddings → Mac Mini (nomic-embed-text, no fallback needed)
+- Failover → Dell (phi3:mini, tinyllama:1.1b)
+
+**Documentation:**
+- Full setup: `~/dta/infrastructure/INFRASTRUCTURE_COMPLETE.md`
+- Part 1: `~/dta/infrastructure/PART1_COMPLETE.md` (RAM-safe model distribution)
+- Part 2: `~/dta/infrastructure/PART2_COMPLETE.md` (LLM Gateway)
+- Part 3: `~/dta/infrastructure/PART3_COMPLETE.md` (Watchdog)
+- Dashboard: `~/clawd/dashboard/` (updated Feb 12, 2026)
 
 ### Other Tailscale Devices (NOT infrastructure nodes)
 | Device | Tailscale IP | Notes |
 |--------|-------------|-------|
 | iPhone | 100.114.130.38 | Telegram access, remote monitoring |
-| Dell i9 (64GB) | 100.119.87.108 | ⛔ WORK COMPUTER — SEE SECTION 2 |
 
 ### Cloud VM Details
 - Provider: Google Cloud Platform (GCP)
@@ -41,9 +72,15 @@
 
 ## SECTION 2: HARD BOUNDARIES — READ THIS FIRST
 
-### 🛑 DELL COMPUTER — ABSOLUTE RESTRICTION
+### 🛑 DELL COMPUTER — LIMITED USE ONLY
 
-**The Dell i9 at Tailscale IP 100.119.87.108 is Tommie's WORK COMPUTER issued by Kuraray America Inc.**
+**The Dell at Tailscale IP 100.119.87.108 is Tommie's WORK COMPUTER issued by Kuraray America Inc.**
+
+**NEW ROLE (Feb 12, 2026):** Lightweight failsafe node in multi-node architecture
+- ✅ ALLOWED: Lightweight Ollama models for emergency failover (phi3:mini, tinyllama:1.1b)
+- ✅ ALLOWED: HTTP health checks from Mac Mini watchdog
+- ⚠️ RESTRICTED: No sensitive data, no heavy workloads, no background scraping
+- ❌ FORBIDDEN: No SSH from personal machines (Windows + CrowdStrike)
 
 It runs **CrowdStrike Falcon** enterprise endpoint detection and response (EDR) software that monitors:
 - Every process launched
