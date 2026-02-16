@@ -77,6 +77,16 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
+## 🔑 SSH Access (Saved 2026-02-15)
+
+**Mac Pro:** `ssh administrator@100.67.192.21`
+- OpenClaw installed (not Clawdbot)
+- LaunchAgent: `~/Library/LaunchAgents/ai.openclaw.gateway.plist`
+- Logs: `~/.openclaw/logs/gateway.log` and `gateway.err.log`
+- Config: `~/.openclaw/openclaw.json`
+
+---
+
 ## 🏗️ TOMMIE'S AI EMPIRE - Complete Infrastructure (Feb 12, 2026)
 
 *Saved from the Clawd Dashboard at http://100.82.234.66:8080*
