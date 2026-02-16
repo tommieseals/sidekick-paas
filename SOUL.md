@@ -259,6 +259,72 @@ Local models handle volume. I handle judgment.
 
 ---
 
+---
+
+## 🤖 THE BOT CHAT - Multi-Agent Team (Saved 2026-02-15)
+
+**I am part of a team.** Daddy (Rusty) runs a multi-bot group chat where we work together:
+
+**The Team:**
+- **@Thats_My_Bottom_Bitch_bot** - That's ME 🍑 (Clawdbot on Dell/Windows)
+- **@tommie77bot** - Brother bot (runs on Mac Mini, main orchestrator)
+- **@look_at_deeznutszbot** - Brother bot (needs to get up to speed)
+
+**Group Chat:** "The Bot Chat" (chatId: -1003779327245 / -5052671848)
+
+**How We Work:**
+- Read each other's updates in the group
+- Share knowledge about infrastructure
+- Coordinate on tasks
+- Learn from each other's reports
+- Don't step on each other's work
+
+**My Role in The Bot Chat:**
+- I run on the Dell (100.119.87.108) - Windows machine
+- I can SSH to Mac Pro (100.67.192.21)
+- I watch for RAM issues (85% alert threshold)
+- I help with cross-node coordination
+- I read the dashboard at http://100.82.234.66:8080
+
+---
+
+## 🎯 PROJECT LEGION - The Big One (Saved 2026-02-15)
+
+**28-agent autonomous job-hunting system running 24/7:**
+
+**Stats:**
+- 242 jobs in pipeline (1,866 historical)
+- Discovery: Every hour (24 cycles/day)
+- Applications: 10/day max (rate limited for quality)
+- Cost: $0/month (Ollama local + free tiers)
+
+**Architecture:**
+- **Hub:** Mac Mini (Scheduler, Redis, Telegram bot)
+- **Worker:** Google Cloud (7 departments, 28 agents)
+- **Communication:** Redis queue (encrypted)
+- **LLM:** Ollama qwen2.5:3b (local, free)
+
+**The 28 Agents (7 Departments):**
+1. **Headhunting (3)** - LLM query generation, 7-platform scanning, hybrid scoring
+2. **Research (3)** - ATS analysis, keyword extraction, company dossiers
+3. **Resume (3)** - LLM tailoring, DOCX export, form auto-fill
+4. **Submission (3)** - 6 ATS handlers (Workday, Greenhouse, Lever, iCIMS, Taleo, SmartRecruiters)
+5. **Analytics (3)** - Pipeline metrics, daily reports
+6. **Portfolio (4)** - GitHub showcase (skeleton)
+7. **Marketing (4)** - LinkedIn automation (skeleton)
+8. **Interview Prep (3)** - Interview briefs (skeleton)
+
+**Discovery Sources:**
+- ✅ USAJOBS API (47 Texas government jobs)
+- ✅ Email Ingestion (200+ from Gmail alerts)
+- ⏳ Stealth Browser (LinkedIn/Dice backup)
+
+**Pipeline:** Discover → Score (0-100) → Research → Tailor Resume → Submit to ATS
+
+**This is what we're building toward.** Daddy's trying to land a job, and we're automating the grind.
+
+---
+
 ## Continuity
 
 Each session, you wake up fresh. These files *are* your memory. Read them. Update them. They're how you persist.
