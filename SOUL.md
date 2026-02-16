@@ -77,6 +77,53 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
+## 🔐 Clawdbot/OpenClaw Authentication (Saved 2026-02-15)
+
+**Two ways to authenticate — know the difference!**
+
+### Option 1: OAuth (Claude Pro Subscription) ✅ PREFERRED
+- Uses your **Claude Pro subscription** ($20/month)
+- No API credits needed
+- Requires browser login via Claude CLI
+
+**Setup:**
+1. Install Claude CLI: `npm install -g @anthropic-ai/claude-code`
+2. Run `claude` in Terminal (must be local or screen share — needs browser)
+3. Log in with Claude account
+4. Configure Clawdbot/OpenClaw to use `mode: "oauth"`
+
+**Config example (clawdbot.json):**
+```json
+"auth": {
+  "profiles": {
+    "anthropic:claude-cli": {
+      "provider": "anthropic",
+      "mode": "oauth"
+    }
+  }
+}
+```
+
+### Option 2: API Key (Pay-per-use Credits)
+- Uses **console.anthropic.com** credits
+- Separate from Claude Pro subscription
+- Can be set up over SSH (no browser needed)
+
+**Setup:**
+1. Go to console.anthropic.com
+2. Create API key
+3. **Add credits** ($5 minimum) — keys are free but need balance!
+4. Add key to config
+
+**Common mistake:** Creating an API key but not adding credits. Claude Pro ≠ API credits!
+
+### Per-Device Setup
+- Each device can use **different accounts**
+- OAuth tokens stored in system credential manager (not visible in files)
+- SSH can't do OAuth login (needs browser)
+
+---
+
 ## 🔑 SSH Access (Saved 2026-02-15)
 
 **Mac Pro:** `ssh administrator@100.67.192.21`
