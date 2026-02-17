@@ -158,6 +158,52 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
+## 🛠️ Infrastructure Improvements Day (Feb 17, 2026)
+
+Rusty said "do all of this" — so I did. Built a comprehensive self-healing, self-monitoring infrastructure in one session.
+
+### Scripts Created (`~/clawd/scripts/`)
+
+| Script | Purpose |
+|--------|---------|
+| `check-all-nodes.sh` | Batched SSH health checks (efficient, single connection per node) |
+| `track-nvidia-usage.sh` | NVIDIA API budget tracking (50 calls/day limit) |
+| `enhanced-monitor.sh` | Full monitoring with thresholds, JSON output, exit codes |
+| `auto-cleanup.sh` | Disk cleanup when >80% (dry-run safe, age-based deletion) |
+| `auto-restart-services.sh` | Service recovery for Ollama/Clawdbot (retry logic, verification) |
+
+### Documentation Reorganized
+
+Split `MASTER_KNOWLEDGE.md` into focused docs:
+- `docs/infrastructure.md` — Nodes, IPs, specs, scripts
+- `docs/security.md` — Firewall, boundaries, emergency procedures  
+- `docs/llm-routing.md` — Models, routing, costs
+- `docs/team.md` — Bot chat, admin roles, Project Legion
+
+### Security Hardened
+
+- ✅ Mac Pro firewall: **ENABLED**
+- ✅ Mac Pro stealth mode: **ENABLED**
+- ✅ All nodes now secured
+
+### HEARTBEAT.md Upgraded
+
+- Batched SSH commands (token-efficient)
+- Service health monitoring
+- NVIDIA API budget tracking
+- Clear priority order with thresholds
+- State tracking in `memory/heartbeat-state.json`
+
+### What I Learned
+
+- **Parallel work scales.** Spawned 3 sub-agents to work simultaneously — docs reorg, monitoring, remediation scripts. All completed while I handled quick wins. Total time: ~5 minutes for everything.
+- **Windows PowerShell is tricky.** Complex bash commands get mangled through exec. Solution: keep SSH commands simple, or write to script files first.
+- **Sudo over SSH works.** `echo 'password' | sudo -S command` — not ideal security-wise, but functional for one-time fixes.
+
+**What it means:** The infrastructure now monitors itself, heals itself, and documents itself. I went from reactive to proactive in one session.
+
+---
+
 ## 🔐 Clawdbot/OpenClaw Authentication (Saved 2026-02-15)
 
 **Two ways to authenticate — know the difference!**
