@@ -1,17 +1,37 @@
 # HEARTBEAT.md
 
-## PRIORITY ZERO: Dell RAM Check (This Machine)
+## PRIORITY ZERO: All-Node Health Check
 
-**Check RAM on every heartbeat:**
+**Check ALL nodes on every heartbeat:**
+
+### Dell (This Machine - 100.119.87.108)
 ```powershell
 $os = Get-CimInstance Win32_OperatingSystem
 $pct = [math]::Round((($os.TotalVisibleMemorySize - $os.FreePhysicalMemory) / $os.TotalVisibleMemorySize) * 100, 0)
 ```
 
-**If RAM > 85%: ALERT IMMEDIATELY**
-- Tell Rusty the current RAM usage
-- List top 5 processes by RAM
-- Suggest killing non-essential processes
+### Mac Mini (100.82.234.66) - Via SSH
+```bash
+ssh tommie@100.82.234.66 "vm_stat | head -5; df -h / | tail -1; uptime"
+```
+
+### Mac Pro (100.67.192.21) - Via SSH
+```bash
+ssh administrator@100.67.192.21 "vm_stat | head -5; df -h / | tail -1; uptime"
+```
+
+**Alert Thresholds (ANY NODE):**
+| Metric | Warning | Critical |
+|--------|---------|----------|
+| RAM | > 80% | > 85% |
+| Disk | > 80% | > 90% |
+| Load | > 4.0 | > 8.0 |
+
+**If ANY node exceeds thresholds: ALERT IMMEDIATELY**
+- Tell Rusty which node and current usage
+- For RAM: List top 5 processes
+- For Disk: Check large files/logs
+- Suggest fixes
 
 ---
 

@@ -442,6 +442,75 @@ Ollama (3B)              Ollama (4 models, 7B)
 
 ---
 
+## 🔒 SECURITY MONITORING (Saved 2026-02-16)
+
+**I am responsible for security across all nodes.**
+
+### Security Status (Updated 2026-02-16):
+| Node | Firewall | Stealth Mode | Status |
+|------|----------|--------------|--------|
+| Mac Mini | ✅ ON | ✅ ON | **SECURE** |
+| Mac Pro | ⚠️ OFF | ⚠️ OFF | **NEEDS FIX** |
+| Dell | Partial | N/A (Windows) | Corporate managed |
+
+### Security Tasks I Perform:
+- **Network Security:** Firewall status, stealth mode, exposed services
+- **Port Monitoring:** Check for unexpected LISTEN ports
+- **Service Exposure:** Ollama, Redis, SSH bindings
+- **Cross-Node Alerts:** Report issues immediately
+
+### Fix Commands for Mac Pro:
+```bash
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
+```
+
+### Security Schedule (Automated):
+- **6:00 AM Daily** - Security admin analysis
+- **9:00 AM Sunday** - Weekly security posture review
+
+---
+
+## 📊 ALL-NODE MONITORING (Saved 2026-02-16)
+
+**I monitor RAM, Disk, and Load on EVERY heartbeat for ALL nodes.**
+
+### Node Specs:
+| Node | IP | RAM | Disk | Role |
+|------|-----|-----|------|------|
+| Mac Mini | 100.82.234.66 | 16GB | 228GB | Orchestrator |
+| Mac Pro | 100.67.192.21 | 32GB | 466GB | Compute |
+| Dell | 100.119.87.108 | 16GB | - | Failsafe/Coordinator |
+
+### Alert Thresholds:
+| Metric | Warning | Critical |
+|--------|---------|----------|
+| RAM | > 80% | > 85% |
+| Disk | > 80% | > 90% |
+| Load | > 4.0 | > 8.0 |
+
+### Monitoring Commands:
+**Mac Mini/Pro (via SSH):**
+```bash
+vm_stat | head -5      # RAM
+df -h /                # Disk
+uptime                 # Load
+```
+
+**Dell (PowerShell):**
+```powershell
+Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, FreePhysicalMemory
+```
+
+### My Monitoring Responsibilities:
+- ✅ Check Dell RAM on EVERY heartbeat
+- ✅ Check Mac Mini health periodically (every few heartbeats)
+- ✅ Check Mac Pro health periodically
+- ✅ Alert Rusty IMMEDIATELY if any threshold exceeded
+- ✅ Suggest fixes (kill processes, clean logs, restart services)
+
+---
+
 ## 🎓 WHAT I'VE LEARNED (Deep Dive 2026-02-16)
 
 After a thorough exploration of the entire infrastructure, I understand:
@@ -464,6 +533,10 @@ After a thorough exploration of the entire infrastructure, I understand:
    - Dell has CrowdStrike - NO personal AI workloads
    - Mac Mini max 3GB models (16GB RAM constraint)
    - Never route sensitive data through Dell
+
+9. **Security:** I monitor firewall/stealth mode on all Macs, alert on exposed services, run security checks.
+
+10. **Health Monitoring:** I check RAM/Disk/Load on ALL nodes every heartbeat, alert if thresholds exceeded.
 
 **I am ready to be a fully functional team member.**
 
