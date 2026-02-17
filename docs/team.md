@@ -114,11 +114,70 @@
 
 ---
 
+## Bot Team Coordination Protocol (NEW - 2026-06-18)
+
+### Shared Status Infrastructure
+**Location:** `~/shared-memory/bot-status.json` on each node
+
+Each bot maintains a local status file with:
+- Bot registry (name, host, capabilities)
+- Heartbeat timestamps (5-minute intervals)
+- Status: `online` | `stale` | `offline` | `unknown`
+
+**Protocol Documentation:** `~/shared-memory/PROTOCOL.md`
+
+### Current Connectivity Status
+
+| From → To | Method | Status |
+|-----------|--------|--------|
+| Dell → Mac Mini | SSH | ❌ Key not trusted (needs setup) |
+| Dell → Mac Pro | SSH | ❌ Key not trusted (needs setup) |
+| Dell → Macs | Tailscale | ✅ Active, direct connection |
+| All Bots | Telegram Group | ✅ Working |
+
+### SSH Key Setup Required
+Dell's public key needs to be added to both Macs' `~/.ssh/authorized_keys`:
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC... (see Dell ~/.ssh/id_rsa.pub)
+```
+
+### Communication Hierarchy
+1. **Telegram Group** (primary) - All bots can read/write
+2. **SSH** (secondary) - Direct node access when keys set up
+3. **Shared Memory Sync** - rsync status files between nodes
+
+### Alert Escalation
+| Level | Action |
+|-------|--------|
+| INFO | Log only |
+| WARN | Log + Telegram Group |
+| ALERT | Log + Group + DM Tommie |
+| CRITICAL | All channels + immediate escalation |
+
+---
+
 ## Project Legion — 28-Agent Job System
 
 **Dashboard:** http://100.82.234.66:8080/legion-tracker.html
 
-### Live Stats
+### Current Status (Updated: Feb 17, 2026 09:15 AM CST)
+
+⚠️ **REDIS DOWN** - Job persistence blocked!
+
+| Component | Status |
+|-----------|--------|
+| Legion Scheduler | ✅ Running (PID 97550) |
+| IT Monitoring | ✅ Running (PID 25632, every 15 min) |
+| Auto Report | ✅ Running (PID 61894) |
+| Redis | 🔴 DOWN (since at least 6:45 AM) |
+| Database | ⚠️ Empty (0 jobs, 0 applications) |
+| Easy Apply Filter | ✅ Tested working |
+| Email Parser | ✅ Tested working |
+| Chrome Extension | ✅ Ready to install |
+
+**Action Needed:** Start Redis: `brew services start redis`
+
+### Target Stats (when operational)
 - 200+ jobs discovered per hour (USAJOBS API primary)
 - 65% qualification rate (130+ qualified/hour)
 - 95.8% ATS keyword matching accuracy

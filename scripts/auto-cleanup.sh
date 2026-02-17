@@ -154,11 +154,19 @@ run_cmd() {
 #------------------------------------------------------------------------------
 get_disk_usage() {
     # Returns disk usage percentage for root filesystem
-    run_cmd "df -h / | awk 'NR==2 {gsub(/%/,\"\",\$5); print \$5}'"
+    # More portable version that works on both macOS and Linux
+    run_cmd "df / | awk 'NR==2 {print \$5}' | tr -d '%'"
 }
 
 check_disk_threshold() {
     local usage=$(get_disk_usage)
+    
+    # Validate we got a number
+    if [[ -z "$usage" || ! "$usage" =~ ^[0-9]+$ ]]; then
+        log_error "Failed to get disk usage from target (got: '$usage')"
+        exit 1
+    fi
+    
     log_info "Current disk usage: ${usage}% (threshold: ${THRESHOLD}%)"
     
     if [[ $usage -lt $THRESHOLD ]]; then
