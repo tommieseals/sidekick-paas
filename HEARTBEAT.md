@@ -1,23 +1,25 @@
 # HEARTBEAT.md
 
-## PRIORITY ZERO: All-Node Health Check
+## PRIORITY ZERO: All-Node Health Check (EFFICIENT VERSION)
 
-**Check ALL nodes on every heartbeat:**
+**Run batched check script when available:**
+```bash
+bash ~/clawd/scripts/check-all-nodes.sh
+```
+
+**Or quick manual checks:**
 
 ### Dell (This Machine - 100.119.87.108)
 ```powershell
-$os = Get-CimInstance Win32_OperatingSystem
-$pct = [math]::Round((($os.TotalVisibleMemorySize - $os.FreePhysicalMemory) / $os.TotalVisibleMemorySize) * 100, 0)
+wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /Value
 ```
 
-### Mac Mini (100.82.234.66) - Via SSH
+### Mac Mini + Mac Pro (Batched SSH)
 ```bash
-ssh tommie@100.82.234.66 "vm_stat | head -5; df -h / | tail -1; uptime"
-```
-
-### Mac Pro (100.67.192.21) - Via SSH
-```bash
-ssh administrator@100.67.192.21 "vm_stat | head -5; df -h / | tail -1; uptime"
+# Single command checks both nodes efficiently
+for host in tommie@100.82.234.66 administrator@100.67.192.21; do
+  ssh -o ConnectTimeout=10 $host 'echo "$(hostname):"; memory_pressure 2>/dev/null | grep "free percentage"; df -h / | tail -1; uptime' 2>/dev/null
+done
 ```
 
 **Alert Thresholds (ANY NODE):**
@@ -29,56 +31,68 @@ ssh administrator@100.67.192.21 "vm_stat | head -5; df -h / | tail -1; uptime"
 
 **If ANY node exceeds thresholds: ALERT IMMEDIATELY**
 - Tell Rusty which node and current usage
-- For RAM: List top 5 processes
-- For Disk: Check large files/logs
-- Suggest fixes
+- For RAM: List top 5 processes (`ps aux -m | head -6`)
+- For Disk: Check large files (`du -sh /var/log/* 2>/dev/null | sort -hr | head -5`)
+- Run auto-remediation if available: `bash ~/clawd/scripts/auto-cleanup.sh`
 
 ---
 
-## FIRST PRIORITY: Read Admin Reports & Act
+## PRIORITY ONE: Service Health
 
-**BEFORE ANYTHING ELSE:**
-1. **Read shared-memory reports** - network.json, systems.json, security.json
-2. **Act on issues immediately:**
-   - RAM < 5GB → Spawn sub-agent to fix
-   - Disk > 85% → Alert and clean up
-   - Network issues → Investigate
-3. **Don't wait for user** - Fix problems proactively
-
-**Run proactive monitor:**
+**Check key services are running:**
 ```bash
-bash /Users/tommie/clawd/scripts/proactive-monitor.sh
+# Mac Mini
+ssh tommie@100.82.234.66 'pgrep -x ollama && pgrep -f clawdbot-gateway'
+
+# Mac Pro  
+ssh administrator@100.67.192.21 'pgrep -x ollama && pgrep -f openclaw'
 ```
 
-## SECOND PRIORITY: Group Chat Monitoring
+**If service is down:** Run `bash ~/clawd/scripts/auto-restart-services.sh`
+
+---
+
+## PRIORITY TWO: NVIDIA API Budget
+
+**Check daily usage (50 calls/day limit):**
+```bash
+ssh tommie@100.82.234.66 'bash ~/dta/gateway/track-nvidia-usage.sh status 2>/dev/null || echo "Tracker not set up"'
+```
+
+- If > 40 calls: Warn about approaching limit
+- If > 45 calls: Suggest switching to local Ollama
+
+---
+
+## PRIORITY THREE: Admin Reports & Group Chat
+
+**Check shared-memory reports (on Mac Mini):**
+```bash
+ssh tommie@100.82.234.66 'cat ~/shared-memory/*.json 2>/dev/null | head -50'
+```
 
 **Check "The Bot Chat" group:**
-1. Check for @ mentions (chatId: -5052671848)
-2. Respond immediately to any questions
-3. User has warned 3 times - IT IS CRITICAL
-
 ```bash
-curl -s "https://api.telegram.org/bot8392398778:AAH5lan45kR-VT74d3OiXAAIxlPyR4skGzU/getUpdates"
+curl -s "https://api.telegram.org/bot8392398778:AAH5lan45kR-VT74d3OiXAAIxlPyR4skGzU/getUpdates?offset=-10"
 ```
 
-## Security Officer Checks
+---
 
-Every few heartbeats (2-4 times per day), check for security audit reports:
+## PRIORITY FOUR: Security Checks (2-4x daily)
 
-1. **Check latest security audit** (`memory/security-audit-*.md`)
-   - If today's report exists and shows issues → alert immediately
-   - Track last check in `memory/heartbeat-state.json`
-   - Only alert once per report (don't spam)
+**Check for security audit reports:**
+```bash
+ssh tommie@100.82.234.66 'ls -la ~/clawd/memory/security-audit-*.md 2>/dev/null | tail -3'
+```
 
-2. **What to report:**
-   - Number of issues found
-   - Summary of issue types (hardcoded secrets, git exposure, network, etc.)
-   - Location of full report
+**Verify firewall status:**
+```bash
+# Mac Mini
+ssh tommie@100.82.234.66 'sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null || echo "needs sudo"'
 
-**When NOT to alert:**
-- Report shows 0 issues (all clean)
-- Already alerted about this report
-- Late night (23:00-08:00) unless critical (10+ issues)
+# Mac Pro (⚠️ CURRENTLY OFF - needs manual fix)
+ssh administrator@100.67.192.21 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
+```
 
 ---
 
@@ -86,13 +100,35 @@ Every few heartbeats (2-4 times per day), check for security audit reports:
 
 **On every heartbeat, remember:**
 - Use Ollama local (FREE) for simple checks
-- Batch operations - don't make separate requests
+- Batch SSH commands - don't make separate connections
 - Spawn sub-agents for heavy research tasks
 - Check `session_status` if usage seems high
 
 **NVIDIA API Budget:** 50 calls/day total (shared across Kimi, Llama, Qwen)
 
-**Cost hierarchy:**
-1. 🆓 Ollama local → Always try first
-2. 💰 NVIDIA/Gemini → For specialized tasks
-3. 💰💰💰 Claude → Only when necessary
+---
+
+## MANUAL ACTION REQUIRED
+
+### ⚠️ Mac Pro Firewall (Needs Rusty)
+Run these commands on Mac Pro with sudo password:
+```bash
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
+```
+
+---
+
+## State Tracking
+
+Track check timestamps in `memory/heartbeat-state.json`:
+```json
+{
+  "lastChecks": {
+    "fullHealth": null,
+    "security": null,
+    "nvidia": null
+  },
+  "alerts": []
+}
+```
