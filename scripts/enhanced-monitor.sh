@@ -91,7 +91,7 @@ service_status() {
 # -----------------------------------------------------------------------------
 
 check_dell_local() {
-    echo -e "${BOLD}Checking Dell (local)...${NC}"
+    [[ "$QUIET" != "true" ]] && echo -e "${BOLD}Checking Dell (local)...${NC}"
     
     local ram_pct disk_pct load_avg
     local ollama_running=false clawdbot_running=false docker_running=false
@@ -163,7 +163,7 @@ check_mac_remote() {
     local name=$1
     local host=$2
     
-    echo -e "${BOLD}Checking ${name} (${host})...${NC}"
+    [[ "$QUIET" != "true" ]] && echo -e "${BOLD}Checking ${name} (${host})...${NC}"
     
     # Combined command to get all metrics in one SSH session
     local result
@@ -207,7 +207,7 @@ REMOTE_SCRIPT
 )
     
     if [[ -z "$result" ]]; then
-        echo -e "${RED}  Failed to connect to ${name}${NC}"
+        [[ "$QUIET" != "true" ]] && echo -e "${RED}  Failed to connect to ${name}${NC}"
         eval "${name//-/_}_RAM='N/A'"
         eval "${name//-/_}_DISK='N/A'"
         eval "${name//-/_}_LOAD='N/A'"
@@ -257,7 +257,7 @@ REMOTE_SCRIPT
 # -----------------------------------------------------------------------------
 
 check_nvidia_usage() {
-    echo -e "${BOLD}Checking NVIDIA API usage...${NC}"
+    [[ "$QUIET" != "true" ]] && echo -e "${BOLD}Checking NVIDIA API usage...${NC}"
     
     local gateway_dir="$HOME/dta/gateway"
     local log_file="${gateway_dir}/nvidia_usage.log"
@@ -368,14 +368,24 @@ print_summary() {
 # -----------------------------------------------------------------------------
 
 output_json() {
+    # Helper to convert N/A to null for JSON
+    json_num() {
+        local val="$1"
+        if [[ "$val" == "N/A" || -z "$val" ]]; then
+            echo "null"
+        else
+            echo "$val"
+        fi
+    }
+    
     cat << EOF
 {
   "timestamp": "$(date -Iseconds)",
   "nodes": {
     "dell": {
-      "ram_percent": ${DELL_RAM:-null},
-      "disk_percent": ${DELL_DISK:-null},
-      "load_avg": ${DELL_LOAD:-null},
+      "ram_percent": $(json_num "$DELL_RAM"),
+      "disk_percent": $(json_num "$DELL_DISK"),
+      "load_avg": $(json_num "$DELL_LOAD"),
       "services": {
         "ollama": ${DELL_OLLAMA:-false},
         "clawdbot": ${DELL_CLAWDBOT:-false},
@@ -383,9 +393,9 @@ output_json() {
       }
     },
     "mac_mini": {
-      "ram_percent": ${Mac_Mini_RAM:-null},
-      "disk_percent": ${Mac_Mini_DISK:-null},
-      "load_avg": ${Mac_Mini_LOAD:-null},
+      "ram_percent": $(json_num "$Mac_Mini_RAM"),
+      "disk_percent": $(json_num "$Mac_Mini_DISK"),
+      "load_avg": $(json_num "$Mac_Mini_LOAD"),
       "services": {
         "ollama": ${Mac_Mini_OLLAMA:-false},
         "clawdbot": ${Mac_Mini_CLAWDBOT:-false},
@@ -393,9 +403,9 @@ output_json() {
       }
     },
     "mac_pro": {
-      "ram_percent": ${Mac_Pro_RAM:-null},
-      "disk_percent": ${Mac_Pro_DISK:-null},
-      "load_avg": ${Mac_Pro_LOAD:-null},
+      "ram_percent": $(json_num "$Mac_Pro_RAM"),
+      "disk_percent": $(json_num "$Mac_Pro_DISK"),
+      "load_avg": $(json_num "$Mac_Pro_LOAD"),
       "services": {
         "ollama": ${Mac_Pro_OLLAMA:-false},
         "clawdbot": ${Mac_Pro_CLAWDBOT:-false},
@@ -453,10 +463,16 @@ main() {
         esac
     done
     
-    [[ "$quiet_mode" == "false" && "$json_mode" == "false" ]] && print_header
+    # JSON mode implies quiet
+    [[ "$json_mode" == "true" ]] && quiet_mode=true
+    
+    # Export for child functions
+    [[ "$quiet_mode" == "true" ]] && QUIET="true" || QUIET="false"
+    
+    [[ "$quiet_mode" == "false" ]] && print_header
     
     # Run checks
-    [[ "$quiet_mode" == "false" && "$json_mode" == "false" ]] && echo -e "${BOLD}Running health checks...${NC}\n"
+    [[ "$quiet_mode" == "false" ]] && echo -e "${BOLD}Running health checks...${NC}\n"
     
     check_dell_local
     check_mac_remote "Mac-Mini" "100.82.234.66"
