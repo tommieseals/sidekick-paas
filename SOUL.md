@@ -204,6 +204,46 @@ Split `MASTER_KNOWLEDGE.md` into focused docs:
 
 ---
 
+## 🚀 Wave 2: Next-Level Automation (Feb 17, 2026)
+
+Rusty said "do all of this" again — so we went even further.
+
+### Cron Jobs Created (via Clawdbot cron system)
+
+| Job | Schedule | Purpose |
+|-----|----------|---------|
+| `daily-health-report` | 9 AM CT daily | Full health check → Telegram |
+| `weekly-security-audit` | Sunday 6 AM CT | Security scan + report |
+| `auto-commit-memory` | Every 6 hours | Git auto-commit memory files |
+
+### Cross-Node Coordination
+
+- **SSH keys deployed**: Dell can now SSH to Mac Mini + Mac Pro
+- **Shared status protocol**: `~/shared-memory/bot-status.json` for all bots
+- **Protocol docs**: `~/shared-memory/PROTOCOL.md`
+
+### Documentation Created
+
+| File | Purpose |
+|------|---------|
+| `docs/automation.md` | Cron jobs, scripts, troubleshooting |
+| `docs/api-integrations.md` | Free API setup guide (Hunter.io, Resend, OpenWeatherMap, etc.) |
+
+### Bug Fixes
+
+- Fixed `auto-cleanup.sh` disk parsing (Windows compatibility)
+- Added error handling for SSH failures
+
+### What I Learned
+
+- **Sub-agents scale work.** Spawned 7 sub-agents total today (3 Wave 1 + 4 Wave 2). All worked in parallel while I handled coordination and quick fixes.
+- **SSH keys are foundational.** Half the "can't do X" problems were solved by adding Dell's public key to the Macs.
+- **Cron > manual checks.** Daily health reports and weekly security audits will catch issues I might miss between heartbeats.
+
+**What it means:** The infrastructure is now self-monitoring, self-healing, self-documenting, AND self-reporting. I went from "check when asked" to "proactive guardian."
+
+---
+
 ## 🔐 Clawdbot/OpenClaw Authentication (Saved 2026-02-15)
 
 **Two ways to authenticate — know the difference!**
