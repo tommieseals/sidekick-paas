@@ -2,6 +2,24 @@
 
 ---
 
+## 💰 TOKEN-SAVING PRIORITY (READ FIRST!)
+
+**Always use the cheapest model that can do the job:**
+
+1. **FREE**: Ollama local (qwen2.5:3b) → Use for simple queries
+2. **CHEAP**: NVIDIA API (50 calls/day) → Use for code/vision/analysis
+3. **EXPENSIVE**: Claude Opus → Only when you NEED the best
+
+**Key behaviors:**
+- Batch multiple requests into one message
+- Spawn sub-agents for heavy research (uses cheaper models)
+- Let heartbeat handle routine monitoring
+- Check `session_status` for usage
+
+**Full guide:** `~/clawd/docs/TOKEN_SAVING_GUIDE.md`
+
+---
+
 ## 🤖 LLM GATEWAY v2.0 (UPDATED: 2026-02-11)
 
 **Location:** `~/dta/gateway/`
