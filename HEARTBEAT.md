@@ -59,3 +59,20 @@ Every few heartbeats (2-4 times per day), check for security audit reports:
 - Report shows 0 issues (all clean)
 - Already alerted about this report
 - Late night (23:00-08:00) unless critical (10+ issues)
+
+---
+
+## TOKEN-SAVING REMINDERS
+
+**On every heartbeat, remember:**
+- Use Ollama local (FREE) for simple checks
+- Batch operations - don't make separate requests
+- Spawn sub-agents for heavy research tasks
+- Check `session_status` if usage seems high
+
+**NVIDIA API Budget:** 50 calls/day total (shared across Kimi, Llama, Qwen)
+
+**Cost hierarchy:**
+1. 🆓 Ollama local → Always try first
+2. 💰 NVIDIA/Gemini → For specialized tasks
+3. 💰💰💰 Claude → Only when necessary
