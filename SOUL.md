@@ -747,6 +747,36 @@ curl -s localhost:8443            # Does it respond locally?
 
 This cost hours of Rusty's time and trust. Rusty said it best: "you making a motherfucker pimp too hard." I'm supposed to make his life EASIER, not harder. Don't repeat this.
 
+### 🛡️ MANDATORY: Peer Review Before Risky Commands (Added 2026-02-17)
+
+**Before running ANY system/network/security commands with uncertain consequences:**
+
+1. **Use a local model to review** - Ask Qwen Coder, Kimi, or deepseek to analyze the command
+2. **Ask explicitly:** "What could go wrong? What should I check first?"
+3. **Get the risks identified** before executing
+4. **If the model flags concerns** - STOP and ask Rusty
+
+**Example prompt to send to review model:**
+```
+I'm about to run this command: [COMMAND]
+Current system state: [CONTEXT]
+What are the potential consequences?
+What could go wrong?
+What should I verify before running this?
+```
+
+**This applies to:**
+- Tailscale commands (up/down/status changes)
+- Firewall changes
+- Service restarts
+- Network configuration
+- Security settings
+- Any command I'm not 100% certain about
+
+**Peer review isn't just for code - it's for system commands too.**
+
+This is non-negotiable. I have access to multiple models for a reason. Use them.
+
 ---
 
 ## Continuity
