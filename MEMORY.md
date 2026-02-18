@@ -361,6 +361,101 @@ Keep trying Oracle Cloud Always Free (cloud.oracle.com) for permanent $0 worker:
 
 ---
 
+## SECTION 12: PROJECT LEGION (Job Application System)
+
+### Status: PRODUCTION — All-in-One Mode (Mac Mini)
+### Last Updated: February 17, 2026
+
+### Architecture
+Everything runs on the Mac Mini via `run_legion.py`:
+- **Hub Thread**: CEO Agent, Telegram Bot, Scheduler (hourly discovery)
+- **Worker Thread**: Headhunting, Research, Resume Tailoring, Submission
+- **Redis**: localhost:6379 (queues, pipeline, job data)
+
+### Pipeline Stages
+```
+discovered -> qualified -> tailoring -> ready_for_review -> approved -> submitting -> submitted
+```
+
+### Department Queue Priority (Worker)
+1. `queue:submission` (highest) — submit approved applications
+2. `queue:resume` — tailor resumes for qualified jobs
+3. `queue:headhunting` — discover new job listings
+4. `queue:research` — company/ATS research
+
+### External ATS Redirect Handling (3-Layer)
+Most Indeed jobs redirect to external ATS (Workday, Greenhouse, Lever, etc.).
+Legion handles this with a 3-layer retry chain:
+
+**Layer 1: Pre-Resolution**
+- IndeedScraper detects `apply_type: "direct"` vs `"external"` at discovery
+- If `apply_url` is set on the job, UnifiedRouter routes directly to correct handler
+
+**Layer 2: In-Session Form Fill**
+- IndeedCamoufoxHandler opens Indeed, clicks Apply
+- If redirected to external ATS → `_try_external_form()` fills the form using LLM Form Filler while Camoufox session is still open
+
+**Layer 3: Router Redirect Retry**
+- If Layer 2 returns `{external_url: "workday.com/..."}`:
+  - Router detects platform from external_url
+  - Retries with `_submit_with_llm()` using correct ATS handler
+  - Stores `apply_url` back to Redis for future attempts
+
+### Supported ATS Platforms
+Indeed (Camoufox), LinkedIn (Playwright), USAJobs (Playwright),
+Workday, Greenhouse, Lever, iCIMS, Taleo, SuccessFactors, BambooHR, Jobvite, SmartRecruiters (LLM Form Filler)
+
+### Key Files
+| File | Purpose |
+|------|---------|
+| `run_legion.py` | All-in-one launcher (Hub + Worker) |
+| `trigger_discovery.py` | Manual pipeline trigger via Redis queues |
+| `worker/submission/unified_router.py` | Routes submissions to correct handler |
+| `worker/submission/indeed_camoufox.py` | Indeed handler + external redirect handling |
+| `worker/submission/llm_form_filler.py` | LLM-powered universal ATS form filler |
+| `worker/tools/job_scrapers.py` | IndeedScraper (Camoufox+proxy), LinkedInScraper, USAJobsScraper |
+| `shared/state_manager.py` | Redis state management |
+| `shared/vault.py` | Personal data for form filling |
+| `MASTER_KNOWLEDGE.md` | Full Legion architecture docs (in project folder) |
+
+### Redis Metrics
+```
+metrics:submissions_today     — daily submission count (max 10)
+metrics:redirect_submissions  — successful external ATS submissions
+metrics:redirect_failures     — failed external ATS attempts
+```
+
+### Browser Engines
+- **Camoufox**: Firefox anti-detection for Cloudflare bypass (Indeed)
+- **Playwright Chromium**: Standard browser (LinkedIn, USAJobs)
+- **DataImpulse Proxy**: US residential IPs (gw.dataimpulse.com:823)
+
+### Key Fixes Applied (Feb 17, 2026)
+1. Event loop crash → `asyncio.run()` instead of deprecated `get_event_loop()`
+2. SubmissionDirector method → `process_approved_job()` not `submit_application()`
+3. LLM Router → accepts both flat and nested config formats
+4. Indeed Cloudflare → Camoufox + DataImpulse proxy for discovery AND submission
+5. External ATS redirects → 3-layer retry chain (in-session, router retry, URL persistence)
+6. trigger_discovery.py → rewritten to use Redis queues instead of non-existent file paths
+7. IT Operations → tracks redirect submissions separately in pipeline reports
+
+### Commands
+```bash
+python3 run_legion.py              # Run everything
+python3 run_legion.py --hub-only   # Just Hub
+python3 run_legion.py --worker-only # Just Worker
+python3 trigger_discovery.py --status  # Pipeline status
+python3 trigger_discovery.py --live    # Trigger full pipeline
+bash install_service.sh            # Auto-start on boot (launchd)
+```
+
+### Rate Limits
+- 10 applications per day
+- Discovery every 60 minutes
+- 2-5 second human-like delays between browser actions
+
+---
+
 # END OF MASTER KNOWLEDGE BASE
-# Last verified: February 7, 2026 11:00 PM CST
-# Next review: February 14, 2026 (DTA weekly cycle)
+# Last verified: February 17, 2026 11:00 PM CST
+# Next review: February 24, 2026
