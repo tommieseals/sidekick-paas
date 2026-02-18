@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "profiles": {
+    "anthropic:default": {
+      "type": "token",
+      "provider": "anthropic",
+      "token": "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"
+    },
+    "openai-codex:codex-cli": {
+      "type": "oauth",
+      "provider": "openai-codex",
+      "access": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MzQ0ZTY1LWJiYzktNDRkMS1hOWQwLWY5NTdiMDc5YmQwZSIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSJdLCJjbGllbnRfaWQiOiJhcHBfRU1vYW1FRVo3M2YwQ2tYYVhwN2hyYW5uIiwiZXhwIjoxNzcyMjg1MDk0LCJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiODNiNDBiZmYtZmZkMC00NGJlLTk5YTMtYmQ4OTFmY2IwMzMyIiwiY2hhdGdwdF9hY2NvdW50X3VzZXJfaWQiOiJ1c2VyLTlnQXVyVExUZ0doN3kxQmhONVhCc0hQOF9fODNiNDBiZmYtZmZkMC00NGJlLTk5YTMtYmQ4OTFmY2IwMzMyIiwiY2hhdGdwdF9jb21wdXRlX3Jlc2lkZW5jeSI6Im5vX2NvbnN0cmFpbnQiLCJjaGF0Z3B0X3BsYW5fdHlwZSI6InRlYW0iLCJjaGF0Z3B0X3VzZXJfaWQiOiJ1c2VyLTlnQXVyVExUZ0doN3kxQmhONVhCc0hQOCIsInVzZXJfaWQiOiJ1c2VyLTlnQXVyVExUZ0doN3kxQmhONVhCc0hQOCJ9LCJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ0b21taWVzZWFsczc3MDBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9LCJpYXQiOjE3NzE0MjEwOTMsImlzcyI6Imh0dHBzOi8vYXV0aC5vcGVuYWkuY29tIiwianRpIjoiYTNmYjcyMGYtZTNkNS00NWQxLWI4NWYtZDU1ZTkwNmQwOWFlIiwibmJmIjoxNzcxNDIxMDkzLCJwd2RfYXV0aF90aW1lIjoxNzcwNjg0MTk2MjcxLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImVtYWlsIiwib2ZmbGluZV9hY2Nlc3MiXSwic2Vzc2lvbl9pZCI6ImF1dGhzZXNzX3pXTzZMUU05UHpOZm5ob3JBeE1adm55VyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA1NTc0NDIxMTExODgwOTkwNTM5In0.PDU_6WHwMGHQOZv5fu2TOP0U0DYinpJ0BHS7OMX0o2WXOOS9dMjk2WdKnTydGTx1uZKkNw2S6gwvIqU8azfReSezNIxUvpig5RgGR1jBJw4JWj3YozXfgqoH3TNjT-cx4AU7NWg-1PmIro68ugRsoTeE44tte5HjUKdeZG1GlQDz_bBOWha9C8Zh3ypQCFnyqZYedEs1zNcWY72pSP81ZjuvlKWYgXWc0QEL_bSk0h-hPd1ZS0Znw6jcsiY7zlL8TM-1MJCP6CbyGEitiKomgufj3JEONSO-Isd13e_hAjRE7hyM58uDjL8fxKwA3h_YqDNcRg7LNbi3LNY23n58qIflckb1l8sP8xWpME6GqJxqbs7ZOkzkaZD22nHH0KFh8xGQ5XEZrH2_N45Q-FuRnIigQpelESbMHUww3WI8OeZ9PddKja1kdN2ykjqGe2WygZ8xJmsVGdDGJ92OjVMnuaq50AvidmpRRo7EgnqcScXsKONWQvMYunatcNCtF9qbIVXtEJDIyn8Y4Ev3r6GZxlHcRrBcpsxSBrNcUpfspjFp4_SiSJZszNbcLsPy9OsunA0MXizv9-rstX32kwEBjYLdvU9R3MSgBUDIDWc-XbXxAV-UtvE0R0uInxNI8GKWt1Eeqz93O5NhdR0AsxoJrAaHHurCYNKCGMSXR4DNhm0",
+      "refresh": "rt_HTjC2sElAR2oobL4H9GmKzN6kKUg6EtO-5pwVPeI4LE.0Q4G33SlSNiMBbnn-ybkF3aFfME2tMRJMn7067vzC_o",
+      "expires": 1772285093638,
+      "accountId": "83b40bff-ffd0-44be-99a3-bd891fcb0332"
+    }
+  },
+  "lastGood": {
+    "anthropic": "anthropic:default"
+  },
+  "usageStats": {}
+}
