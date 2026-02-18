@@ -127,5 +127,26 @@ ssh dell           # 100.119.87.108
 
 ---
 
+---
+
+## Project Legion (Job Application System)
+
+**Status:** PRODUCTION — All-in-One on Mac Mini
+**Full Docs:** `~/Projects/job-hunter-system/MASTER_KNOWLEDGE.md`
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| Launcher | `run_legion.py` | Runs Hub + Worker in one process |
+| Pipeline Trigger | `trigger_discovery.py` | Manual queue trigger via Redis |
+| Submission Router | `worker/submission/unified_router.py` | Routes to correct ATS handler |
+| Indeed Handler | `worker/submission/indeed_camoufox.py` | Camoufox + redirect to external ATS |
+| LLM Form Filler | `worker/submission/llm_form_filler.py` | Universal ATS form filler |
+| State Manager | `shared/state_manager.py` | Redis queues + pipeline |
+
+**Key:** External ATS jobs (Indeed -> Workday/Greenhouse/Lever) handled via 3-layer redirect retry chain.
+See `MEMORY.md` Section 12 for full details.
+
+---
+
 # END OF INDEX
-# For complete details, see docs/*.md
+# For complete details, see docs/*.md and MEMORY.md
