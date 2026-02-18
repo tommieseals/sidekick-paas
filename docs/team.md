@@ -13,7 +13,7 @@
 |-----|----------|----------|------|
 | 🍑 **Bottom Bitch** | @Thats_My_Bottom_Bitch_bot | Dell (100.119.87.108) | Coordinator, Windows host |
 | 🧠 **Tommie77** | @tommie77bot | Mac Mini (100.82.234.66) | Main orchestrator |
-| 🐭 **Pinky** | @Pinkypickles_bot | Mac Pro (100.67.192.21) | Compute node |
+| 🐭 **Pinky** | @Pinkypickles_bot | Mac Pro (100.64.58.30) | Compute node |
 | 🥜 **Deez Nutz** | @look_at_deeznutszbot | TBD | Needs setup |
 
 ### How We Work

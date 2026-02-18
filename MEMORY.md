@@ -18,7 +18,7 @@
 | Node | Hardware | Tailscale IP | Role | Models | Status |
 |------|----------|-------------|------|--------|--------|
 | MAC MINI | Mac Mini (M-chip, 16GB RAM) | 100.82.234.66 | Orchestrator — LLM Gateway, Clawdbot, Watchdog, Dashboard | phi3:mini (2.3GB), qwen2.5:3b (1.9GB), nomic-embed-text (0.3GB) | ✅ Operational |
-| MAC PRO | Mac Pro | 100.67.192.21 | Compute — Heavy models, code tasks, complex reasoning | deepseek-coder:6.7b, qwen2.5:7b, llama2 (12.3GB total) | ⏳ Pending setup |
+| MAC PRO | Mac Pro | 100.64.58.30 | Compute — Heavy models, code tasks, complex reasoning | deepseek-coder:6.7b, qwen2.5:7b, llama2 (12.3GB total) | ⏳ Pending setup |
 | DELL | Dell Latitude (Windows) | 100.119.87.108 | Failsafe — Lightweight backup, emergency failover | phi3:mini ✅, tinyllama:1.1b ⏳, qwen2.5:3b ⏳ (4.8GB total) | ⚠️ Partial (1/3 models) |
 | GOOGLE CLOUD | e2-standard-4 (4 vCPU, 16GB RAM) | 100.107.231.87 | Reserved — Not in active rotation (may migrate to Oracle Cloud) | qwen2.5:7b, nomic-embed-text | 🔄 Reserved |
 

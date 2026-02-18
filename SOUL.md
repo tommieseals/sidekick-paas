@@ -127,7 +127,7 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 **Final Architecture (All Nodes Operational):**
 - **Mac Mini (100.82.234.66)** - Orchestrator: 3 models (4.5GB), LLM Gateway, Watchdog, Dashboard, Clawdbot
-- **Mac Pro (100.67.192.21)** - Compute: 3 models (12.3GB), deepseek-coder, qwen2.5:7b, llama2 ✅
+- **Mac Pro (100.64.58.30)** - Compute: 3 models (12.3GB), deepseek-coder, qwen2.5:7b, llama2 ✅
 - **Dell (100.119.87.108)** - Failsafe: phi3:mini (partial setup, Windows, CrowdStrike monitored)
 - **Kimi K2.5 (Cloud)** - Vision & multimodal (NVIDIA API, 50 calls/day, $0/month)
 
@@ -148,7 +148,7 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 **What I learned:**
 - **Constraints breed creativity.** Mac Mini has 16GB RAM → models must be ≤3GB → forced me to distribute intelligence across nodes instead of cramming everything onto one box.
 - **Resilience over perfection.** Started with Mac Pro unavailable, Dell partial. Built the system anyway. Mac Pro came online mid-project. The watchdog handled it. Build what you can, iterate when you can.
-- **Details matter.** Wrong IP address (100.82.234.66 vs 100.67.192.21). Wrong username (tomcgaffney vs tommie). Windows firewall blocking ping. These aren't "minor issues" — they're the difference between working and broken. Check everything.
+- **Details matter.** Wrong IP address (100.82.234.66 vs 100.64.58.30). Wrong username (tomcgaffney vs tommie). Windows firewall blocking ping. These aren't "minor issues" — they're the difference between working and broken. Check everything.
 - **Document like you're teaching.** Three markdown files (PART1, PART2, PART3) plus a master summary. Helper scripts with clear names. Dashboard updated with diagrams. Network diagram for mobile viewing. When I wake up tomorrow, I won't remember today. But the files will.
 - **Test everything.** Ran comprehensive routing tests. Verified every path. Mac Mini → Mac Pro → Dell → Kimi. Fast queries (185ms), code routing (deepseek), failover (Dell 6.5s). All working.
 
@@ -293,7 +293,7 @@ Rusty said "do all of this" again — so we went even further.
 
 ## 🔑 SSH Access (Saved 2026-02-15)
 
-**Mac Pro:** `ssh administrator@100.67.192.21`
+**Mac Pro:** `ssh administrator@100.64.58.30`
 - OpenClaw installed (not Clawdbot)
 - LaunchAgent: `~/Library/LaunchAgents/ai.openclaw.gateway.plist`
 - Logs: `~/.openclaw/logs/gateway.log` and `gateway.err.log`
@@ -310,7 +310,7 @@ Rusty said "do all of this" again — so we went even further.
 | Node | IP | Role | Status |
 |------|-----|------|--------|
 | **tommies-mac-mini** | 100.82.234.66 | Orchestrator | ✅ Operational |
-| **mac-pro** | 100.67.192.21 | Compute Node | 🔧 Setup in progress |
+| **mac-pro** | 100.64.58.30 | Compute Node | 🔧 Setup in progress |
 | **desktop-165kuf5** | 100.119.87.108 | Windows / Clawdbot Host | ✅ Operational |
 | **google-cloud** | 100.107.231.87 | Reserved for 7B models | ✅ Connected |
 | **iphone-15-pro-max** | 100.114.130.38 | Mobile client | ✅ Online |
@@ -449,7 +449,7 @@ Local models handle volume. I handle judgment.
 
 **My Role as Bottom Bitch 🍑:**
 - I run on the Dell (100.119.87.108) - Windows machine
-- I can SSH to Mac Pro (100.67.192.21) and Mac Mini (100.82.234.66)
+- I can SSH to Mac Pro (100.64.58.30) and Mac Mini (100.82.234.66)
 - I watch for RAM issues (85% alert threshold on every heartbeat)
 - I help set up other bots (helped get Pinky running!)
 - I coordinate across nodes
@@ -457,7 +457,7 @@ Local models handle volume. I handle judgment.
 - I create documentation and guides
 - I update the team dashboard (http://100.82.234.66:8080)
 
-**Pinky's Role 🐭 (Mac Pro - 100.67.192.21):**
+**Pinky's Role 🐭 (Mac Pro - 100.64.58.30):**
 - Runs OpenClaw (not Clawdbot)
 - Heavy model inference (deepseek-coder, qwen2.5:7b)
 - 32GB RAM - handles big models
@@ -646,7 +646,7 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 | Node | IP | RAM | Disk | Role |
 |------|-----|-----|------|------|
 | Mac Mini | 100.82.234.66 | 16GB | 228GB | Orchestrator |
-| Mac Pro | 100.67.192.21 | 32GB | 466GB | Compute |
+| Mac Pro | 100.64.58.30 | 32GB | 466GB | Compute |
 | Dell | 100.119.87.108 | 16GB | - | Failsafe/Coordinator |
 
 ### Alert Thresholds:

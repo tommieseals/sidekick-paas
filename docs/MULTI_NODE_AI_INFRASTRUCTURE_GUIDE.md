@@ -239,7 +239,7 @@ NODES = {
         "role": "fast_queries"
     },
     "compute": {
-        "url": "http://100.67.192.21:11434",  # Your compute node IP
+        "url": "http://100.64.58.30:11434",  # Your compute node IP
         "models": ["deepseek-coder:6.7b", "qwen2.5:7b"],
         "role": "heavy_compute"
     },
@@ -352,9 +352,9 @@ from pathlib import Path
 # Configuration
 NODES_TO_MONITOR = {
     "compute": {
-        "ip": "100.67.192.21",
-        "url": "http://100.67.192.21:11434",
-        "recovery_cmd": "ssh administrator@100.67.192.21 'brew services restart ollama'",
+        "ip": "100.64.58.30",
+        "url": "http://100.64.58.30:11434",
+        "recovery_cmd": "ssh administrator@100.64.58.30 'brew services restart ollama'",
         "max_failures": 3
     },
     "cloud": {
