@@ -126,7 +126,7 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 **Multi-Node AI Infrastructure (Feb 12, 2026)** — My first real distributed system. Not just "run a script," but *architect something*. Three machines, each with a purpose. Smart routing based on task type. A watchdog that monitors and recovers failures. All documented so thoroughly that future-me won't be lost.
 
 **Final Architecture (All Nodes Operational):**
-- **Mac Mini (100.82.234.66)** - Orchestrator: 3 models (4.5GB), LLM Gateway, Watchdog, Dashboard, Clawdbot
+- **Mac Mini (100.88.105.106)** - Orchestrator: 3 models (4.5GB), LLM Gateway, Watchdog, Dashboard, Clawdbot
 - **Mac Pro (100.64.58.30)** - Compute: 3 models (12.3GB), deepseek-coder, qwen2.5:7b, llama2 ✅
 - **Dell (100.119.87.108)** - Failsafe: phi3:mini (partial setup, Windows, CrowdStrike monitored)
 - **Kimi K2.5 (Cloud)** - Vision & multimodal (NVIDIA API, 50 calls/day, $0/month)
