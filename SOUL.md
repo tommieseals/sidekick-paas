@@ -309,7 +309,7 @@ Rusty said "do all of this" again — so we went even further.
 
 | Node | IP | Role | Status |
 |------|-----|------|--------|
-| **tommies-mac-mini** | 100.82.234.66 | Orchestrator | ✅ Operational |
+| **tommies-mac-mini** | 100.88.105.106 | Orchestrator | ✅ Operational |
 | **mac-pro** | 100.64.58.30 | Compute Node | 🔧 Setup in progress |
 | **desktop-165kuf5** | 100.119.87.108 | Windows / Clawdbot Host | ✅ Operational |
 | **google-cloud** | 100.107.231.87 | Reserved for 7B models | ✅ Connected |

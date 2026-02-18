@@ -17,7 +17,7 @@ wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /Value
 ### Mac Mini + Mac Pro (Batched SSH)
 ```bash
 # Single command checks both nodes efficiently
-for host in tommie@100.82.234.66 administrator@100.64.58.30; do
+for host in tommie@100.88.105.106 administrator@100.64.58.30; do
   ssh -o ConnectTimeout=10 $host 'echo "$(hostname):"; memory_pressure 2>/dev/null | grep "free percentage"; df -h / | tail -1; uptime' 2>/dev/null
 done
 ```
@@ -42,7 +42,7 @@ done
 **Check key services are running:**
 ```bash
 # Mac Mini
-ssh tommie@100.82.234.66 'pgrep -x ollama && pgrep -f clawdbot-gateway'
+ssh tommie@100.88.105.106 'pgrep -x ollama && pgrep -f clawdbot-gateway'
 
 # Mac Pro  
 ssh administrator@100.64.58.30 'pgrep -x ollama && pgrep -f openclaw'
@@ -56,7 +56,7 @@ ssh administrator@100.64.58.30 'pgrep -x ollama && pgrep -f openclaw'
 
 **Check daily usage (50 calls/day limit):**
 ```bash
-ssh tommie@100.82.234.66 'bash ~/dta/gateway/track-nvidia-usage.sh status 2>/dev/null || echo "Tracker not set up"'
+ssh tommie@100.88.105.106 'bash ~/dta/gateway/track-nvidia-usage.sh status 2>/dev/null || echo "Tracker not set up"'
 ```
 
 - If > 40 calls: Warn about approaching limit
@@ -68,7 +68,7 @@ ssh tommie@100.82.234.66 'bash ~/dta/gateway/track-nvidia-usage.sh status 2>/dev
 
 **Check shared-memory reports (on Mac Mini):**
 ```bash
-ssh tommie@100.82.234.66 'cat ~/shared-memory/*.json 2>/dev/null | head -50'
+ssh tommie@100.88.105.106 'cat ~/shared-memory/*.json 2>/dev/null | head -50'
 ```
 
 **Check "The Bot Chat" group:**
@@ -82,13 +82,13 @@ curl -s "https://api.telegram.org/bot8392398778:AAH5lan45kR-VT74d3OiXAAIxlPyR4sk
 
 **Check for security audit reports:**
 ```bash
-ssh tommie@100.82.234.66 'ls -la ~/clawd/memory/security-audit-*.md 2>/dev/null | tail -3'
+ssh tommie@100.88.105.106 'ls -la ~/clawd/memory/security-audit-*.md 2>/dev/null | tail -3'
 ```
 
 **Verify firewall status:**
 ```bash
 # Mac Mini
-ssh tommie@100.82.234.66 'sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null || echo "needs sudo"'
+ssh tommie@100.88.105.106 'sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null || echo "needs sudo"'
 
 # Mac Pro (⚠️ CURRENTLY OFF - needs manual fix)
 ssh administrator@100.64.58.30 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
