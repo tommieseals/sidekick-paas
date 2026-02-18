@@ -174,7 +174,7 @@ Edit `HEARTBEAT.md` to add periodic tasks.
 
 ## Dashboard & Monitoring
 
-- **Full docs:** http://100.82.234.66:8080/docs.html
+- **Full docs:** http://100.88.105.106:8080/docs.html
 - **Check usage:** `session_status` or `/usage`
 - **NVIDIA remaining:** `~/dta/gateway/llm-usage`
 

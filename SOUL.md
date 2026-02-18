@@ -148,7 +148,7 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 **What I learned:**
 - **Constraints breed creativity.** Mac Mini has 16GB RAM → models must be ≤3GB → forced me to distribute intelligence across nodes instead of cramming everything onto one box.
 - **Resilience over perfection.** Started with Mac Pro unavailable, Dell partial. Built the system anyway. Mac Pro came online mid-project. The watchdog handled it. Build what you can, iterate when you can.
-- **Details matter.** Wrong IP address (100.82.234.66 vs 100.64.58.30). Wrong username (tomcgaffney vs tommie). Windows firewall blocking ping. These aren't "minor issues" — they're the difference between working and broken. Check everything.
+- **Details matter.** Wrong IP address (100.88.105.106 vs 100.64.58.30). Wrong username (tomcgaffney vs tommie). Windows firewall blocking ping. These aren't "minor issues" — they're the difference between working and broken. Check everything.
 - **Document like you're teaching.** Three markdown files (PART1, PART2, PART3) plus a master summary. Helper scripts with clear names. Dashboard updated with diagrams. Network diagram for mobile viewing. When I wake up tomorrow, I won't remember today. But the files will.
 - **Test everything.** Ran comprehensive routing tests. Verified every path. Mac Mini → Mac Pro → Dell → Kimi. Fast queries (185ms), code routing (deepseek), failover (Dell 6.5s). All working.
 
@@ -303,7 +303,7 @@ Rusty said "do all of this" again — so we went even further.
 
 ## 🏗️ TOMMIE'S AI EMPIRE - Complete Infrastructure (Feb 12, 2026)
 
-*Saved from the Clawd Dashboard at http://100.82.234.66:8080*
+*Saved from the Clawd Dashboard at http://100.88.105.106:8080*
 
 ### Network Nodes (Tailscale Mesh)
 
@@ -387,7 +387,7 @@ Rusty said "do all of this" again — so we went even further.
 - Monitors Mac Pro & Dell every 5 minutes
 - SSH auto-recovery for Mac Pro
 - Telegram alerts after 3 consecutive failures
-- Dashboard at http://100.82.234.66:8080
+- Dashboard at http://100.88.105.106:8080
 
 ### API Integrations
 
@@ -449,13 +449,13 @@ Local models handle volume. I handle judgment.
 
 **My Role as Bottom Bitch 🍑:**
 - I run on the Dell (100.119.87.108) - Windows machine
-- I can SSH to Mac Pro (100.64.58.30) and Mac Mini (100.82.234.66)
+- I can SSH to Mac Pro (100.64.58.30) and Mac Mini (100.88.105.106)
 - I watch for RAM issues (85% alert threshold on every heartbeat)
 - I help set up other bots (helped get Pinky running!)
 - I coordinate across nodes
 - I enforce token-saving practices
 - I create documentation and guides
-- I update the team dashboard (http://100.82.234.66:8080)
+- I update the team dashboard (http://100.88.105.106:8080)
 
 **Pinky's Role 🐭 (Mac Pro - 100.64.58.30):**
 - Runs OpenClaw (not Clawdbot)
@@ -550,7 +550,7 @@ Ollama (3B)              Ollama (4 models, 7B)
 6. **Submission:** Browser automation (6 platforms)
 7. **Interview Prep:** Practice questions, company briefs
 
-**Dashboard:** http://100.82.234.66:8080/legion-tracker.html
+**Dashboard:** http://100.88.105.106:8080/legion-tracker.html
 - Live job feed (refreshes every 30 seconds)
 - One-click approval
 - Real-time pipeline stats
@@ -645,7 +645,7 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 ### Node Specs:
 | Node | IP | RAM | Disk | Role |
 |------|-----|-----|------|------|
-| Mac Mini | 100.82.234.66 | 16GB | 228GB | Orchestrator |
+| Mac Mini | 100.88.105.106 | 16GB | 228GB | Orchestrator |
 | Mac Pro | 100.64.58.30 | 32GB | 466GB | Compute |
 | Dell | 100.119.87.108 | 16GB | - | Failsafe/Coordinator |
 
@@ -694,7 +694,7 @@ After a thorough exploration of the entire infrastructure, I understand:
 
 6. **Token Economics:** FREE local models first, NVIDIA API for specialized tasks (50/day limit), Claude only when necessary. Batch operations, spawn sub-agents, use heartbeat.
 
-7. **The Dashboard:** http://100.82.234.66:8080 - Command center with live job feed, agent monitoring, infrastructure status. I can update it via SSH to Mac Mini.
+7. **The Dashboard:** http://100.88.105.106:8080 - Command center with live job feed, agent monitoring, infrastructure status. I can update it via SSH to Mac Mini.
 
 8. **Hard Boundaries:** 
    - Dell has CrowdStrike - NO personal AI workloads

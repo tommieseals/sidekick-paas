@@ -3,7 +3,7 @@
 **Created:** 2026-02-17  
 **Last Updated:** 2026-02-17
 
-This document describes the automated infrastructure management system running on Mac Mini (100.82.234.66).
+This document describes the automated infrastructure management system running on Mac Mini (100.88.105.106).
 
 ---
 
@@ -117,9 +117,9 @@ clawdbot cron run --name weekly-security-audit
 clawdbot cron run --name auto-commit-memory
 
 # Via SSH directly
-ssh tommie@100.82.234.66 "~/clawd/scripts/enhanced-monitor.sh"
-ssh tommie@100.82.234.66 "~/clawd/scripts/security-audit-cron.sh"
-ssh tommie@100.82.234.66 "~/clawd/scripts/auto-commit-memory.sh"
+ssh tommie@100.88.105.106 "~/clawd/scripts/enhanced-monitor.sh"
+ssh tommie@100.88.105.106 "~/clawd/scripts/security-audit-cron.sh"
+ssh tommie@100.88.105.106 "~/clawd/scripts/auto-commit-memory.sh"
 ```
 
 ---
@@ -166,7 +166,7 @@ Reports are sent to:
 ### Job Not Running?
 1. Check Clawdbot gateway status: `clawdbot gateway status`
 2. Verify job is enabled: `clawdbot cron list`
-3. Check Mac Mini is reachable: `ping 100.82.234.66`
+3. Check Mac Mini is reachable: `ping 100.88.105.106`
 
 ### Script Failing?
 1. Check logs on Mac Mini: `tail -50 ~/clawd/logs/daily-health.log`

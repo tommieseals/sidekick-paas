@@ -12,7 +12,7 @@
 | Bot | Username | Location | Role |
 |-----|----------|----------|------|
 | 🍑 **Bottom Bitch** | @Thats_My_Bottom_Bitch_bot | Dell (100.119.87.108) | Coordinator, Windows host |
-| 🧠 **Tommie77** | @tommie77bot | Mac Mini (100.82.234.66) | Main orchestrator |
+| 🧠 **Tommie77** | @tommie77bot | Mac Mini (100.88.105.106) | Main orchestrator |
 | 🐭 **Pinky** | @Pinkypickles_bot | Mac Pro (100.64.58.30) | Compute node |
 | 🥜 **Deez Nutz** | @look_at_deeznutszbot | TBD | Needs setup |
 
@@ -158,7 +158,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC... (see Dell ~/.ssh/id_rsa.pub)
 
 ## Project Legion — 28-Agent Job System
 
-**Dashboard:** http://100.82.234.66:8080/legion-tracker.html
+**Dashboard:** http://100.88.105.106:8080/legion-tracker.html
 
 ### Current Status (Updated: Feb 17, 2026 09:15 AM CST)
 

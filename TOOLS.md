@@ -98,7 +98,7 @@ python3 ~/dta/gateway/llm-gateway.py --force llama_90b --image "url" "analyze"
 
 **Optimized aliases** (via `~/.ssh/config`):
 ```bash
-ssh mac-mini      # 100.82.234.66 (local)
+ssh mac-mini      # 100.88.105.106 (local)
 ssh google-cloud  # 100.107.231.87 (GCP VM)
 ssh dell          # 100.119.87.108 (Windows)
 ```
@@ -133,7 +133,7 @@ pbpaste | ~/dta/gateway/process-cr
 
 ## 🏗️ SYSTEM ARCHITECTURE
 
-### Mac Mini (100.82.234.66)
+### Mac Mini (100.88.105.106)
 - Main host
 - Ollama running (qwen2.5:3b) **⚡ OPTIMIZED**
 - **Model stays in memory permanently** (OLLAMA_KEEP_ALIVE=-1)

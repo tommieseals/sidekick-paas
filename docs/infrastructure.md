@@ -9,7 +9,7 @@
 
 | Node | Hardware | Tailscale IP | Role | RAM | Disk |
 |------|----------|--------------|------|-----|------|
-| **Mac Mini** | M-chip | 100.82.234.66 | Primary orchestrator, bot runtime, scheduling, lightweight AI | 16GB | 228GB |
+| **Mac Mini** | M-chip | 100.88.105.106 | Primary orchestrator, bot runtime, scheduling, lightweight AI | 16GB | 228GB |
 | **Mac Pro** | - | 100.64.58.30 | Compute node, heavy model inference | 32GB | 466GB |
 | **Dell** | i9/64GB | 100.119.87.108 | Windows, Clawdbot host, failsafe coordinator | 16GB | - |
 | **Google Cloud** | e2-standard-4 | 100.107.231.87 | Reserved for 7B models, transcription, scraping | 16GB | 50GB |
@@ -23,14 +23,14 @@
 
 ## Node Details
 
-### Mac Mini (100.82.234.66) — "HUB"
+### Mac Mini (100.88.105.106) — "HUB"
 **Role:** Primary orchestrator
 
 **Services Running:**
 - Clawdbot (Telegram bot)
 - LLM Gateway v2.0
 - Watchdog system
-- Dashboard (http://100.82.234.66:8080)
+- Dashboard (http://100.88.105.106:8080)
 - Ollama (qwen2.5:3b, nomic-embed-text)
 - Redis (Project Legion)
 
@@ -177,7 +177,7 @@ Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, Fr
 
 **Optimized aliases** (via `~/.ssh/config`):
 ```bash
-ssh mac-mini      # 100.82.234.66
+ssh mac-mini      # 100.88.105.106
 ssh mac-pro       # 100.64.58.30 (user: administrator)
 ssh google-cloud  # 100.107.231.87
 ssh dell          # 100.119.87.108 (user: tommi)
@@ -193,7 +193,7 @@ ssh dell          # 100.119.87.108 (user: tommi)
 
 ## Dashboard
 
-**URL:** http://100.82.234.66:8080
+**URL:** http://100.88.105.106:8080
 
 **Features:**
 - Live job feed (Project Legion) - 30-second refresh

@@ -16,7 +16,7 @@
 
 | Node | IP | Role | Max Model |
 |------|-----|------|-----------|
-| **Mac Mini** | 100.82.234.66 | Orchestrator, LLM Gateway, Dashboard | 3GB |
+| **Mac Mini** | 100.88.105.106 | Orchestrator, LLM Gateway, Dashboard | 3GB |
 | **Mac Pro** | 100.64.58.30 | Compute node (heavy inference) | 12GB+ |
 | **Dell** | 100.119.87.108 | Windows coordinator, failsafe | ⚠️ See below |
 | **Google Cloud** | 100.107.231.87 | Reserved for 7B models | 8GB |
@@ -47,7 +47,7 @@
 **Read these FIRST on every session:**
 
 1. **Architecture:** 4 nodes connected via Tailscale mesh
-   - Mac Mini (100.82.234.66) — Hub, 3B models only
+   - Mac Mini (100.88.105.106) — Hub, 3B models only
    - Mac Pro (100.64.58.30) — Compute, larger models
    - Google Cloud (100.107.231.87) — 7B models
    - Dell (100.119.87.108) — Windows, CrowdStrike-monitored
@@ -62,7 +62,7 @@
 
 4. **Shared Memory:** ~/shared-memory/*.json — Read on startup for recovery
 
-5. **Dashboard:** http://100.82.234.66:8080
+5. **Dashboard:** http://100.88.105.106:8080
 
 ---
 
