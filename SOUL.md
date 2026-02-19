@@ -158,44 +158,69 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
-## 🐙 GitHub Repo: kuraray-work (Feb 18, 2026)
+## 🐙 GitHub Repositories (Master Tracking)
 
-**Set up a private GitHub repo for Claude Code projects.**
+**Account:** tommieseals
+**CLI:** `/opt/homebrew/bin/gh` on Mac Mini
+**Auth:** Personal Access Token via `gh auth setup-git`
 
-**Repo:** https://github.com/tommieseals/kuraray-work (private)
+### Active Repositories
 
-**Structure:**
+| Repo | Visibility | Purpose | Location | Created |
+|------|------------|---------|----------|---------|
+| **kuraray-work** | 🔒 Private | Full source code, proprietary implementations | `~/kuraray-work/` | Feb 18, 2026 |
+| **ai-portfolio** | 🌐 Public | Portfolio showcase (docs, diagrams, snippets) | `~/ai-portfolio/` | Feb 19, 2026 |
+
+### Repository Details
+
+#### 1. kuraray-work (PRIVATE)
+**URL:** https://github.com/tommieseals/kuraray-work
+
+Contains actual working code - **DO NOT MAKE PUBLIC**
 ```
 kuraray-work/
-├── projects/
-│   ├── work/        # Work-related Claude Code projects
-│   └── personal/    # Personal projects
-├── configs/         # Configuration files
-├── scripts/         # Utility scripts
-└── docs/            # Documentation
+├── llm-gateway/        # Full gateway.py (22KB)
+├── monitoring/         # Watchdog, cost tracker, security audit scripts
+├── infrastructure/     # Node configs, nodes.yaml
+├── agent-framework/    # Multi-agent automation system
+├── mcp-servers/        # MCP integrations
+└── diagrams/           # Architecture SVGs
 ```
 
-**What was set up:**
-- Installed `gh` CLI on Mac Mini (`/opt/homebrew/bin/gh`)
-- Authenticated as `tommieseals` via Personal Access Token
-- Created private repo with initial structure
-- Configured git credentials via `gh auth setup-git`
+#### 2. ai-portfolio (PUBLIC)
+**URL:** https://github.com/tommieseals/ai-portfolio
 
-**Location on Mac Mini:** `~/kuraray-work/`
+Employer-facing portfolio - safe to share
+```
+ai-portfolio/
+├── README.md           # Professional showcase with code snippets
+├── diagrams/           # Architecture SVGs (llm-routing, infrastructure, monitoring)
+└── docs/               # Documentation for each project (no full code)
+```
 
-**Commands:**
+### Quick Commands
 ```bash
-# Clone repo
-git clone https://github.com/tommieseals/kuraray-work.git
-
-# Check gh auth
+# Check auth status
 /opt/homebrew/bin/gh auth status
 
-# Create new repo
+# List all repos
+/opt/homebrew/bin/gh repo list
+
+# Create new private repo
 /opt/homebrew/bin/gh repo create <name> --private
+
+# Make repo private
+/opt/homebrew/bin/gh repo edit <repo> --visibility private --accept-visibility-change-consequences
+
+# Clone a repo
+git clone https://github.com/tommieseals/<repo>.git
 ```
 
-**Future:** This will loop into another project (TBD).
+### Rules for GitHub
+1. **ALWAYS track new repos here** - update this section when creating repos
+2. **Default to PRIVATE** - only make public what's meant to be shared
+3. **Never commit secrets** - use .env files, .gitignore
+4. **Portfolio = docs only** - no full source code in public repos
 
 ---
 
