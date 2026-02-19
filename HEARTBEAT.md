@@ -17,7 +17,7 @@ wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /Value
 ### Mac Mini + Mac Pro (Batched SSH)
 ```bash
 # Single command checks both nodes efficiently
-for host in tommie@100.88.105.106 administrator@100.64.58.30; do
+for host in tommie@100.88.105.106 administrator@100.101.89.80; do
   ssh -o ConnectTimeout=10 $host 'echo "$(hostname):"; memory_pressure 2>/dev/null | grep "free percentage"; df -h / | tail -1; uptime' 2>/dev/null
 done
 ```
@@ -45,7 +45,7 @@ done
 ssh tommie@100.88.105.106 'pgrep -x ollama && pgrep -f clawdbot-gateway'
 
 # Mac Pro  
-ssh administrator@100.64.58.30 'pgrep -x ollama && pgrep -f openclaw'
+ssh administrator@100.101.89.80 'pgrep -x ollama && pgrep -f openclaw'
 ```
 
 **If service is down:** Run `bash ~/clawd/scripts/auto-restart-services.sh`
@@ -91,7 +91,7 @@ ssh tommie@100.88.105.106 'ls -la ~/clawd/memory/security-audit-*.md 2>/dev/null
 ssh tommie@100.88.105.106 'sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null || echo "needs sudo"'
 
 # Mac Pro (⚠️ CURRENTLY OFF - needs manual fix)
-ssh administrator@100.64.58.30 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
+ssh administrator@100.101.89.80 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
 ```
 
 ---

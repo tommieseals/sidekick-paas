@@ -16,7 +16,7 @@ Before doing anything else:
 5. **If in MAIN SESSION** (direct chat with your human): `MEMORY.md` is now a copy of MASTER_KNOWLEDGE.md
 
 **Critical startup facts from MASTER_KNOWLEDGE.md:**
-- Architecture: Mac Mini (100.88.105.106, 3B models only) + Mac Pro (100.64.58.30, larger models) + Google Cloud (100.107.231.87, 7B models)
+- Architecture: Mac Mini (100.88.105.106, 3B models only) + Mac Pro (100.101.89.80, larger models) + Google Cloud (100.107.231.87, 7B models)
 - Dell at 100.119.87.108 is AVAILABLE (Windows, NOT CrowdStrike-monitored - safe to use)
 - NEVER load models >3GB on Mac Mini
 - Shared memory for reset recovery: ~/shared-memory/*.json

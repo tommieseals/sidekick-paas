@@ -17,7 +17,7 @@
 | Node | IP | Role | Max Model |
 |------|-----|------|-----------|
 | **Mac Mini** | 100.88.105.106 | Orchestrator, LLM Gateway, Dashboard | 3GB |
-| **Mac Pro** | 100.64.58.30 | Compute node (heavy inference) | 12GB+ |
+| **Mac Pro** | 100.101.89.80 | Compute node (heavy inference) | 12GB+ |
 | **Dell** | 100.119.87.108 | Windows coordinator, failsafe | ⚠️ See below |
 | **Google Cloud** | 100.107.231.87 | Reserved for 7B models | 8GB |
 | iPhone | 100.114.130.38 | Mobile client | - |
@@ -48,7 +48,7 @@
 
 1. **Architecture:** 4 nodes connected via Tailscale mesh
    - Mac Mini (100.88.105.106) — Hub, 3B models only
-   - Mac Pro (100.64.58.30) — Compute, larger models
+   - Mac Pro (100.101.89.80) — Compute, larger models
    - Google Cloud (100.107.231.87) — 7B models
    - Dell (100.119.87.108) — Windows, CrowdStrike-monitored
 
@@ -94,7 +94,7 @@ RESPONSE=$(get_ai_response "prompt")
 ollama ps
 
 # SSH shortcuts
-ssh mac-pro        # 100.64.58.30
+ssh mac-pro        # 100.101.89.80
 ssh google-cloud   # 100.107.231.87
 ssh dell           # 100.119.87.108
 ```

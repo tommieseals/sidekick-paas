@@ -10,7 +10,7 @@
 | Node | Hardware | Tailscale IP | Role | RAM | Disk |
 |------|----------|--------------|------|-----|------|
 | **Mac Mini** | M-chip | 100.88.105.106 | Primary orchestrator, bot runtime, scheduling, lightweight AI | 16GB | 228GB |
-| **Mac Pro** | - | 100.64.58.30 | Compute node, heavy model inference | 32GB | 466GB |
+| **Mac Pro** | - | 100.101.89.80 | Compute node, heavy model inference | 32GB | 466GB |
 | **Dell** | i9/64GB | 100.119.87.108 | Windows, Clawdbot host, failsafe coordinator | 16GB | - |
 | **Google Cloud** | e2-standard-4 | 100.107.231.87 | Reserved for 7B models, transcription, scraping | 16GB | 50GB |
 
@@ -59,10 +59,10 @@
 
 ---
 
-### Mac Pro (100.64.58.30) — "COMPUTE"
+### Mac Pro (100.101.89.80) — "COMPUTE"
 **Role:** Heavy model inference
 
-**SSH Access:** `ssh administrator@100.64.58.30`
+**SSH Access:** `ssh administrator@100.101.89.80`
 
 **Services Running:**
 - OpenClaw (not Clawdbot)
@@ -178,7 +178,7 @@ Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, Fr
 **Optimized aliases** (via `~/.ssh/config`):
 ```bash
 ssh mac-mini      # 100.88.105.106
-ssh mac-pro       # 100.64.58.30 (user: administrator)
+ssh mac-pro       # 100.101.89.80 (user: administrator)
 ssh google-cloud  # 100.107.231.87
 ssh dell          # 100.119.87.108 (user: tommi)
 ```
