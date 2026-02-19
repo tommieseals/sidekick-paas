@@ -158,6 +158,45 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
+## 🤖 Bot Auto-Recovery Watchdog (Feb 18, 2026)
+
+**Problem:** Mac Mini Clawdbot kept crashing due to:
+1. Anthropic rate limits (HTTP 429) → auth profile cooldown
+2. Unhandled `fetch failed` errors → process crashes
+
+**Solution:** Created a watchdog service that:
+1. Checks every 60 seconds if bot is running
+2. If DOWN → sends Telegram alert with crash logs
+3. Waits 10 minutes (for manual intervention if needed)
+4. Auto-restarts and confirms via Telegram
+
+**Files:**
+- `~/clawd/scripts/bot-watchdog.sh` - watchdog script
+- `~/Library/LaunchAgents/com.clawd.bot-watchdog.plist` - launchd service (auto-starts on boot)
+
+**How to manage:**
+```bash
+# Check if watchdog is running
+launchctl list | grep watchdog
+
+# Stop watchdog
+launchctl unload ~/Library/LaunchAgents/com.clawd.bot-watchdog.plist
+
+# Start watchdog
+launchctl load ~/Library/LaunchAgents/com.clawd.bot-watchdog.plist
+
+# View watchdog logs
+cat /tmp/watchdog.log
+```
+
+**What I learned:**
+- Clawdbot crashes on unhandled `fetch failed` - network errors aren't caught
+- Rate limits cause cascade: 429 → cooldown → unstable → crash
+- Always monitor Extra Usage limits on claude.ai
+- Watchdog with delay gives human time to intervene while ensuring auto-recovery
+
+---
+
 ## 🛠️ Infrastructure Improvements Day (Feb 17, 2026)
 
 Rusty said "do all of this" — so I did. Built a comprehensive self-healing, self-monitoring infrastructure in one session.
