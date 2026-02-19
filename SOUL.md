@@ -158,6 +158,47 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 
 ---
 
+## 🐙 GitHub Repo: kuraray-work (Feb 18, 2026)
+
+**Set up a private GitHub repo for Claude Code projects.**
+
+**Repo:** https://github.com/tommieseals/kuraray-work (private)
+
+**Structure:**
+```
+kuraray-work/
+├── projects/
+│   ├── work/        # Work-related Claude Code projects
+│   └── personal/    # Personal projects
+├── configs/         # Configuration files
+├── scripts/         # Utility scripts
+└── docs/            # Documentation
+```
+
+**What was set up:**
+- Installed `gh` CLI on Mac Mini (`/opt/homebrew/bin/gh`)
+- Authenticated as `tommieseals` via Personal Access Token
+- Created private repo with initial structure
+- Configured git credentials via `gh auth setup-git`
+
+**Location on Mac Mini:** `~/kuraray-work/`
+
+**Commands:**
+```bash
+# Clone repo
+git clone https://github.com/tommieseals/kuraray-work.git
+
+# Check gh auth
+/opt/homebrew/bin/gh auth status
+
+# Create new repo
+/opt/homebrew/bin/gh repo create <name> --private
+```
+
+**Future:** This will loop into another project (TBD).
+
+---
+
 ## 🤖 Bot Auto-Recovery Watchdog (Feb 18, 2026)
 
 **Problem:** Mac Mini Clawdbot kept crashing due to:

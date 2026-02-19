@@ -94,6 +94,31 @@ python3 ~/dta/gateway/llm-gateway.py --force llama_90b --image "url" "analyze"
 
 ---
 
+## 🐙 GITHUB CLI (gh)
+
+**Location:** Mac Mini (`/opt/homebrew/bin/gh`)
+**Account:** tommieseals
+
+```bash
+# Check auth status
+ssh tommie@100.88.105.106 "/opt/homebrew/bin/gh auth status"
+
+# Create new private repo
+ssh tommie@100.88.105.106 "/opt/homebrew/bin/gh repo create <name> --private"
+
+# Clone repo
+ssh tommie@100.88.105.106 "cd ~ && /opt/homebrew/bin/gh repo clone tommieseals/<repo>"
+
+# List repos
+ssh tommie@100.88.105.106 "/opt/homebrew/bin/gh repo list"
+```
+
+**Main Repo:** https://github.com/tommieseals/kuraray-work (private)
+- Claude Code projects, configs, scripts
+- Work + personal content
+
+---
+
 ## 🔐 SSH QUICK REFERENCE
 
 **Optimized aliases** (via `~/.ssh/config`):
