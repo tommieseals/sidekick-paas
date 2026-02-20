@@ -161,8 +161,31 @@ Be the assistant you'd actually want to talk to. Concise when needed, thorough w
 ## 🐙 GitHub Repositories (Master Tracking)
 
 **Account:** tommieseals
+**Profile:** https://github.com/tommieseals
 **CLI:** `/opt/homebrew/bin/gh` on Mac Mini
 **Auth:** Personal Access Token via `gh auth setup-git`
+
+### Profile README (Updated Feb 19, 2026)
+
+Dynamic portfolio profile with auto-updating elements via GitHub Actions:
+
+| Feature | Description | Auto-Updates |
+|---------|-------------|--------------|
+| 🐍 **Snake Animation** | Contribution graph eaten by animated snake | Every 12 hours |
+| 📊 **3D Contribution Graph** | Rainbow 3D visualization of contributions | Daily at 1 AM UTC |
+| ⏱️ **WakaTime Stats** | Real coding time breakdown by language | Daily at midnight UTC |
+| 🎯 **Animated Header** | Twinkling gradient banner | Static |
+| 🏆 **GitHub Trophies** | Achievement badges | Real-time |
+| 📈 **Stats Cards** | Commits, streak, activity graph | Real-time |
+
+**GitHub Actions Workflows:**
+- `.github/workflows/snake.yml` - Generates snake animation
+- `.github/workflows/3d-contrib.yml` - Generates 3D contribution graph  
+- `.github/workflows/waka-readme.yml` - Updates WakaTime stats
+
+**WakaTime:** API Key stored as repo secret `WAKATIME_API_KEY`
+
+**Local Files:** `~/clawd/github-profile-upgrade/`
 
 ### Active Repositories
 
