@@ -87,6 +87,63 @@ pyautogui.press('enter')
 
 ---
 
+## 🔄 COMPLEX CODE WORKFLOW (NEW - 2026-02-19)
+
+**Rusty's Rule:** For complicated/complex code, use this pipeline:
+
+```
+1. ChatGPT Codex (generate) → 2. Claude Code (proof check) → 3. Implement
+```
+
+### Why This Workflow
+- **Codex** is great at generating complex code quickly
+- **Claude Code** catches edge cases, security issues, bugs
+- **Double-checked code** = production-ready code
+
+### How I Execute This
+
+**Step 1: Generate with Codex**
+```python
+import pyautogui
+import time
+
+# Click Codex in ChatGPT sidebar
+pyautogui.click(277, 331)
+time.sleep(1)
+
+# Type the task
+pyautogui.typewrite('Build a REST API with authentication...', interval=0.02)
+pyautogui.press('enter')
+
+# Wait for response, screenshot to see result
+time.sleep(30)
+pyautogui.screenshot().save('codex_result.png')
+```
+
+**Step 2: Proof Check with Claude Code**
+```bash
+# Run Claude Code on the generated code
+claude "Review this code for bugs, security issues, and improvements: [paste code]"
+```
+
+**Step 3: Implement**
+- Apply fixes from Claude Code review
+- Test the final version
+- Deploy
+
+### When to Use This Pipeline
+- ✅ Complex algorithms
+- ✅ Full features/modules
+- ✅ Security-sensitive code
+- ✅ Production deployments
+- ❌ Simple scripts (overkill)
+- ❌ Quick fixes (just use one agent)
+
+### Automation Script
+Location: `~/clawd/scripts/code-pipeline.py` (TODO: create)
+
+---
+
 ## 💰 TOKEN-SAVING PRIORITY (READ FIRST!)
 
 **Always use the cheapest model that can do the job:**
