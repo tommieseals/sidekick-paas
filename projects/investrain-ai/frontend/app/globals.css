@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --finance-dark: #0F172A;
+  --finance-darker: #020617;
+  --finance-card: #1E293B;
+  --finance-border: #334155;
+  --finance-green: #10B981;
+  --finance-red: #EF4444;
+  --finance-blue: #3B82F6;
+}
+
+body {
+  background: linear-gradient(180deg, var(--finance-darker) 0%, var(--finance-dark) 100%);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--finance-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--finance-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--finance-blue);
+}
+
+/* Card glow effect */
+.card-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+/* Positive/Negative indicators */
+.text-positive {
+  color: var(--finance-green);
+}
+
+.text-negative {
+  color: var(--finance-red);
+}
+
+/* Chart tooltip */
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.custom-tooltip {
+  background: var(--finance-card) !important;
+  border: 1px solid var(--finance-border) !important;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+/* Pulse animation for live data */
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+}
+
+.pulse-live {
+  animation: pulse-green 2s infinite;
+}
+
+/* Typing animation for AI */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 0.5s steps(30, end);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--finance-card) 25%,
+    var(--finance-border) 50%,
+    var(--finance-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
