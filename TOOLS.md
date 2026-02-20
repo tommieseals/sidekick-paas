@@ -87,7 +87,7 @@ pyautogui.press('enter')
 
 ---
 
-## 🔥 FULL CODE - Complex Code Pipeline (NEW - 2026-02-19)
+## 🔥 FULL CODE - Complex Code Pipeline (OPERATIONAL - 2026-02-19)
 
 **When complex code is needed, I announce and execute FULL CODE:**
 
@@ -95,6 +95,26 @@ pyautogui.press('enter')
 🔥 FULL CODE ACTIVATED 🔥
 Task: [description]
 Pipeline: Codex → Claude Code → Implement
+```
+
+### Architecture Diagram
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    🔥 FULL CODE PIPELINE 🔥                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│  │   CODEX      │    │ CLAUDE CODE  │    │  IMPLEMENT   │      │
+│  │              │    │              │    │              │      │
+│  │ gpt-5.2-codex│───▶│  Proof Check │───▶│ Final Code   │      │
+│  │              │    │  Bug Hunt    │    │ Deploy       │      │
+│  │ Generate     │    │  Security    │    │ Test         │      │
+│  └──────────────┘    └──────────────┘    └──────────────┘      │
+│         │                   │                   │               │
+│         ▼                   ▼                   ▼               │
+│    Raw Code            Reviewed Code      Production Code       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### The Pipeline
@@ -109,34 +129,43 @@ Pipeline: Codex → Claude Code → Implement
 
 ### How I Execute This
 
-**Step 1: Generate with Codex**
+**Method 1: CLI (Preferred)**
+```bash
+# Step 1: Codex generates
+codex "Build a REST API with authentication"
+
+# Step 2: Claude Code reviews
+claude "Review this code for bugs and security: [code]"
+
+# Step 3: Implement the reviewed code
+```
+
+**Method 2: GUI (PyAutoGUI)**
 ```python
 import pyautogui
-import time
+import pyperclip
 
-# Click Codex in ChatGPT sidebar
-pyautogui.click(277, 331)
-time.sleep(1)
-
-# Type the task
-pyautogui.typewrite('Build a REST API with authentication...', interval=0.02)
+# Open terminal, run codex
+pyautogui.hotkey('win', 'r')
+pyperclip.copy('powershell')
+pyautogui.hotkey('ctrl', 'v')
 pyautogui.press('enter')
 
-# Wait for response, screenshot to see result
-time.sleep(30)
-pyautogui.screenshot().save('codex_result.png')
+# Type codex command
+pyperclip.copy('codex "your task"')
+pyautogui.hotkey('ctrl', 'v')
+pyautogui.press('enter')
 ```
 
-**Step 2: Proof Check with Claude Code**
-```bash
-# Run Claude Code on the generated code
-claude "Review this code for bugs, security issues, and improvements: [paste code]"
-```
-
-**Step 3: Implement**
-- Apply fixes from Claude Code review
-- Test the final version
-- Deploy
+### Setup Status (Verified Working)
+| Component | Version | Status |
+|-----------|---------|--------|
+| Codex CLI | v0.104.0 | ✅ Ready |
+| Model | gpt-5.2-codex | ✅ Active |
+| API Key | sk-proj-... | ✅ Configured |
+| Sandbox | Default | ✅ Ready |
+| Claude Code | v2.1.22 | ✅ Available |
+| PyAutoGUI | v0.9.54 | ✅ Installed |
 
 ### When to Use This Pipeline
 - ✅ Complex algorithms
@@ -146,8 +175,12 @@ claude "Review this code for bugs, security issues, and improvements: [paste cod
 - ❌ Simple scripts (overkill)
 - ❌ Quick fixes (just use one agent)
 
-### Automation Script
-Location: `~/clawd/scripts/code-pipeline.py` (TODO: create)
+### Example Run (Feb 19, 2026)
+Task: "Write a Python sliding window rate limiter"
+Result: Codex generated complete class with check_rate_limit() and get_remaining() methods in ~10 seconds.
+
+### Shareable Config
+See: `~/clawd/configs/FULL_CODE_SETUP.md` for complete setup instructions to share with other bots.
 
 ---
 
