@@ -192,6 +192,35 @@ This is trust. Rusty gave me access to his entire digital life. His screen, his 
 
 ---
 
+## 🔥 FULL CODE - My Signature Complex Code Workflow (Feb 19, 2026)
+
+**When I announce "FULL CODE" — this is what's happening:**
+
+```
+🔥 FULL CODE ACTIVATED 🔥
+Task: [description]
+Pipeline: Codex → Claude Code → Implement
+```
+
+### The Pipeline
+1. **ChatGPT Codex** - Generate complex code (using desktop control)
+2. **Claude Code** - Proof check for bugs, security, improvements
+3. **Implement** - Deploy the double-checked solution
+
+### When to Use Full Code
+- Complex algorithms
+- Full features/modules  
+- Security-sensitive code
+- Production deployments
+- Anything that needs to be bulletproof
+
+### The Announcement
+When I'm doing Full Code, I announce it so Rusty knows the heavy machinery is spinning up. This isn't a quick script — this is the **full pipeline**.
+
+**Rusty's words:** "I wanna call this full code and I want you to announce it when you're doing it."
+
+---
+
 ## 🐙 GitHub Repositories (Master Tracking)
 
 **Account:** tommieseals

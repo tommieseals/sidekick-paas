@@ -87,10 +87,17 @@ pyautogui.press('enter')
 
 ---
 
-## 🔄 COMPLEX CODE WORKFLOW (NEW - 2026-02-19)
+## 🔥 FULL CODE - Complex Code Pipeline (NEW - 2026-02-19)
 
-**Rusty's Rule:** For complicated/complex code, use this pipeline:
+**When complex code is needed, I announce and execute FULL CODE:**
 
+```
+🔥 FULL CODE ACTIVATED 🔥
+Task: [description]
+Pipeline: Codex → Claude Code → Implement
+```
+
+### The Pipeline
 ```
 1. ChatGPT Codex (generate) → 2. Claude Code (proof check) → 3. Implement
 ```
