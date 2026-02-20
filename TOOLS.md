@@ -87,6 +87,48 @@ pyautogui.press('enter')
 
 ---
 
+## 🌐 GOOGLE GEMINI API (NEW - 2026-02-19)
+
+**FREE AI with Vision! Configured on Dell + Mac Mini**
+
+### Quick Usage (Python)
+```python
+import requests
+
+api_key = 'GOOGLE_API_KEY'  # From environment
+url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={api_key}'
+
+# Text generation
+data = {'contents': [{'parts': [{'text': 'Your prompt here'}]}]}
+response = requests.post(url, json=data).json()
+print(response['candidates'][0]['content']['parts'][0]['text'])
+
+# Vision (with image)
+import base64
+with open('image.png', 'rb') as f:
+    image_data = base64.b64encode(f.read()).decode('utf-8')
+data = {'contents': [{'parts': [
+    {'text': 'Describe this image'},
+    {'inline_data': {'mime_type': 'image/png', 'data': image_data}}
+]}]}
+```
+
+### Available Models (Highlights)
+| Model | Use Case |
+|-------|----------|
+| gemini-flash-latest | Fast text/vision (FREE) |
+| gemini-2.5-pro | Advanced reasoning |
+| gemini-3-pro-preview | Latest & greatest |
+| imagen-4.0-generate-001 | Image generation |
+| veo-3.0-generate-001 | Video generation |
+
+### Free Tier Limits
+- 60 requests/minute
+- 1 million tokens/day
+- Vision included!
+
+---
+
 ## 🔥 FULL CODE - Complex Code Pipeline (OPERATIONAL - 2026-02-19)
 
 **When complex code is needed, I announce and execute FULL CODE:**
