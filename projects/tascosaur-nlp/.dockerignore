@@ -1,0 +1,37 @@
+# Dependencies
+node_modules
+*/node_modules
+
+# Build artifacts
+dist
+build
+*.log
+
+# Development
+.git
+.gitignore
+.env
+.env.local
+*.md
+!README.md
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (will be mounted as volume)
+backend/data
+*.db
+*.db-wal
+*.db-shm
+
+# Test
+coverage
+*.test.js
+__tests__

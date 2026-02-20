@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Cyberpunk Theme */
+:root {
+  --cyber-black: #0a0a0f;
+  --cyber-darker: #0d0d14;
+  --cyber-dark: #12121a;
+  --cyber-pink: #ff2a6d;
+  --cyber-cyan: #05d9e8;
+  --cyber-yellow: #f9f002;
+  --cyber-purple: #d300c5;
+  --cyber-green: #01ff70;
+}
+
+body {
+  background: var(--cyber-black);
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanlines Effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Grid Background */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(5, 217, 232, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5, 217, 232, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Neon Text */
+.neon-text-pink {
+  text-shadow: 
+    0 0 5px var(--cyber-pink),
+    0 0 10px var(--cyber-pink),
+    0 0 20px var(--cyber-pink);
+}
+
+.neon-text-cyan {
+  text-shadow: 
+    0 0 5px var(--cyber-cyan),
+    0 0 10px var(--cyber-cyan),
+    0 0 20px var(--cyber-cyan);
+}
+
+.neon-text-green {
+  text-shadow: 
+    0 0 5px var(--cyber-green),
+    0 0 10px var(--cyber-green);
+}
+
+/* Neon Borders */
+.neon-border-pink {
+  border: 1px solid var(--cyber-pink);
+  box-shadow: 
+    0 0 5px var(--cyber-pink),
+    inset 0 0 5px rgba(255, 42, 109, 0.2);
+}
+
+.neon-border-cyan {
+  border: 1px solid var(--cyber-cyan);
+  box-shadow: 
+    0 0 5px var(--cyber-cyan),
+    inset 0 0 5px rgba(5, 217, 232, 0.2);
+}
+
+.neon-border-green {
+  border: 1px solid var(--cyber-green);
+  box-shadow: 
+    0 0 5px var(--cyber-green),
+    inset 0 0 5px rgba(1, 255, 112, 0.2);
+}
+
+/* Card Styles */
+.cyber-card {
+  background: linear-gradient(135deg, rgba(18, 18, 26, 0.9), rgba(13, 13, 20, 0.95));
+  border: 1px solid rgba(5, 217, 232, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.cyber-card:hover {
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 20px rgba(5, 217, 232, 0.3);
+}
+
+/* Priority Colors */
+.priority-high {
+  border-left: 3px solid var(--cyber-pink);
+}
+
+.priority-high::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 42, 109, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+.priority-medium {
+  border-left: 3px solid var(--cyber-yellow);
+}
+
+.priority-low {
+  border-left: 3px solid var(--cyber-green);
+}
+
+/* Command Input */
+.command-input {
+  background: rgba(10, 10, 15, 0.9);
+  border: 2px solid var(--cyber-cyan);
+  caret-color: var(--cyber-cyan);
+  transition: all 0.3s ease;
+}
+
+.command-input:focus {
+  outline: none;
+  box-shadow: 
+    0 0 10px var(--cyber-cyan),
+    0 0 20px rgba(5, 217, 232, 0.5),
+    inset 0 0 10px rgba(5, 217, 232, 0.1);
+}
+
+.command-input::placeholder {
+  color: rgba(5, 217, 232, 0.5);
+}
+
+/* Blinking Cursor */
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Kanban Column */
+.kanban-column {
+  background: rgba(13, 13, 20, 0.6);
+  border: 1px solid rgba(5, 217, 232, 0.2);
+  min-height: 400px;
+}
+
+.kanban-column-header {
+  background: linear-gradient(90deg, rgba(5, 217, 232, 0.1), transparent);
+  border-bottom: 1px solid rgba(5, 217, 232, 0.3);
+}
+
+/* Drag States */
+.dragging {
+  opacity: 0.8;
+  transform: rotate(3deg);
+  box-shadow: 0 0 30px var(--cyber-cyan);
+}
+
+.drag-over {
+  background: rgba(5, 217, 232, 0.05);
+  border-color: var(--cyber-cyan);
+}
+
+/* Tag Styles */
+.tag {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-bug { background: rgba(255, 42, 109, 0.2); color: var(--cyber-pink); }
+.tag-feature { background: rgba(5, 217, 232, 0.2); color: var(--cyber-cyan); }
+.tag-docs { background: rgba(211, 0, 197, 0.2); color: var(--cyber-purple); }
+.tag-ui { background: rgba(249, 240, 2, 0.2); color: var(--cyber-yellow); }
+.tag-backend { background: rgba(1, 255, 112, 0.2); color: var(--cyber-green); }
+.tag-default { background: rgba(100, 100, 100, 0.2); color: #888; }
+
+/* Parse Preview */
+.parse-preview {
+  background: rgba(10, 10, 15, 0.95);
+  border: 1px solid rgba(5, 217, 232, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.parse-preview .key {
+  color: var(--cyber-pink);
+}
+
+.parse-preview .value {
+  color: var(--cyber-green);
+}
+
+.parse-preview .string {
+  color: var(--cyber-yellow);
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) infinite;
+}
+
+/* Status Indicators */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-dot.online { background: var(--cyber-green); }
+.status-dot.processing { background: var(--cyber-yellow); }
+.status-dot.error { background: var(--cyber-pink); }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cyber-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-cyan);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyber-pink);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kanban-board {
+    flex-direction: column;
+  }
+  
+  .kanban-column {
+    min-height: 200px;
+  }
+}
