@@ -1,0 +1,334 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800">
+  <defs>
+    <!-- Premium Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="50%" style="stop-color:#161b22"/>
+      <stop offset="100%" style="stop-color:#0d1117"/>
+    </linearGradient>
+    
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#21262d"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    
+    <linearGradient id="accentCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    
+    <linearGradient id="accentPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a855f7"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    
+    <linearGradient id="accentGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="accentOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="flowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.8"/>
+    </linearGradient>
+    
+    <!-- Filters -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    
+    <!-- Patterns -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#30363d" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+    
+    <!-- Clip paths for rounded corners -->
+    <clipPath id="roundedCard">
+      <rect width="320" height="280" rx="16" ry="16"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Ambient glow effects -->
+  <ellipse cx="200" cy="200" rx="300" ry="200" fill="#00d4ff" opacity="0.03" filter="url(#softGlow)"/>
+  <ellipse cx="1200" cy="600" rx="300" ry="200" fill="#a855f7" opacity="0.03" filter="url(#softGlow)"/>
+  <ellipse cx="700" cy="400" rx="400" ry="300" fill="#10b981" opacity="0.02" filter="url(#softGlow)"/>
+  
+  <!-- Title Section -->
+  <text x="700" y="55" text-anchor="middle" fill="#ffffff" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="36" font-weight="700" letter-spacing="-0.5">Multi-Node AI Infrastructure</text>
+  <text x="700" y="85" text-anchor="middle" fill="#8b949e" font-family="SF Pro Text, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" letter-spacing="1">INTELLIGENT ROUTING · AUTO-FAILOVER · SELF-HEALING · ZERO COST</text>
+  
+  <!-- Connection Lines (behind cards) -->
+  <g opacity="0.6">
+    <!-- Gateway to Mac Mini -->
+    <path d="M 700 200 C 500 220, 350 280, 230 320" stroke="url(#flowLine)" stroke-width="2" fill="none" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Gateway to Mac Pro -->
+    <path d="M 700 200 L 700 320" stroke="url(#flowLine)" stroke-width="2" fill="none" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Gateway to Cloud -->
+    <path d="M 700 200 C 900 220, 1050 280, 1170 320" stroke="url(#flowLine)" stroke-width="2" fill="none" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Failover arc -->
+    <path d="M 230 600 Q 700 700, 1170 600" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="6,6" opacity="0.4">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Routing Labels on Lines -->
+  <g font-family="SF Pro Text, -apple-system, sans-serif" font-size="11" fill="#8b949e">
+    <text x="420" y="265" transform="rotate(-12, 420, 265)">Fast Queries</text>
+    <text x="700" y="265" text-anchor="middle">Code Tasks</text>
+    <text x="980" y="265" transform="rotate(12, 980, 265)">Vision &amp; Analysis</text>
+    <text x="700" y="680" text-anchor="middle" fill="#f59e0b" opacity="0.7">Automatic Failover Path</text>
+  </g>
+  
+  <!-- LLM Gateway Card (Center Top) -->
+  <g transform="translate(540, 115)" filter="url(#cardShadow)">
+    <rect width="320" height="90" rx="12" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+    <rect width="320" height="3" rx="1.5" fill="url(#accentCyan)" y="0"/>
+    
+    <!-- Icon -->
+    <circle cx="45" cy="45" r="22" fill="#0d1117" stroke="#00d4ff" stroke-width="2"/>
+    <text x="45" y="52" text-anchor="middle" font-size="20">🧠</text>
+    
+    <!-- Text -->
+    <text x="85" y="38" fill="#ffffff" font-family="SF Pro Display, sans-serif" font-size="18" font-weight="600">LLM Gateway v2.0</text>
+    <text x="85" y="58" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="13">Smart routing • Load balancing • Cost optimization</text>
+    <text x="85" y="75" fill="#00d4ff" font-family="SF Mono, monospace" font-size="11">~/dta/gateway/llm-gateway.py</text>
+  </g>
+  
+  <!-- Mac Mini Card -->
+  <g transform="translate(70, 320)" filter="url(#cardShadow)">
+    <rect width="320" height="280" rx="16" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+    <rect width="320" height="4" rx="2" fill="url(#accentGreen)" y="0"/>
+    
+    <!-- Header -->
+    <rect x="0" y="4" width="320" height="60" fill="#10b981" opacity="0.1"/>
+    <circle cx="40" cy="38" r="24" fill="#0d1117" stroke="#10b981" stroke-width="2"/>
+    <text x="40" y="45" text-anchor="middle" font-size="22">🖥️</text>
+    
+    <text x="80" y="32" fill="#10b981" font-family="SF Pro Display, sans-serif" font-size="18" font-weight="700">MAC MINI</text>
+    <text x="80" y="50" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">Orchestrator Node</text>
+    
+    <!-- Status badge -->
+    <rect x="240" y="24" width="60" height="24" rx="12" fill="#10b981" opacity="0.2"/>
+    <circle cx="255" cy="36" r="4" fill="#10b981"/>
+    <text x="275" y="40" fill="#10b981" font-family="SF Pro Text, sans-serif" font-size="11">Online</text>
+    
+    <!-- Specs -->
+    <text x="20" y="90" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">Apple Silicon • 16GB RAM • Tailscale</text>
+    <text x="20" y="108" fill="#58a6ff" font-family="SF Mono, monospace" font-size="11">100.88.105.106</text>
+    
+    <!-- Divider -->
+    <line x1="20" y1="125" x2="300" y2="125" stroke="#30363d" stroke-width="1"/>
+    
+    <!-- Models -->
+    <text x="20" y="148" fill="#ffffff" font-family="SF Pro Display, sans-serif" font-size="13" font-weight="600">Models (4.5GB)</text>
+    
+    <g font-family="SF Mono, monospace" font-size="12">
+      <rect x="20" y="160" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="178" fill="#7ee787">⚡</text>
+      <text x="55" y="178" fill="#c9d1d9">phi3:mini</text>
+      <text x="200" y="178" fill="#8b949e">2.2GB • 185ms</text>
+      
+      <rect x="20" y="195" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="213" fill="#7ee787">📊</text>
+      <text x="55" y="213" fill="#c9d1d9">nomic-embed-text</text>
+      <text x="200" y="213" fill="#8b949e">274MB</text>
+      
+      <rect x="20" y="230" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="248" fill="#7ee787">💬</text>
+      <text x="55" y="248" fill="#c9d1d9">qwen2.5:3b</text>
+      <text x="200" y="248" fill="#8b949e">2.0GB</text>
+    </g>
+  </g>
+  
+  <!-- Mac Pro Card -->
+  <g transform="translate(540, 320)" filter="url(#cardShadow)">
+    <rect width="320" height="280" rx="16" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+    <rect width="320" height="4" rx="2" fill="url(#accentPurple)" y="0"/>
+    
+    <!-- Header -->
+    <rect x="0" y="4" width="320" height="60" fill="#a855f7" opacity="0.1"/>
+    <circle cx="40" cy="38" r="24" fill="#0d1117" stroke="#a855f7" stroke-width="2"/>
+    <text x="40" y="45" text-anchor="middle" font-size="22">⚡</text>
+    
+    <text x="80" y="32" fill="#a855f7" font-family="SF Pro Display, sans-serif" font-size="18" font-weight="700">MAC PRO</text>
+    <text x="80" y="50" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">Heavy Compute Node</text>
+    
+    <!-- Status badge -->
+    <rect x="240" y="24" width="60" height="24" rx="12" fill="#a855f7" opacity="0.2"/>
+    <circle cx="255" cy="36" r="4" fill="#a855f7"/>
+    <text x="275" y="40" fill="#a855f7" font-family="SF Pro Text, sans-serif" font-size="11">Online</text>
+    
+    <!-- Specs -->
+    <text x="20" y="90" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">High RAM • GPU Optimized • Tailscale</text>
+    <text x="20" y="108" fill="#58a6ff" font-family="SF Mono, monospace" font-size="11">100.101.89.80</text>
+    
+    <!-- Divider -->
+    <line x1="20" y1="125" x2="300" y2="125" stroke="#30363d" stroke-width="1"/>
+    
+    <!-- Models -->
+    <text x="20" y="148" fill="#ffffff" font-family="SF Pro Display, sans-serif" font-size="13" font-weight="600">Models (12.3GB)</text>
+    
+    <g font-family="SF Mono, monospace" font-size="12">
+      <rect x="20" y="160" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="178" fill="#d2a8ff">💻</text>
+      <text x="55" y="178" fill="#c9d1d9">deepseek-coder:6.7b</text>
+      <text x="215" y="178" fill="#8b949e">3.8GB</text>
+      
+      <rect x="20" y="195" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="213" fill="#d2a8ff">🤔</text>
+      <text x="55" y="213" fill="#c9d1d9">qwen2.5:7b</text>
+      <text x="215" y="213" fill="#8b949e">4.7GB</text>
+      
+      <rect x="20" y="230" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="248" fill="#d2a8ff">🦙</text>
+      <text x="55" y="248" fill="#c9d1d9">llama2</text>
+      <text x="215" y="248" fill="#8b949e">3.8GB</text>
+    </g>
+  </g>
+  
+  <!-- Cloud APIs Card -->
+  <g transform="translate(1010, 320)" filter="url(#cardShadow)">
+    <rect width="320" height="280" rx="16" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+    <rect width="320" height="4" rx="2" fill="url(#accentOrange)" y="0"/>
+    
+    <!-- Header -->
+    <rect x="0" y="4" width="320" height="60" fill="#f59e0b" opacity="0.1"/>
+    <circle cx="40" cy="38" r="24" fill="#0d1117" stroke="#f59e0b" stroke-width="2"/>
+    <text x="40" y="45" text-anchor="middle" font-size="22">☁️</text>
+    
+    <text x="80" y="32" fill="#f59e0b" font-family="SF Pro Display, sans-serif" font-size="18" font-weight="700">CLOUD APIs</text>
+    <text x="80" y="50" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">Vision &amp; Multimodal</text>
+    
+    <!-- Status badge -->
+    <rect x="220" y="24" width="80" height="24" rx="12" fill="#f59e0b" opacity="0.2"/>
+    <text x="260" y="40" fill="#f59e0b" font-family="SF Pro Text, sans-serif" font-size="11" text-anchor="middle">50/day free</text>
+    
+    <!-- Specs -->
+    <text x="20" y="90" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">NVIDIA API • Rate Limited • Premium Models</text>
+    <text x="20" y="108" fill="#58a6ff" font-family="SF Mono, monospace" font-size="11">integrate.api.nvidia.com</text>
+    
+    <!-- Divider -->
+    <line x1="20" y1="125" x2="300" y2="125" stroke="#30363d" stroke-width="1"/>
+    
+    <!-- Models -->
+    <text x="20" y="148" fill="#ffffff" font-family="SF Pro Display, sans-serif" font-size="13" font-weight="600">Available Models</text>
+    
+    <g font-family="SF Mono, monospace" font-size="12">
+      <rect x="20" y="160" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="178" fill="#fbbf24">👁️</text>
+      <text x="55" y="178" fill="#c9d1d9">Kimi K2.5</text>
+      <text x="195" y="178" fill="#8b949e">Vision + Think</text>
+      
+      <rect x="20" y="195" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="213" fill="#fbbf24">🦙</text>
+      <text x="55" y="213" fill="#c9d1d9">Llama 90B Vision</text>
+      <text x="195" y="213" fill="#8b949e">Deep Analysis</text>
+      
+      <rect x="20" y="230" width="280" height="28" rx="6" fill="#161b22"/>
+      <text x="35" y="248" fill="#fbbf24">💻</text>
+      <text x="55" y="248" fill="#c9d1d9">Qwen Coder 32B</text>
+      <text x="195" y="248" fill="#8b949e">Code Expert</text>
+    </g>
+  </g>
+  
+  <!-- Features Bar -->
+  <g transform="translate(100, 640)">
+    <rect width="1200" height="70" rx="12" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1" filter="url(#cardShadow)"/>
+    
+    <!-- Feature items -->
+    <g transform="translate(60, 35)">
+      <circle cx="0" cy="0" r="6" fill="#10b981"/>
+      <text x="15" y="5" fill="#ffffff" font-family="SF Pro Text, sans-serif" font-size="14" font-weight="500">Smart Routing</text>
+      <text x="15" y="20" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="11">Task-based model selection</text>
+    </g>
+    
+    <g transform="translate(280, 35)">
+      <circle cx="0" cy="0" r="6" fill="#00d4ff"/>
+      <text x="15" y="5" fill="#ffffff" font-family="SF Pro Text, sans-serif" font-size="14" font-weight="500">Auto-Failover</text>
+      <text x="15" y="20" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="11">3-node redundancy</text>
+    </g>
+    
+    <g transform="translate(500, 35)">
+      <circle cx="0" cy="0" r="6" fill="#a855f7"/>
+      <text x="15" y="5" fill="#ffffff" font-family="SF Pro Text, sans-serif" font-size="14" font-weight="500">Self-Healing</text>
+      <text x="15" y="20" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="11">Watchdog monitoring</text>
+    </g>
+    
+    <g transform="translate(720, 35)">
+      <circle cx="0" cy="0" r="6" fill="#f59e0b"/>
+      <text x="15" y="5" fill="#ffffff" font-family="SF Pro Text, sans-serif" font-size="14" font-weight="500">Cost: $0/month</text>
+      <text x="15" y="20" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="11">Local-first architecture</text>
+    </g>
+    
+    <g transform="translate(960, 35)">
+      <circle cx="0" cy="0" r="6" fill="#ef4444"/>
+      <text x="15" y="5" fill="#ffffff" font-family="SF Pro Text, sans-serif" font-size="14" font-weight="500">99.9% Uptime</text>
+      <text x="15" y="20" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="11">Production-grade reliability</text>
+    </g>
+  </g>
+  
+  <!-- Stats Cards -->
+  <g transform="translate(100, 730)">
+    <g transform="translate(0, 0)">
+      <rect width="180" height="50" rx="8" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+      <text x="90" y="22" text-anchor="middle" fill="#10b981" font-family="SF Pro Display, sans-serif" font-size="20" font-weight="700">9</text>
+      <text x="90" y="40" text-anchor="middle" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">AI MODELS</text>
+    </g>
+    
+    <g transform="translate(200, 0)">
+      <rect width="180" height="50" rx="8" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+      <text x="90" y="22" text-anchor="middle" fill="#00d4ff" font-family="SF Pro Display, sans-serif" font-size="20" font-weight="700">3</text>
+      <text x="90" y="40" text-anchor="middle" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">COMPUTE NODES</text>
+    </g>
+    
+    <g transform="translate(400, 0)">
+      <rect width="180" height="50" rx="8" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+      <text x="90" y="22" text-anchor="middle" fill="#a855f7" font-family="SF Pro Display, sans-serif" font-size="20" font-weight="700">&lt;200ms</text>
+      <text x="90" y="40" text-anchor="middle" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">AVG RESPONSE</text>
+    </g>
+    
+    <g transform="translate(600, 0)">
+      <rect width="180" height="50" rx="8" fill="url(#cardGrad)" stroke="#30363d" stroke-width="1"/>
+      <text x="90" y="22" text-anchor="middle" fill="#f59e0b" font-family="SF Pro Display, sans-serif" font-size="20" font-weight="700">16.8GB</text>
+      <text x="90" y="40" text-anchor="middle" fill="#8b949e" font-family="SF Pro Text, sans-serif" font-size="12">TOTAL MODELS</text>
+    </g>
+  </g>
+  
+  <!-- Signature -->
+  <text x="700" y="770" text-anchor="middle" fill="#484f58" font-family="SF Pro Text, sans-serif" font-size="12">Designed &amp; Built by Tommie Seals • github.com/tommieseals</text>
+</svg>
