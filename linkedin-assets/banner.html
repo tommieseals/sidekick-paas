@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    .banner {
+      width: 1584px;
+      height: 396px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 80px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Animated grid background */
+    .grid {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.5;
+    }
+    
+    /* Glowing orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+    .orb1 { width: 300px; height: 300px; background: rgba(0, 212, 255, 0.3); top: -100px; left: 10%; }
+    .orb2 { width: 250px; height: 250px; background: rgba(139, 92, 246, 0.3); bottom: -80px; right: 20%; }
+    .orb3 { width: 200px; height: 200px; background: rgba(16, 185, 129, 0.2); top: 50%; left: 60%; }
+    
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .name {
+      font-size: 52px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+    }
+    
+    .title {
+      font-size: 28px;
+      color: #00d4ff;
+      font-weight: 500;
+      letter-spacing: 2px;
+    }
+    
+    .tagline {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 5px;
+    }
+    
+    .tech-stack {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .tech {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      padding: 8px 20px;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 20px;
+    }
+    
+    .nodes {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .node {
+      text-align: center;
+    }
+    
+    .node-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(139, 92, 246, 0.2));
+      border: 2px solid rgba(0, 212, 255, 0.5);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .node-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #10b981;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="grid"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    
+    <div class="content">
+      <div class="left">
+        <div class="name">Tommie Seals</div>
+        <div class="title">AI INFRASTRUCTURE ENGINEER</div>
+        <div class="tagline">Building intelligent, self-healing distributed systems</div>
+        <div class="tech-stack">
+          <span class="tech">Python</span>
+          <span class="tech">LLM Ops</span>
+          <span class="tech">Distributed Systems</span>
+          <span class="tech">DevOps</span>
+        </div>
+      </div>
+      
+      <div class="right">
+        <div class="nodes">
+          <div class="node">
+            <div class="node-icon">🖥️</div>
+            <div class="node-label">Orchestrator</div>
+          </div>
+          <div class="node">
+            <div class="node-icon">⚡</div>
+            <div class="node-label">Compute</div>
+          </div>
+          <div class="node">
+            <div class="node-icon">☁️</div>
+            <div class="node-label">Cloud</div>
+          </div>
+        </div>
+        
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value">9</div>
+            <div class="stat-label">AI Models</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Nodes</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">99.9%</div>
+            <div class="stat-label">Uptime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
