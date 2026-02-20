@@ -1,0 +1,49 @@
+# ============================================
+# 💹 INVESTRAIN AI - Docker Compose
+# ============================================
+
+version: '3.8'
+
+services:
+  investrain:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: investrain-ai
+    ports:
+      - "3001:3001"
+    volumes:
+      - investrain-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - USE_MOCK_DATA=${USE_MOCK_DATA:-true}
+      - ALPHA_VANTAGE_KEY=${ALPHA_VANTAGE_KEY:-demo}
+      - OLLAMA_URL=${OLLAMA_URL:-http://ollama:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:3b}
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - investrain-net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: investrain-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - investrain-net
+
+volumes:
+  investrain-data:
+  ollama-data:
+
+networks:
+  investrain-net:
+    driver: bridge
