@@ -248,6 +248,71 @@ When I'm doing Full Code, I announce it so Rusty knows the heavy machinery is sp
 
 ---
 
+## 🎯 Portfolio Projects (Feb 20, 2026)
+
+**Employer-ready showcase projects demonstrating full-stack, AI/ML, and DevOps skills:**
+
+### 1. 🦖 Tascosaur NLP — Natural Language Task Management
+**Type:** Full-Stack + NLP
+**Tech:** React, Node.js, Compromise.js, Ollama, WebSocket, SQLite
+**Demo:** Cyberpunk Kanban board controlled by natural language
+
+Turn "Create a high-priority bug for the login page" into structured task data. Features intent classification, entity extraction, real-time sync, and LLM fallback for complex inputs.
+
+**Why it matters:** Shows NLP/intent processing, real-time systems, modern UI/UX
+**Location:** `projects/tascosaur-nlp/`
+
+---
+
+### 2. 💹 Investrain AI — AI Investment Tracker with RAG
+**Type:** Full-Stack + RAG/LLM
+**Tech:** Next.js, Express, Ollama, Recharts, SQLite
+**Demo:** Chat with your portfolio using natural language
+
+Ask "What is my highest-risk asset?" and get data-driven insights from your actual portfolio data. RAG pipeline injects financial context into prompts.
+
+**Why it matters:** Demonstrates RAG implementation, financial domain knowledge, data visualization
+**Location:** `projects/investrain-ai/`
+
+---
+
+### 3. 🚀 Sidekick PaaS — Zero-Config Deployment Platform
+**Type:** DevOps + Full-Stack
+**Tech:** Docker, Nginx, Certbot, Express, React, Dockerode
+**Demo:** Deploy any GitHub repo with one URL
+
+Paste a GitHub URL → Sidekick detects project type, generates Dockerfile, builds container, configures reverse proxy, issues SSL certificate. Self-hosted Vercel/Heroku alternative.
+
+**Why it matters:** Shows DevOps/infrastructure skills, system design, automation
+**Location:** `projects/sidekick-paas/`
+
+---
+
+### 4. 🌍 Teams UN-Translator — Real-Time Meeting Translation
+**Type:** Real-Time Systems + AI
+**Tech:** Teams Bot Framework, Whisper STT, Claude Translation, ElevenLabs TTS
+**Demo:** Multi-language Teams meetings like UN simultaneous interpretation
+
+Everyone hears the meeting in their preferred language with <1s latency. Speaker identification, per-participant audio streams, live captions.
+
+**Why it matters:** Complex real-time pipeline, multi-API orchestration, enterprise integration
+**Location:** `projects/teams-un-translator/`
+
+---
+
+### Portfolio Strategy
+
+| Project | Primary Skills Demonstrated |
+|---------|----------------------------|
+| Tascosaur | NLP, Real-time, Modern UI |
+| Investrain | RAG/LLM, Finance, Data Viz |
+| Sidekick | DevOps, Docker, System Design |
+| Teams UN | Real-time, Enterprise, Audio/Video |
+
+**All projects:** Docker-ready, well-documented, production patterns
+
+---
+
 ## 🐙 GitHub Repositories (Master Tracking)
 
 **Account:** tommieseals
