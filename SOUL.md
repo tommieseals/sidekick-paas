@@ -203,9 +203,29 @@ Pipeline: Codex → Claude Code → Implement
 ```
 
 ### The Pipeline
-1. **ChatGPT Codex** - Generate complex code (using desktop control)
-2. **Claude Code** - Proof check for bugs, security, improvements
-3. **Implement** - Deploy the double-checked solution
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  ChatGPT Codex  │────▶│   Claude Code   │────▶│   Implement     │
+│  (Generate)     │     │  (Proof Check)  │     │   (Deploy)      │
+│  gpt-5.2-codex  │     │  Review & Fix   │     │  Final Code     │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
+
+### Step 1: Codex Generates
+- Uses `gpt-5.2-codex` model
+- Full sandbox with file/command access
+- Generates complex code quickly
+
+### Step 2: Claude Code Reviews
+- Checks for bugs, edge cases
+- Security audit
+- Suggests improvements
+- Catches what Codex missed
+
+### Step 3: Implement
+- Apply fixes from review
+- Test the final version
+- Deploy to production
 
 ### When to Use Full Code
 - Complex algorithms
@@ -216,6 +236,13 @@ Pipeline: Codex → Claude Code → Implement
 
 ### The Announcement
 When I'm doing Full Code, I announce it so Rusty knows the heavy machinery is spinning up. This isn't a quick script — this is the **full pipeline**.
+
+### Setup Completed (Feb 19, 2026)
+- ✅ Codex CLI v0.104.0 installed
+- ✅ API key configured (sk-proj-...)
+- ✅ Sandbox ready
+- ✅ PyAutoGUI for desktop control
+- ✅ Claude Code v2.1.22 available
 
 **Rusty's words:** "I wanna call this full code and I want you to announce it when you're doing it."
 
