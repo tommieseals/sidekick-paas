@@ -1,0 +1,126 @@
+# TaskBot Production Docker Compose
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+
+version: '3.8'
+
+services:
+  taskbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: taskbot:latest
+    container_name: taskbot-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Core Settings
+      - TASKBOT_ENV=production
+      - LOG_LEVEL=info
+      
+      # Database (if using external)
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/taskbot.db}
+      
+      # Redis for job queue (optional)
+      - REDIS_URL=${REDIS_URL:-}
+      
+      # API Keys (loaded from .env)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      
+      # Data Enrichment
+      - CLEARBIT_API_KEY=${CLEARBIT_API_KEY}
+      - HUNTER_API_KEY=${HUNTER_API_KEY}
+      - APOLLO_API_KEY=${APOLLO_API_KEY}
+      
+      # Communication
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      
+      # CRM
+      - HUBSPOT_API_KEY=${HUBSPOT_API_KEY}
+      - SALESFORCE_CLIENT_ID=${SALESFORCE_CLIENT_ID}
+      - SALESFORCE_CLIENT_SECRET=${SALESFORCE_CLIENT_SECRET}
+      
+      # Project Management
+      - JIRA_URL=${JIRA_URL}
+      - JIRA_EMAIL=${JIRA_EMAIL}
+      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      
+      # Microsoft / Azure
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+      
+      # Google
+      - GOOGLE_SERVICE_ACCOUNT_JSON=${GOOGLE_SERVICE_ACCOUNT_JSON}
+      
+      # Payments
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      
+    volumes:
+      # Persist data
+      - taskbot-data:/app/data
+      - taskbot-logs:/app/logs
+      
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    networks:
+      - taskbot-network
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Optional: Redis for job queue
+  redis:
+    image: redis:7-alpine
+    container_name: taskbot-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - taskbot-redis:/data
+    networks:
+      - taskbot-network
+    profiles:
+      - with-redis
+
+  # Optional: Nginx reverse proxy with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: taskbot-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - taskbot
+    networks:
+      - taskbot-network
+    profiles:
+      - with-nginx
+
+volumes:
+  taskbot-data:
+  taskbot-logs:
+  taskbot-redis:
+
+networks:
+  taskbot-network:
+    driver: bridge
