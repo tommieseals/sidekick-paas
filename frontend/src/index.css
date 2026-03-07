@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #010409;
+  color: #e6edf3;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Terminal styling */
+.terminal {
+  background: #0d1117;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.terminal-line {
+  padding: 2px 0;
+}
+
+.terminal-timestamp {
+  color: #7d8590;
+  margin-right: 8px;
+}
+
+.terminal-success {
+  color: #3fb950;
+}
+
+.terminal-error {
+  color: #f85149;
+}
+
+.terminal-info {
+  color: #58a6ff;
+}
+
+.terminal-warning {
+  color: #d29922;
+}
+
+/* Status indicators */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-running {
+  background: #3fb950;
+  box-shadow: 0 0 8px #3fb950;
+}
+
+.status-stopped {
+  background: #f85149;
+}
+
+.status-building {
+  background: #d29922;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* Card hover effect */
+.project-card {
+  transition: all 0.2s ease;
+  border: 1px solid #30363d;
+}
+
+.project-card:hover {
+  border-color: #58a6ff;
+  transform: translateY(-2px);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(180deg, #238636 0%, #2ea043 100%);
+  border: 1px solid #238636;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #2ea043 0%, #3fb950 100%);
+}
+
+.btn-danger {
+  background: transparent;
+  border: 1px solid #f85149;
+  color: #f85149;
+}
+
+.btn-danger:hover {
+  background: rgba(248, 81, 73, 0.1);
+}
+
+/* Input focus */
+input:focus, select:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}

@@ -1,0 +1,63 @@
+# ============================================
+# 🚀 SIDEKICK PAAS - Docker Compose
+# ============================================
+
+version: '3.8'
+
+services:
+  sidekick:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sidekick-paas
+    ports:
+      - "3002:3002"
+    volumes:
+      - sidekick-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker-in-Docker
+      - nginx-conf:/app/data/nginx
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - BASE_DOMAIN=${BASE_DOMAIN:-localhost}
+    restart: unless-stopped
+    networks:
+      - sidekick-net
+
+  # Nginx reverse proxy for deployed apps
+  nginx:
+    image: nginx:alpine
+    container_name: sidekick-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginx-conf:/etc/nginx/conf.d:ro
+      - certbot-conf:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot:ro
+    depends_on:
+      - sidekick
+    restart: unless-stopped
+    networks:
+      - sidekick-net
+
+  # Certbot for SSL certificates
+  certbot:
+    image: certbot/certbot
+    container_name: sidekick-certbot
+    volumes:
+      - certbot-conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - sidekick-net
+
+volumes:
+  sidekick-data:
+  nginx-conf:
+  certbot-conf:
+  certbot-www:
+
+networks:
+  sidekick-net:
+    driver: bridge
