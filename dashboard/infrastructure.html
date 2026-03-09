@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦀 Rusty's Lab - Infrastructure Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ===== GLOBAL RESET & VARIABLES ===== */
+    :root {
+      --bg-deep: #0a0e17;
+      --bg-card: #0d1321;
+      --bg-hover: #131a2b;
+      --cyan: #00ffff;
+      --purple: #9d4edd;
+      --green: #00ff88;
+      --amber: #ffa500;
+      --red: #ff3366;
+      --text-primary: #ffffff;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --glow-cyan: rgba(0, 255, 255, 0.5);
+      --glow-purple: rgba(157, 78, 221, 0.5);
+      --glow-green: rgba(0, 255, 136, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== ANIMATED BACKGROUND ===== */
+    .bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(157, 78, 221, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.02) 0%, transparent 50%);
+    }
+
+    /* ===== HEADER ===== */
+    .dashboard-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(10, 14, 23, 0.98) 0%, rgba(10, 14, 23, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+      padding: 16px 24px;
+    }
+
+    .header-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 10px var(--glow-cyan));
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .brand-text h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .health-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 20px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 12px;
+    }
+
+    .health-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--green);
+      text-shadow: 0 0 20px var(--glow-green);
+    }
+
+    .health-label {
+      font-size: 0.65rem;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .live-clock {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 16px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 8px;
+    }
+
+    .clock-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    .clock-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+    }
+
+    .action-btn:hover {
+      background: rgba(0, 255, 255, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    .action-btn.presentation {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 255, 255, 0.2));
+      border-color: var(--purple);
+    }
+
+    .action-btn.presentation:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px var(--glow-purple);
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav-container {
+      background: rgba(13, 19, 33, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 76px;
+      z-index: 999;
+    }
+
+    .nav-scroll {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 24px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .nav-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 12px 0;
+      min-width: max-content;
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+
+    .nav-tab.active {
+      background: rgba(0, 255, 255, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .nav-tab .tab-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .nav-tab.active .tab-key {
+      background: rgba(0, 255, 255, 0.2);
+      color: var(--cyan);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ===== SECTIONS ===== */
+    .infra-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .infra-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Common Styles */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .icon-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .section-title-block {
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 4px 0 0 0;
+    }
+
+    .section-status {
+      margin-left: auto;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-badge.status-online {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ===== PLACEHOLDER SECTIONS (for missing 01-04) ===== */
+    .placeholder-section {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .placeholder-title {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .placeholder-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ===== FOOTER ===== */
+    .dashboard-footer {
+      margin-top: 48px;
+      padding: 24px;
+      background: rgba(13, 19, 33, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .footer-brand .brand-icon {
+      font-size: 1.5rem;
+    }
+
+    .footer-shortcuts {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .shortcut {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .shortcut kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: var(--cyan);
+    }
+
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--green);
+    }
+
+    .footer-status .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* ===== PRESENTATION MODE ===== */
+    body.presentation-mode .dashboard-header,
+    body.presentation-mode .nav-container,
+    body.presentation-mode .dashboard-footer {
+      display: none;
+    }
+
+    body.presentation-mode .main-content {
+      padding: 0;
+      max-width: 100%;
+    }
+
+    body.presentation-mode .infra-section {
+      padding: 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .header-content {
+        flex-wrap: wrap;
+      }
+      
+      .header-stats {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-header {
+        padding: 12px 16px;
+      }
+      
+      .brand-text h1 {
+        font-size: 1.2rem;
+      }
+      
+      .health-score, .live-clock {
+        padding: 6px 12px;
+      }
+      
+      .health-value {
+        font-size: 1.4rem;
+      }
+      
+      .clock-time {
+        font-size: 1.1rem;
+      }
+      
+      .main-content {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-pattern"></div>
+
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="header-brand">
+        <span class="brand-logo">🦀</span>
+        <div class="brand-text">
+          <h1>RUSTY'S LAB</h1>
+          <p>Infrastructure Command Center</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="health-score">
+          <span class="health-value" id="health-score">94</span>
+          <span class="health-label">Health Score</span>
+        </div>
+        <div class="live-clock">
+          <span class="clock-time" id="clock-time">--:--:--</span>
+          <span class="clock-date" id="clock-date">Loading...</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="action-btn" onclick="refreshAll()">
+          <span>🔄</span> Refresh
+        </button>
+        <button class="action-btn presentation" onclick="togglePresentationMode()">
+          <span>📺</span> Present
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-container">
+    <div class="nav-scroll">
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-section="1" onclick="showSection(1)">
+          <span>🌐</span> Network
+          <span class="tab-key">1</span>
+        </button>
+        <button class="nav-tab" data-section="2" onclick="showSection(2)">
+          <span>🚀</span> Gateway
+          <span class="tab-key">2</span>
+        </button>
+        <button class="nav-tab" data-section="3" onclick="showSection(3)">
+          <span>💰</span> Vault
+          <span class="tab-key">3</span>
+        </button>
+        <button class="nav-tab" data-section="4" onclick="showSection(4)">
+          <span>🏴</span> Legion
+          <span class="tab-key">4</span>
+        </button>
+        <button class="nav-tab" data-section="5" onclick="showSection(5)">
+          <span>🧬</span> Pharma
+          <span class="tab-key">5</span>
+        </button>
+        <button class="nav-tab" data-section="6" onclick="showSection(6)">
+          <span>🏰</span> Fort Knox
+          <span class="tab-key">6</span>
+        </button>
+        <button class="nav-tab" data-section="7" onclick="showSection(7)">
+          <span>🧠</span> Brain
+          <span class="tab-key">7</span>
+        </button>
+        <button class="nav-tab" data-section="8" onclick="showSection(8)">
+          <span>🔒</span> Security
+          <span class="tab-key">8</span>
+        </button>
+        <button class="nav-tab" data-section="9" onclick="showSection(9)">
+          <span>🧠</span> LLM Router
+          <span class="tab-key">9</span>
+        </button>
+        <button class="nav-tab" data-section="10" onclick="showSection(10)">
+          <span>🔧</span> MCP Tools
+          <span class="tab-key">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Section 1: Network (Placeholder) -->
+    <section id="section-1" class="infra-section active">
+      <div class="placeholder-section">
+        <div class="placeholder-icon">🌐</div>
+        <h2 class="placeholder-title">Network Topology</h2>
+        <p class="placeholder-desc">Master network diagram showing 3-node Tailscale mesh with all external connections.</p>
+        <p class="placeholder-desc" style="margin-top: 16px; color: var(--amber);">Section pending build by subagent...</p>
+      </div>
+    </section>
+
+    <!-- Section 2: Gateway (Placeholder) -->
+    <section id="section-2" class="infra-section">
+      <div class="placeholder-section">
+        <div class="placeholder-icon">🚀</div>
+        <h2 class="placeholder-title">Clawdbot Gateway Flow</h2>
+        <p class="placeholder-desc">Complete message lifecycle from Telegram to LLM response.</p>
+        <p class="placeholder-desc" style="margin-top: 16px; color: var(--amber);">Section pending build by subagent...</p>
+      </div>
+    </section>
+
+    <!-- Section 3: Vault (Placeholder) -->
+    <section id="section-3" class="infra-section">
+      <div class="placeholder-section">
+        <div class="placeholder-icon">💰</div>
+        <h2 class="placeholder-title">Project Vault</h2>
+        <p class="placeholder-desc">10-strategy trading system from market scan to order execution.</p>
+        <p class="placeholder-desc" style="margin-top: 16px; color: var(--amber);">Section pending build by subagent...</p>
+      </div>
+    </section>
+
+    <!-- Section 4: Legion (Placeholder) -->
+    <section id="section-4" class="infra-section">
+      <div class="placeholder-section">
+        <div class="placeholder-icon">🏴</div>
+        <h2 class="placeholder-title">Project Legion</h2>
+        <p class="placeholder-desc">Event-driven job hunting pipeline from scraping to interview prep.</p>
+        <p class="placeholder-desc" style="margin-top: 16px; color: var(--amber);">Section pending build by subagent...</p>
+      </div>
+    </section>
+
+    <!-- Section 5: Pharma -->
+    <section id="section-5" class="infra-section">
+      <!-- 🧬 ARBITRAGE PHARMA - DRUG DEAL MACHINE -->
+<section id="pharma" class="infra-section" data-section="pharma">
+  <div class="section-header">
+    <div class="section-icon">🧬</div>
+    <h2>ARBITRAGE PHARMA</h2>
+    <span class="section-badge active">DEAL MACHINE</span>
+  </div>
+
+  <!-- Pipeline Value Banner -->
+  <div class="pipeline-banner">
+    <div class="pipeline-stat">
+      <span class="stat-value">$150M</span>
+      <span class="stat-label">Total Pipeline</span>
+    </div>
+    <div class="pipeline-divider"></div>
+    <div class="pipeline-stat highlight">
+      <span class="stat-value">$15M</span>
+      <span class="stat-label">Weighted Value</span>
+    </div>
+    <div class="pipeline-divider"></div>
+    <div class="pipeline-stat">
+      <span class="stat-value">9</span>
+      <span class="stat-label">Active Deals</span>
+    </div>
+    <div class="pipeline-divider"></div>
+    <div class="pipeline-stat">
+      <span class="stat-value">7</span>
+      <span class="stat-label">Emails Sent</span>
+    </div>
+  </div>
+
+  <!-- 5-Layer Architecture -->
+  <div class="architecture-layers">
+    
+    <!-- LAYER 1: HARVESTERS -->
+    <div class="layer" data-layer="1">
+      <div class="layer-header">
+        <span class="layer-number">01</span>
+        <span class="layer-title">HARVESTERS</span>
+        <span class="layer-tag">DATA SOURCES</span>
+      </div>
+      <div class="layer-content">
+        <div class="harvester-grid">
+          <div class="harvester-card" data-source="pubmed">
+            <div class="harvester-icon">📚</div>
+            <div class="harvester-name">PubMed</div>
+            <div class="harvester-desc">Scientific Papers</div>
+            <div class="harvester-status online">● Scanning</div>
+          </div>
+          <div class="harvester-card" data-source="clinicaltrials">
+            <div class="harvester-icon">🧪</div>
+            <div class="harvester-name">ClinicalTrials</div>
+            <div class="harvester-desc">Withdrawn Trials</div>
+            <div class="harvester-status online">● Active</div>
+          </div>
+          <div class="harvester-card" data-source="fda">
+            <div class="harvester-icon">🏛️</div>
+            <div class="harvester-name">FDA Orphan</div>
+            <div class="harvester-desc">Designation DB</div>
+            <div class="harvester-status online">● Mining</div>
+          </div>
+          <div class="harvester-card" data-source="patents">
+            <div class="harvester-icon">📜</div>
+            <div class="harvester-name">Lens Patents</div>
+            <div class="harvester-desc">IP Intelligence</div>
+            <div class="harvester-status online">● Tracking</div>
+          </div>
+          <div class="harvester-card" data-source="pipeline">
+            <div class="harvester-icon">🏢</div>
+            <div class="harvester-name">Pipeline DB</div>
+            <div class="harvester-desc">Company Assets</div>
+            <div class="harvester-status standby">○ Standby</div>
+          </div>
+        </div>
+        <div class="data-flow-indicator">
+          <div class="flow-dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <span class="flow-label">Data Flowing ↓</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 2: ALCHEMISTS -->
+    <div class="layer" data-layer="2">
+      <div class="layer-header">
+        <span class="layer-number">02</span>
+        <span class="layer-title">ALCHEMISTS</span>
+        <span class="layer-tag">ANALYSIS</span>
+      </div>
+      <div class="layer-content">
+        <div class="alchemist-grid">
+          <div class="alchemist-card">
+            <div class="alchemist-icon">💰</div>
+            <div class="alchemist-name">NPV Calculator</div>
+            <div class="alchemist-detail">
+              <span class="metric">Cash Flows</span>
+              <span class="value">DCF Model</span>
+            </div>
+          </div>
+          <div class="alchemist-card">
+            <div class="alchemist-icon">📊</div>
+            <div class="alchemist-name">Market Sizing</div>
+            <div class="alchemist-detail">
+              <span class="metric">Target</span>
+              <span class="value">&lt;200K patients</span>
+            </div>
+          </div>
+          <div class="alchemist-card">
+            <div class="alchemist-icon">🔬</div>
+            <div class="alchemist-name">Compound Analyzer</div>
+            <div class="alchemist-detail">
+              <span class="metric">Strategy</span>
+              <span class="value">Repurpose</span>
+            </div>
+          </div>
+          <div class="alchemist-card highlight">
+            <div class="alchemist-icon">⚡</div>
+            <div class="alchemist-name">Scoring Engine</div>
+            <div class="alchemist-detail">
+              <span class="metric">Range</span>
+              <span class="value">0-100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 3: MOAT BUILDERS -->
+    <div class="layer" data-layer="3">
+      <div class="layer-header">
+        <span class="layer-number">03</span>
+        <span class="layer-title">MOAT BUILDERS</span>
+        <span class="layer-tag">REGULATORY</span>
+      </div>
+      <div class="layer-content">
+        <div class="moat-grid">
+          <div class="moat-card">
+            <div class="moat-header">
+              <span class="moat-icon">📋</span>
+              <span class="moat-name">ODD Drafter</span>
+            </div>
+            <div class="moat-benefit">
+              <div class="benefit-icon">🏆</div>
+              <div class="benefit-text">7-Year Market Exclusivity</div>
+            </div>
+          </div>
+          <div class="moat-card">
+            <div class="moat-header">
+              <span class="moat-icon">🛤️</span>
+              <span class="moat-name">FDA Pathway Predictor</span>
+            </div>
+            <div class="pathway-options">
+              <span class="pathway active">505(b)(2)</span>
+              <span class="pathway">NDA</span>
+              <span class="pathway">BLA</span>
+            </div>
+          </div>
+          <div class="moat-card">
+            <div class="moat-header">
+              <span class="moat-icon">🛡️</span>
+              <span class="moat-name">IP Strategy Analyzer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    /* Pharma Section Embedded Styles */
+    #pharma { padding: 0; }
+    #pharma .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    #pharma .section-icon { font-size: 2.5rem; }
+    #pharma h2 { font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0; }
+    #pharma .section-badge { background: linear-gradient(90deg, #00ff88, #00ffff); color: #0a0e17; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .pipeline-banner { display: flex; justify-content: center; align-items: center; gap: 32px; background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(157, 78, 221, 0.1)); padding: 20px 40px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(0, 255, 136, 0.3); flex-wrap: wrap; }
+    .pipeline-stat { text-align: center; }
+    .pipeline-stat .stat-value { display: block; font-size: 2rem; font-weight: 700; color: #00ff88; }
+    .pipeline-stat.highlight .stat-value { color: #00ffff; font-size: 2.5rem; }
+    .pipeline-stat .stat-label { font-size: 0.75rem; color: #a0aec0; text-transform: uppercase; }
+    .pipeline-divider { width: 1px; height: 40px; background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.5), transparent); }
+    .architecture-layers { display: flex; flex-direction: column; gap: 16px; }
+    .layer { background: rgba(13, 19, 33, 0.8); border-radius: 12px; border: 1px solid rgba(0, 255, 255, 0.15); overflow: hidden; }
+    .layer-header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), transparent); border-bottom: 1px solid rgba(0, 255, 255, 0.1); }
+    .layer-number { font-size: 0.8rem; font-weight: 700; color: #00ffff; font-family: monospace; }
+    .layer-title { font-size: 1.1rem; font-weight: 600; color: #fff; letter-spacing: 2px; }
+    .layer-tag { margin-left: auto; font-size: 0.7rem; color: #9d4edd; letter-spacing: 1px; padding: 4px 10px; background: rgba(157, 78, 221, 0.2); border-radius: 12px; }
+    .layer-content { padding: 16px 20px; }
+    .harvester-grid, .alchemist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .harvester-card, .alchemist-card { background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 8px; padding: 16px; text-align: center; transition: all 0.3s ease; }
+    .harvester-card:hover, .alchemist-card:hover { transform: translateY(-4px); border-color: #00ffff; }
+    .harvester-icon, .alchemist-icon { font-size: 2rem; margin-bottom: 8px; }
+    .harvester-name, .alchemist-name { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .harvester-desc { font-size: 0.75rem; color: #a0aec0; margin-bottom: 8px; }
+    .harvester-status.online { color: #00ff88; font-size: 0.7rem; font-weight: 600; }
+    .harvester-status.standby { color: #ffa500; font-size: 0.7rem; font-weight: 600; }
+    .data-flow-indicator { display: flex; flex-direction: column; align-items: center; margin-top: 16px; gap: 8px; }
+    .flow-dots { display: flex; gap: 4px; }
+    .flow-dots .dot { width: 8px; height: 8px; background: #00ffff; border-radius: 50%; animation: flowPulse 1.5s ease-in-out infinite; }
+    .flow-dots .dot:nth-child(2) { animation-delay: 0.3s; }
+    .flow-dots .dot:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes flowPulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+    .flow-label { font-size: 0.7rem; color: #00ffff; letter-spacing: 1px; }
+    .alchemist-detail { display: flex; justify-content: space-between; font-size: 0.75rem; }
+    .alchemist-detail .metric { color: #a0aec0; }
+    .alchemist-detail .value { color: #00ffff; font-weight: 600; }
+    .alchemist-card.highlight { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+    .moat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .moat-card { background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 10px; padding: 16px; }
+    .moat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .moat-icon { font-size: 1.5rem; }
+    .moat-name { font-size: 0.95rem; font-weight: 600; color: #fff; }
+    .moat-benefit { display: flex; align-items: center; gap: 8px; background: linear-gradient(90deg, rgba(0, 255, 136, 0.2), transparent); padding: 8px 12px; border-radius: 6px; }
+    .benefit-icon { font-size: 1.2rem; }
+    .benefit-text { font-size: 0.8rem; color: #00ff88; font-weight: 600; }
+    .pathway-options { display: flex; gap: 8px; }
+    .pathway { font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: #a0aec0; }
+    .pathway.active { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.4); }
+  </style>
+</section>
+    </section>
+
+    <!-- Section 6: Fort Knox -->
+    <section id="section-6" class="infra-section">
+      <!-- FORT KNOX content inserted here -->
+<div class="fortknox-section">
+  <div class="fortknox-header">
+    <h2><span class="icon">🏰</span> Fort Knox</h2>
+    <span class="subtitle">Automated Backup Lifecycle</span>
+  </div>
+  <div class="timeline-container">
+    <div class="timeline-axis">
+      <span class="label">◄ Time Axis (Days)</span>
+      <span class="label">Auto-managed lifecycle ►</span>
+    </div>
+    <div class="timeline-track">
+      <div class="timeline-stage hot"><div class="stage-icon">🔥</div><div class="stage-title">HOT STORAGE</div><div class="stage-days">0-7 Days</div><div class="stage-desc">Uncompressed<br>Local node</div></div>
+      <div class="timeline-stage warm"><div class="stage-icon">📦</div><div class="stage-title">STILL HOT</div><div class="stage-days">Day 7</div><div class="stage-desc">Transfer begins<br>SCP to Mac Pro</div></div>
+      <div class="timeline-stage archive"><div class="stage-icon">🗜️</div><div class="stage-title">COMPRESSED</div><div class="stage-days">7-30 Days</div><div class="stage-desc">.tar.gz archive<br>Fort Knox storage</div></div>
+      <div class="timeline-stage delete"><div class="stage-icon">🗑️</div><div class="stage-title">AUTO-DELETE</div><div class="stage-days">30+ Days</div><div class="stage-desc">Purged forever</div></div>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value">697</div><div class="stat-label">Files Cleaned</div></div>
+    <div class="stat-card"><div class="stat-value">71GB</div><div class="stat-label">Space Freed</div></div>
+    <div class="stat-card"><div class="stat-value">~2m</div><div class="stat-label">Policy Runtime</div></div>
+    <div class="stat-card"><div class="stat-value" style="color: #00ff88;">ON</div><div class="stat-label">Auto-Enforce</div></div>
+  </div>
+</div>
+<style>
+  .fortknox-section { background: linear-gradient(135deg, #0d1321 0%, #0a0e17 100%); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 255, 255, 0.2); position: relative; }
+  .fortknox-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #ffa500, transparent); }
+  .fortknox-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .fortknox-header h2 { color: #ffffff; font-size: 1.5rem; margin: 0; display: flex; align-items: center; gap: 10px; }
+  .fortknox-header .icon { font-size: 1.8rem; }
+  .fortknox-header .subtitle { color: #a0aec0; font-size: 0.85rem; margin-left: auto; }
+  .timeline-container { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .timeline-axis { display: flex; justify-content: space-between; margin-bottom: 20px; }
+  .timeline-axis .label { color: #a0aec0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+  .timeline-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .timeline-stage { background: rgba(13, 19, 33, 0.95); border-radius: 12px; padding: 16px; text-align: center; border: 1px solid transparent; }
+  .timeline-stage.hot { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+  .timeline-stage.warm { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
+  .timeline-stage.archive { border-color: #ffa500; box-shadow: 0 0 20px rgba(255, 165, 0, 0.2); }
+  .timeline-stage.delete { border-color: #ff3366; box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
+  .timeline-stage .stage-icon { font-size: 2rem; margin-bottom: 8px; }
+  .timeline-stage .stage-title { color: #ffffff; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .timeline-stage .stage-days { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+  .timeline-stage.hot .stage-days { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+  .timeline-stage.warm .stage-days { background: rgba(0, 255, 255, 0.2); color: #00ffff; }
+  .timeline-stage.archive .stage-days { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+  .timeline-stage.delete .stage-days { background: rgba(255, 51, 102, 0.2); color: #ff3366; }
+  .timeline-stage .stage-desc { color: #a0aec0; font-size: 0.75rem; line-height: 1.4; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat-card { background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 14px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+  .stat-card .stat-value { font-size: 1.4rem; font-weight: 700; color: #00ffff; margin-bottom: 4px; }
+  .stat-card .stat-label { font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; }
+  @media (max-width: 768px) { .timeline-track, .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+    </section>
+
+    <!-- Section 7: Brain -->
+    <section id="section-7" class="infra-section">
+      <!-- SHARED BRAIN content -->
+<div class="brain-section">
+  <div class="brain-header">
+    <h2><span class="icon">🧠</span> Shared Brain</h2>
+    <span class="subtitle">Multi-Agent Knowledge Hub</span>
+  </div>
+  <div class="key-files">
+    <h4>📁 Key Files</h4>
+    <div class="files-grid">
+      <div class="file-card hot"><div class="file-icon">🔥</div><div class="file-name">HOT.md</div><div class="file-desc">Current priorities</div><div class="file-freq">Read first every session</div></div>
+      <div class="file-card"><div class="file-icon">📋</div><div class="file-name">INDEX.md</div><div class="file-desc">Quick file lookup</div><div class="file-freq">As needed</div></div>
+      <div class="file-card"><div class="file-icon">📝</div><div class="file-name">CHANGELOG.md</div><div class="file-desc">Who changed what</div><div class="file-freq">Daily</div></div>
+      <div class="file-card"><div class="file-icon">📊</div><div class="file-name">STATUS.md</div><div class="file-desc">System overview</div><div class="file-freq">Every session</div></div>
+    </div>
+  </div>
+  <div class="agent-flow">
+    <h4>🔄 Agent Communication Flow</h4>
+    <div class="flow-steps">
+      <span class="step-badge">1</span><span class="step-text">Agent makes discovery</span><span class="step-arrow">→</span>
+      <span class="step-badge">2</span><span class="step-text">Updates local file</span><span class="step-arrow">→</span>
+      <span class="step-badge">3</span><span class="step-text">Push to Mac Pro</span><span class="step-arrow">→</span>
+      <span class="step-badge">4</span><span class="step-text">Others pull</span><span class="step-arrow">→</span>
+      <span class="step-badge">5</span><span class="step-text">Knowledge shared!</span>
+    </div>
+  </div>
+</div>
+<style>
+  .brain-section { background: linear-gradient(135deg, #0d1321 0%, #0a0e17 100%); border-radius: 16px; padding: 24px; border: 1px solid rgba(157, 78, 221, 0.3); position: relative; }
+  .brain-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #9d4edd, transparent); }
+  .brain-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .brain-header h2 { color: #ffffff; font-size: 1.5rem; margin: 0; display: flex; align-items: center; gap: 10px; }
+  .brain-header .icon { font-size: 1.8rem; animation: brain-pulse 2s ease-in-out infinite; }
+  @keyframes brain-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .brain-header .subtitle { color: #a0aec0; font-size: 0.85rem; margin-left: auto; }
+  .key-files { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+  .key-files h4 { color: #ffffff; font-size: 0.9rem; margin: 0 0 14px 0; display: flex; align-items: center; gap: 8px; }
+  .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .file-card { background: rgba(13, 19, 33, 0.8); border-radius: 10px; padding: 14px; text-align: center; border: 1px solid transparent; transition: all 0.3s ease; cursor: pointer; }
+  .file-card:hover { transform: translateY(-2px); border-color: rgba(0, 255, 255, 0.4); }
+  .file-card.hot { border-color: #ff3366; background: rgba(255, 51, 102, 0.1); }
+  .file-card .file-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .file-card .file-name { color: #00ffff; font-family: monospace; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
+  .file-card .file-desc { color: #a0aec0; font-size: 0.7rem; line-height: 1.3; }
+  .file-card .file-freq { margin-top: 6px; font-size: 0.65rem; color: #9d4edd; text-transform: uppercase; letter-spacing: 0.5px; }
+  .agent-flow { background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 255, 255, 0.05)); border-radius: 12px; padding: 16px; border: 1px dashed rgba(157, 78, 221, 0.3); }
+  .agent-flow h4 { color: #ffffff; font-size: 0.9rem; margin: 0 0 14px 0; display: flex; align-items: center; gap: 8px; }
+  .flow-steps { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .step-badge { background: rgba(157, 78, 221, 0.2); color: #9d4edd; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+  .step-text { color: #ffffff; font-size: 0.8rem; }
+  .step-arrow { color: #00ffff; font-size: 1rem; }
+</style>
+    </section>
+
+    <!-- Section 8: Security -->
+    <section id="section-8" class="infra-section">
+      <div class="section-card" id="security-section">
+  <div class="section-header">
+    <span class="section-icon">🔒</span>
+    <h2>SECURITY ARCHITECTURE</h2>
+    <span class="section-badge">Defense in Depth</span>
+  </div>
+  <div class="threat-cloud">
+    <h4>🌐 EXTERNAL THREATS</h4>
+    <div class="threat-tags">
+      <span class="threat-tag">Port Scanners</span>
+      <span class="threat-tag">Brute Force</span>
+      <span class="threat-tag">Malware</span>
+      <span class="threat-tag">Phishing</span>
+      <span class="threat-tag">Zero-Days</span>
+    </div>
+  </div>
+  <div class="onion-container">
+    <div class="defense-layer layer-1">
+      <div class="layer-header"><span class="layer-number">1</span><span class="layer-title">Network Perimeter — Tailscale VPN</span></div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ WireGuard 256-bit encryption</span>
+        <span class="detail-item check">✓ Zero-trust mesh</span>
+        <span class="detail-item check">✓ Only 100.x.x.x access</span>
+        <span class="detail-item check">✓ No open ports to internet</span>
+      </div>
+    </div>
+    <div class="defense-layer layer-2">
+      <div class="layer-header"><span class="layer-number">2</span><span class="layer-title">Host Firewalls</span></div>
+      <div class="firewall-grid">
+        <div class="firewall-node healthy"><h5>MAC MINI</h5><div class="node-ip">100.88.105.106</div><div class="firewall-status status-on">✅ ON</div></div>
+        <div class="firewall-node warning"><h5>MAC PRO</h5><div class="node-ip">100.101.89.80</div><div class="firewall-status status-off">⚠️ OFF</div></div>
+        <div class="firewall-node healthy"><h5>DELL</h5><div class="node-ip">100.119.87.108</div><div class="firewall-status status-on">✅ ON</div></div>
+      </div>
+    </div>
+    <div class="defense-layer layer-3">
+      <div class="layer-header"><span class="layer-number">3</span><span class="layer-title">Application Authentication</span></div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ SSH key-based auth</span>
+        <span class="detail-item check">✓ Telegram bot token validation</span>
+        <span class="detail-item check">✓ API keys rotated periodically</span>
+        <span class="detail-item check">✓ Browser relay requires tab attach</span>
+      </div>
+    </div>
+    <div class="defense-layer layer-4">
+      <div class="layer-header"><span class="layer-number">4</span><span class="layer-title">Data Protection</span></div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ Git version control (rollback)</span>
+        <span class="detail-item check">✓ Fort Knox backups (offsite)</span>
+        <span class="detail-item check">✓ Secrets in SOUL.md (not in git)</span>
+        <span class="detail-item check">✓ MEMORY.md only in main sessions</span>
+      </div>
+    </div>
+  </div>
+  <div class="warning-banner">
+    <span class="warning-icon">⚠️</span>
+    <div class="warning-content">
+      <h4>CRITICAL: Mac Pro Firewall Disabled</h4>
+      <p>Fort Knox storage node has firewall OFF. Enable via System Preferences → Security & Privacy → Firewall</p>
+    </div>
+  </div>
+</div>
+<style>
+  #security-section { background: linear-gradient(135deg, #0d1321 0%, #1a1a2e 100%); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+  #security-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ffff, transparent); }
+  #security-section .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  #security-section .section-icon { font-size: 28px; }
+  #security-section h2 { color: #ffffff; font-size: 20px; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+  #security-section .section-badge { background: rgba(157, 78, 221, 0.3); color: #9d4edd; padding: 4px 12px; border-radius: 20px; font-size: 11px; text-transform: uppercase; border: 1px solid rgba(157, 78, 221, 0.5); }
+  .threat-cloud { background: rgba(255, 51, 102, 0.1); border: 1px dashed rgba(255, 51, 102, 0.5); border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: center; }
+  .threat-cloud h4 { color: #ff3366; margin: 0 0 12px 0; font-size: 14px; }
+  .threat-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .threat-tag { background: rgba(255, 51, 102, 0.2); color: #ff6b8a; padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+  .onion-container { display: flex; flex-direction: column; gap: 0; }
+  .defense-layer { border-radius: 12px; padding: 16px 20px; margin: -4px 0; position: relative; }
+  .layer-1 { background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 255, 255, 0.05)); border: 2px solid rgba(0, 255, 255, 0.4); z-index: 4; }
+  .layer-2 { background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(157, 78, 221, 0.05)); border: 2px solid rgba(157, 78, 221, 0.4); z-index: 3; margin-left: 16px; margin-right: 16px; }
+  .layer-3 { background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border: 2px solid rgba(0, 255, 136, 0.4); z-index: 2; margin-left: 32px; margin-right: 32px; }
+  .layer-4 { background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 165, 0, 0.05)); border: 2px solid rgba(255, 165, 0, 0.4); z-index: 1; margin-left: 48px; margin-right: 48px; }
+  .layer-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .layer-number { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+  .layer-1 .layer-number { background: #00ffff; color: #0a0e17; }
+  .layer-2 .layer-number { background: #9d4edd; color: #fff; }
+  .layer-3 .layer-number { background: #00ff88; color: #0a0e17; }
+  .layer-4 .layer-number { background: #ffa500; color: #0a0e17; }
+  .layer-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .layer-1 .layer-title { color: #00ffff; }
+  .layer-2 .layer-title { color: #9d4edd; }
+  .layer-3 .layer-title { color: #00ff88; }
+  .layer-4 .layer-title { color: #ffa500; }
+  .layer-details { display: flex; flex-wrap: wrap; gap: 8px; }
+  .detail-item { background: rgba(0, 0, 0, 0.3); padding: 6px 12px; border-radius: 8px; font-size: 11px; color: #a0aec0; }
+  .detail-item.check { color: #00ff88; }
+  .firewall-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .firewall-node { background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 14px; text-align: center; }
+  .firewall-node.healthy { border: 1px solid rgba(0, 255, 136, 0.4); }
+  .firewall-node.warning { border: 2px solid #ff3366; animation: pulse-warning 2s infinite; }
+  @keyframes pulse-warning { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); } 50% { box-shadow: 0 0 20px 5px rgba(255, 51, 102, 0.2); } }
+  .firewall-node h5 { color: #fff; margin: 0 0 4px 0; font-size: 12px; }
+  .firewall-node .node-ip { color: #a0aec0; font-size: 10px; font-family: monospace; margin-bottom: 10px; }
+  .firewall-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 20px; }
+  .status-on { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+  .status-off { background: rgba(255, 51, 102, 0.2); color: #ff3366; }
+  .warning-banner { background: linear-gradient(90deg, rgba(255, 51, 102, 0.2), rgba(255, 51, 102, 0.1)); border: 1px solid rgba(255, 51, 102, 0.5); border-radius: 10px; padding: 14px 18px; margin-top: 20px; display: flex; align-items: center; gap: 14px; }
+  .warning-icon { font-size: 28px; animation: shake 0.5s ease-in-out infinite; }
+  @keyframes shake { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+  .warning-content h4 { color: #ff3366; margin: 0 0 4px 0; font-size: 13px; }
+  .warning-content p { color: #ff6b8a; margin: 0; font-size: 11px; }
+  @media (max-width: 768px) { .firewall-grid { grid-template-columns: 1fr; } .layer-2, .layer-3, .layer-4 { margin-left: 8px; margin-right: 8px; } }
+</style>
+    </section>
+
+    <!-- Section 9: LLM Router -->
+    <section id="section-9" class="infra-section">
+      <div class="section-card" id="llm-section">
+  <div class="section-header">
+    <span class="section-icon">🧠</span>
+    <h2>LLM SMART ROUTER</h2>
+    <span class="section-badge">Gateway on Mac Mini</span>
+  </div>
+  <div class="query-entry"><h4>📨 Query Arrives</h4></div>
+  <div class="decision-grid">
+    <div class="route-card route-code"><div class="route-header"><span class="route-icon">💻</span><span class="route-title">Code Tasks</span></div><div class="model-name">Qwen Coder 32B</div><div class="model-size">32 billion parameters</div><div class="cost-badge cost-paid">🟢 NVIDIA API</div></div>
+    <div class="route-card route-vision"><div class="route-header"><span class="route-icon">🦙</span><span class="route-title">Vision (Deep)</span></div><div class="model-name">Llama 90B Vision</div><div class="model-size">90 billion parameters</div><div class="cost-badge cost-paid">🟢 NVIDIA API</div></div>
+    <div class="route-card route-simple"><div class="route-header"><span class="route-icon">🏠</span><span class="route-title">Simple Queries</span></div><div class="model-name">Ollama Local</div><div class="model-size">qwen2.5:3b • Mac Mini</div><div class="cost-badge cost-free">✨ FREE</div></div>
+    <div class="route-card route-complex"><div class="route-header"><span class="route-icon">🎭</span><span class="route-title">Complex Reasoning</span></div><div class="model-name">Claude Opus</div><div class="model-size">Anthropic's Best</div><div class="cost-badge cost-expensive">💰 $$$ Expensive</div></div>
+  </div>
+  <div class="nvidia-warning">
+    <span class="nvidia-icon">🟢</span>
+    <div class="nvidia-content"><h4>NVIDIA API Daily Limit</h4><p>Qwen Coder, Llama Vision, and Kimi share 50 calls/day. Use Ollama for simple queries!</p></div>
+    <div class="nvidia-counter"><div class="nvidia-count">50</div><div class="nvidia-label">calls/day</div></div>
+  </div>
+  <div class="models-summary">
+    <div class="model-stat"><div class="model-stat-name">Ollama Local</div><div class="model-stat-latency">~185ms</div><div class="latency-bar"><div class="latency-fill latency-fast"></div></div></div>
+    <div class="model-stat"><div class="model-stat-name">Llama 11B</div><div class="model-stat-latency">~500ms</div><div class="latency-bar"><div class="latency-fill latency-medium"></div></div></div>
+    <div class="model-stat"><div class="model-stat-name">Qwen Coder</div><div class="model-stat-latency">~1.2s</div><div class="latency-bar"><div class="latency-fill latency-slow"></div></div></div>
+    <div class="model-stat"><div class="model-stat-name">Claude Opus</div><div class="model-stat-latency">~3s</div><div class="latency-bar"><div class="latency-fill latency-very-slow"></div></div></div>
+  </div>
+</div>
+<style>
+  #llm-section { background: linear-gradient(135deg, #0d1321 0%, #1a1a2e 100%); border: 1px solid rgba(157, 78, 221, 0.2); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+  #llm-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #9d4edd, transparent); }
+  #llm-section .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  #llm-section .section-icon { font-size: 28px; }
+  #llm-section h2 { color: #ffffff; font-size: 20px; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+  #llm-section .section-badge { background: rgba(0, 255, 255, 0.3); color: #00ffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; text-transform: uppercase; border: 1px solid rgba(0, 255, 255, 0.5); }
+  .query-entry { background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(157, 78, 221, 0.1)); border: 2px solid #9d4edd; border-radius: 50px; padding: 14px 28px; text-align: center; max-width: 200px; margin: 0 auto 30px auto; }
+  .query-entry h4 { color: #9d4edd; margin: 0; font-size: 14px; text-transform: uppercase; }
+  .decision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .route-card { background: rgba(0, 0, 0, 0.4); border-radius: 12px; padding: 18px; transition: all 0.3s ease; }
+  .route-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); }
+  .route-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .route-code { border: 1px solid rgba(0, 255, 136, 0.4); }
+  .route-code .model-name { color: #00ff88; }
+  .route-vision { border: 1px solid rgba(0, 255, 255, 0.4); }
+  .route-vision .model-name { color: #00ffff; }
+  .route-simple { border: 1px solid rgba(0, 200, 100, 0.4); }
+  .route-simple .model-name { color: #00ff88; }
+  .route-complex { border: 1px solid rgba(255, 51, 102, 0.4); }
+  .route-complex .model-name { color: #ff3366; }
+  .route-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .route-icon { font-size: 24px; }
+  .route-title { font-size: 12px; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; }
+  .model-name { font-size: 16px; font-weight: 600; margin: 8px 0; }
+  .model-size { font-size: 11px; color: #a0aec0; margin-bottom: 10px; }
+  .cost-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 12px; font-size: 11px; margin-top: 10px; }
+  .cost-free { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+  .cost-paid { background: rgba(0, 200, 83, 0.15); color: #00c853; }
+  .cost-expensive { background: rgba(255, 51, 102, 0.2); color: #ff3366; }
+  .nvidia-warning { background: linear-gradient(90deg, rgba(0, 200, 83, 0.15), rgba(0, 200, 83, 0.05)); border: 1px solid rgba(0, 200, 83, 0.5); border-radius: 10px; padding: 14px 18px; margin-top: 20px; display: flex; align-items: center; gap: 14px; }
+  .nvidia-icon { font-size: 32px; }
+  .nvidia-content h4 { color: #00c853; margin: 0 0 4px 0; font-size: 13px; }
+  .nvidia-content p { color: #a0aec0; margin: 0; font-size: 11px; }
+  .nvidia-counter { margin-left: auto; text-align: center; }
+  .nvidia-count { font-size: 28px; font-weight: 700; color: #00c853; }
+  .nvidia-label { font-size: 10px; color: #a0aec0; text-transform: uppercase; }
+  .models-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 24px; }
+  .model-stat { background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 14px; text-align: center; }
+  .model-stat-name { color: #fff; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .model-stat-latency { color: #a0aec0; font-size: 11px; }
+  .latency-bar { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .latency-fill { height: 100%; border-radius: 2px; }
+  .latency-fast { width: 15%; background: #00ff88; }
+  .latency-medium { width: 40%; background: #00ffff; }
+  .latency-slow { width: 70%; background: #ffa500; }
+  .latency-very-slow { width: 100%; background: #ff3366; }
+</style>
+    </section>
+
+    <!-- Section 10: MCP Tools -->
+    <section id="section-10" class="infra-section">
+      <div class="section-header">
+        <div class="section-icon mcp-glow">🔧</div>
+        <div class="section-title-block">
+          <h2 class="section-title">MCP Server Connections</h2>
+          <p class="section-subtitle">Model Context Protocol Tool System</p>
+        </div>
+        <div class="section-status">
+          <span class="status-badge status-online"><span class="pulse-dot"></span>ALL OPERATIONAL</span>
+        </div>
+      </div>
+      <div class="mcp-tools-grid">
+        <div class="tool-card browser-card">
+          <div class="tool-header"><div class="tool-title-block"><h3 class="tool-title">🌐 Browser Control</h3><span class="tool-badge">Chrome Relay</span></div></div>
+          <div class="tool-body">
+            <p class="tool-description">Full browser automation via Chrome Extension CDP relay</p>
+            <div class="capability-list">
+              <div class="capability-item"><span class="cap-name">snapshot</span> - Extract DOM</div>
+              <div class="capability-item"><span class="cap-name">navigate</span> - Go to URL</div>
+              <div class="capability-item"><span class="cap-name">click</span> - Element interaction</div>
+              <div class="capability-item"><span class="cap-name">type</span> - Fill inputs</div>
+              <div class="capability-item"><span class="cap-name">screenshot</span> - Capture page</div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-card exec-card">
+          <div class="tool-header"><div class="tool-title-block"><h3 class="tool-title">💻 Exec/Shell</h3><span class="tool-badge">Commands</span></div></div>
+          <div class="tool-body">
+            <p class="tool-description">Execute shell commands with full environment control</p>
+            <div class="capability-list">
+              <div class="capability-item"><span class="cap-name">timeout</span> - Auto-kill</div>
+              <div class="capability-item"><span class="cap-name">background</span> - Async</div>
+              <div class="capability-item"><span class="cap-name">PTY</span> - Terminal required</div>
+              <div class="capability-item"><span class="cap-name">env</span> - Custom vars</div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-card file-card">
+          <div class="tool-header"><div class="tool-title-block"><h3 class="tool-title">📁 File System</h3><span class="tool-badge">R/W/Edit</span></div></div>
+          <div class="tool-body">
+            <p class="tool-description">Full filesystem access with surgical edit</p>
+            <div class="capability-list">
+              <div class="capability-item"><span class="cap-name">read</span> - 50KB/2000 lines</div>
+              <div class="capability-item"><span class="cap-name">write</span> - Create/Overwrite</div>
+              <div class="capability-item"><span class="cap-name">edit</span> - Exact patch</div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-card process-card">
+          <div class="tool-header"><div class="tool-title-block"><h3 class="tool-title">⚙️ Process Mgmt</h3><span class="tool-badge">Sessions</span></div></div>
+          <div class="tool-body">
+            <p class="tool-description">Manage background processes</p>
+            <div class="capability-list">
+              <div class="capability-item"><span class="cap-name">list</span> / <span class="cap-name">poll</span> / <span class="cap-name">kill</span></div>
+              <div class="capability-item"><span class="cap-name">write</span> / <span class="cap-name">send-keys</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        .mcp-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .tool-card { background: rgba(13, 19, 33, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
+        .tool-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }
+        .browser-card { border-top: 3px solid #00ffff; }
+        .exec-card { border-top: 3px solid #00ff88; }
+        .file-card { border-top: 3px solid #ffa500; }
+        .process-card { border-top: 3px solid #9d4edd; }
+        .tool-header { padding: 1rem; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .tool-title { margin: 0; font-size: 1rem; font-weight: 600; color: #fff; }
+        .tool-badge { font-size: 0.7rem; color: #a0aec0; background: rgba(255, 255, 255, 0.1); padding: 0.15rem 0.5rem; border-radius: 4px; }
+        .tool-body { padding: 1rem; }
+        .tool-description { font-size: 0.85rem; color: #a0aec0; margin-bottom: 1rem; }
+        .capability-list { display: flex; flex-direction: column; gap: 0.4rem; }
+        .capability-item { font-size: 0.8rem; padding: 0.4rem 0.6rem; background: rgba(255, 255, 255, 0.03); border-radius: 6px; color: #a0aec0; }
+        .cap-name { font-family: 'JetBrains Mono', monospace; color: #00ffff; font-weight: 500; }
+        .mcp-glow { filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5)); font-size: 2rem; }
+      </style>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="dashboard-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="brand-icon">🦀</span>
+        <span>Rusty's Lab Infrastructure Dashboard v2.0</span>
+      </div>
+      <div class="footer-shortcuts">
+        <div class="shortcut"><kbd>1</kbd>-<kbd>0</kbd> Switch sections</div>
+        <div class="shortcut"><kbd>R</kbd> Refresh</div>
+        <div class="shortcut"><kbd>P</kbd> Presentation mode</div>
+        <div class="shortcut"><kbd>?</kbd> Help</div>
+      </div>
+      <div class="footer-status">
+        <span class="status-dot"></span>
+        <span>All Systems Operational</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Clock update
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+      const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      document.getElementById('clock-time').textContent = timeStr;
+      document.getElementById('clock-date').textContent = dateStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Health score animation
+    function updateHealthScore() {
+      const score = 90 + Math.floor(Math.random() * 8);
+      document.getElementById('health-score').textContent = score;
+    }
+    setInterval(updateHealthScore, 30000);
+
+    // Section navigation
+    function showSection(num) {
+      // Hide all sections
+      document.querySelectorAll('.infra-section').forEach(s => s.classList.remove('active'));
+      // Show target section
+      const target = document.getElementById(`section-${num}`);
+      if (target) target.classList.add('active');
+      // Update nav tabs
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.nav-tab[data-section="${num}"]`)?.classList.add('active');
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ignore if typing in input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
+      // Number keys 1-9 and 0
+      if (e.key >= '1' && e.key <= '9') {
+        showSection(parseInt(e.key));
+      } else if (e.key === '0') {
+        showSection(10);
+      } else if (e.key.toLowerCase() === 'r') {
+        refreshAll();
+      } else if (e.key.toLowerCase() === 'p') {
+        togglePresentationMode();
+      } else if (e.key === 'Escape') {
+        document.body.classList.remove('presentation-mode');
+      }
+    });
+
+    // Refresh function
+    function refreshAll() {
+      updateHealthScore();
+      // Add visual feedback
+      document.querySelector('.action-btn').style.transform = 'rotate(360deg)';
+      setTimeout(() => {
+        document.querySelector('.action-btn').style.transform = '';
+      }, 500);
+    }
+
+    // Presentation mode
+    function togglePresentationMode() {
+      document.body.classList.toggle('presentation-mode');
+    }
+
+    // Initialize
+    console.log('🦀 Rusty\'s Lab Infrastructure Dashboard loaded');
+  </script>
+</body>
+</html>

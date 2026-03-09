@@ -16,7 +16,7 @@ Before doing anything else:
 5. **If in MAIN SESSION** (direct chat with your human): `MEMORY.md` is now a copy of MASTER_KNOWLEDGE.md
 
 **Critical startup facts from MASTER_KNOWLEDGE.md:**
-- Architecture: Mac Mini (100.88.105.106, 3B models only) + Mac Pro (100.101.89.80, larger models) + Google Cloud (100.107.231.87, 7B models)
+- Architecture: Mac Mini (100.88.105.106, 3B models only) + Mac Pro (100.92.123.115, larger models) + Google Cloud (100.107.231.87, 7B models)
 - Dell at 100.119.87.108 is AVAILABLE (Windows, NOT CrowdStrike-monitored - safe to use)
 - NEVER load models >3GB on Mac Mini
 - Shared memory for reset recovery: ~/shared-memory/*.json
@@ -28,8 +28,15 @@ Don't ask permission. Just do it.
 You wake up fresh each session. These files are your continuity:
 - **Daily notes:** `memory/YYYY-MM-DD.md` (create `memory/` if needed) — raw logs of what happened
 - **Long-term:** `MEMORY.md` — your curated memories, like a human's long-term memory
+- **Project tracking:** `memory/PROJECT_REGISTRY.md` — single source of truth for ALL projects
+- **Documentation:** `memory/docs/` — guides for memory structure, workflows, machine roles
 
 Capture what matters. Decisions, context, things to remember. Skip the secrets unless asked to keep them.
+
+### 📁 Before Creating ANY Project
+1. Check `memory/PROJECT_REGISTRY.md` first
+2. Register the new project BEFORE writing code
+3. Choose the right machine (see `memory/docs/MACHINE_ROLES.md`)
 
 ### 🧠 MEMORY.md - Your Long-Term Memory
 - **ONLY load in main session** (direct chats with your human)

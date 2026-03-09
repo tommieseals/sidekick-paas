@@ -1,0 +1,681 @@
+<!-- SHARED BRAIN - Knowledge Sync Section -->
+<style>
+.brain-section {
+  background: linear-gradient(135deg, #0d1321 0%, #0a0e17 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(157, 78, 221, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.brain-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #9d4edd, transparent);
+}
+
+.brain-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.brain-header h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brain-header .icon {
+  font-size: 1.8rem;
+  animation: brain-pulse 2s ease-in-out infinite;
+}
+
+@keyframes brain-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.brain-header .subtitle {
+  color: #a0aec0;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+/* Sync Architecture */
+.sync-architecture {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+/* Central Hub (Mac Pro) */
+.central-brain {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(107, 33, 168, 0.2));
+  border: 2px solid #9d4edd;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(157, 78, 221, 0.3);
+  animation: central-glow 3s ease-in-out infinite;
+}
+
+@keyframes central-glow {
+  0%, 100% { box-shadow: 0 0 30px rgba(157, 78, 221, 0.2); }
+  50% { box-shadow: 0 0 50px rgba(157, 78, 221, 0.4); }
+}
+
+.central-brain .brain-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 10px #9d4edd);
+}
+
+.central-brain .brain-title {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.central-brain .brain-subtitle {
+  color: #9d4edd;
+  font-size: 0.8rem;
+  font-family: monospace;
+  margin-bottom: 12px;
+}
+
+.central-brain .brain-path {
+  background: rgba(0, 0, 0, 0.4);
+  color: #00ffff;
+  font-family: monospace;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.central-brain .brain-role {
+  background: linear-gradient(90deg, #9d4edd, #6b21a8);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* Sync Connectors */
+.sync-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 0;
+}
+
+.sync-arrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #00ffff;
+  font-size: 0.9rem;
+}
+
+.sync-arrow.left { flex-direction: row-reverse; }
+
+.sync-arrow .arrow-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #9d4edd, #00ffff);
+  position: relative;
+}
+
+.sync-arrow .arrow-line::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #00ffff;
+  border-radius: 50%;
+  animation: flow-dot 1.5s ease-in-out infinite;
+}
+
+.sync-arrow.right .arrow-line::before {
+  right: 0;
+  animation-direction: reverse;
+}
+
+.sync-arrow.left .arrow-line::before {
+  left: 0;
+}
+
+@keyframes flow-dot {
+  0% { transform: translateX(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(32px); opacity: 0; }
+}
+
+.sync-label {
+  color: #a0aec0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Node Cards */
+.sync-node {
+  background: rgba(13, 19, 33, 0.9);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.sync-node.mini { border-color: #00ffff; }
+.sync-node.dell { border-color: #00ff88; }
+
+.sync-node .node-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sync-node .node-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.sync-node.mini .node-icon { background: linear-gradient(135deg, #00ffff, #0088ff); }
+.sync-node.dell .node-icon { background: linear-gradient(135deg, #00ff88, #00aa55); }
+
+.sync-node .node-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sync-node .node-ip {
+  color: #a0aec0;
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+.sync-node .sync-path {
+  background: rgba(0, 0, 0, 0.4);
+  color: #00ffff;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.sync-node .sync-script {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #00ff88;
+}
+
+.sync-node .sync-script .script-icon {
+  font-size: 0.9rem;
+}
+
+/* Key Files Grid */
+.key-files {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.key-files h4 {
+  color: #ffffff;
+  font-size: 0.9rem;
+  margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.file-card {
+  background: rgba(13, 19, 33, 0.8);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.file-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 255, 255, 0.4);
+}
+
+.file-card.hot {
+  border-color: #ff3366;
+  background: rgba(255, 51, 102, 0.1);
+}
+
+.file-card .file-icon {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.file-card .file-name {
+  color: #00ffff;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.file-card .file-desc {
+  color: #a0aec0;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.file-card .file-freq {
+  margin-top: 6px;
+  font-size: 0.65rem;
+  color: #9d4edd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Directory Tree */
+.dir-tree {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.dir-tree h4 {
+  color: #ffffff;
+  font-size: 0.9rem;
+  margin: 0 0 12px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tree-line {
+  color: #a0aec0;
+  line-height: 1.6;
+  padding-left: 8px;
+}
+
+.tree-line .folder {
+  color: #ffa500;
+}
+
+.tree-line .file {
+  color: #00ffff;
+}
+
+.tree-line .hot-file {
+  color: #ff3366;
+  font-weight: 600;
+}
+
+.tree-line .comment {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.tree-connector {
+  color: #4b5563;
+}
+
+/* Sync Commands */
+.sync-commands {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.command-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.command-box h5 {
+  color: #ffffff;
+  font-size: 0.8rem;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.command-line {
+  background: rgba(0, 0, 0, 0.5);
+  color: #00ff88;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border-left: 3px solid #00ff88;
+}
+
+.command-line:last-child { margin-bottom: 0; }
+
+/* Agent Communication */
+.agent-flow {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 255, 255, 0.05));
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px dashed rgba(157, 78, 221, 0.3);
+}
+
+.agent-flow h4 {
+  color: #ffffff;
+  font-size: 0.9rem;
+  margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-badge {
+  background: rgba(157, 78, 221, 0.2);
+  color: #9d4edd;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.step-text {
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.step-arrow {
+  color: #00ffff;
+  font-size: 1rem;
+}
+
+/* Agent Badges */
+.agents-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.agent-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.agent-badge .agent-icon {
+  font-size: 1rem;
+}
+
+.agent-badge .agent-name {
+  color: #ffffff;
+}
+
+.agent-badge .agent-file {
+  color: #a0aec0;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+</style>
+
+<div class="brain-section">
+  <div class="brain-header">
+    <h2><span class="icon">🧠</span> Shared Brain</h2>
+    <span class="subtitle">Multi-Agent Knowledge Hub</span>
+  </div>
+
+  <!-- Sync Architecture -->
+  <div class="sync-architecture">
+    <!-- Mac Mini -->
+    <div class="sync-node mini">
+      <div class="node-header">
+        <div class="node-icon">🖥️</div>
+        <div>
+          <div class="node-name">Mac Mini</div>
+          <div class="node-ip">100.88.105.106</div>
+        </div>
+      </div>
+      <div class="sync-path">~/clawd/shared-brain/</div>
+      <div class="sync-script">
+        <span class="script-icon">📜</span>
+        sync-shared-brain.sh
+      </div>
+    </div>
+
+    <!-- Sync Connector Left -->
+    <div class="sync-connector">
+      <div class="sync-arrow right">
+        <span>push</span>
+        <div class="arrow-line"></div>
+        <span>→</span>
+      </div>
+      <div class="sync-label">git sync</div>
+      <div class="sync-arrow left">
+        <span>←</span>
+        <div class="arrow-line"></div>
+        <span>pull</span>
+      </div>
+    </div>
+
+    <!-- Central Hub -->
+    <div class="central-brain">
+      <div class="brain-icon">🧠</div>
+      <div class="brain-title">Mac Pro</div>
+      <div class="brain-subtitle">Central Repository</div>
+      <div class="brain-path">~/shared-brain/</div>
+      <div class="brain-role">Knowledge Hub</div>
+    </div>
+
+    <!-- Right Side (Dell below) -->
+  </div>
+
+  <!-- Dell Node Centered Below -->
+  <div style="display: flex; justify-content: center; margin-bottom: 24px; margin-top: -10px;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <div class="sync-connector" style="padding: 10px 0;">
+        <div class="sync-arrow right">
+          <span>push</span>
+          <div class="arrow-line"></div>
+          <span>→</span>
+        </div>
+        <div class="sync-label">git sync</div>
+        <div class="sync-arrow left">
+          <span>←</span>
+          <div class="arrow-line"></div>
+          <span>pull</span>
+        </div>
+      </div>
+      <div class="sync-node dell" style="max-width: 240px;">
+        <div class="node-header">
+          <div class="node-icon">💻</div>
+          <div>
+            <div class="node-name">Dell Workstation</div>
+            <div class="node-ip">100.119.87.108</div>
+          </div>
+        </div>
+        <div class="sync-path">C:\...\clawd\shared-brain\</div>
+        <div class="sync-script">
+          <span class="script-icon">📜</span>
+          sync-shared-brain.ps1
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Files -->
+  <div class="key-files">
+    <h4>📁 Key Files</h4>
+    <div class="files-grid">
+      <div class="file-card hot">
+        <div class="file-icon">🔥</div>
+        <div class="file-name">HOT.md</div>
+        <div class="file-desc">Current priorities</div>
+        <div class="file-freq">Read first every session</div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📋</div>
+        <div class="file-name">INDEX.md</div>
+        <div class="file-desc">Quick file lookup</div>
+        <div class="file-freq">As needed</div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📝</div>
+        <div class="file-name">CHANGELOG.md</div>
+        <div class="file-desc">Who changed what</div>
+        <div class="file-freq">Daily</div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📊</div>
+        <div class="file-name">STATUS.md</div>
+        <div class="file-desc">System overview</div>
+        <div class="file-freq">Every session</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Directory Tree -->
+  <div class="dir-tree">
+    <h4>🗂️ Directory Structure</h4>
+    <div class="tree-line"><span class="folder">shared-brain/</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="hot-file">HOT.md</span> <span class="comment">← 🔥 ALWAYS READ FIRST</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="file">INDEX.md</span> <span class="comment">← Quick lookup</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="file">CHANGELOG.md</span> <span class="comment">← Change log</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="file">STATUS.md</span> <span class="comment">← Overview</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">agents/</span> <span class="comment">← Per-bot status files</span></div>
+    <div class="tree-line"><span class="tree-connector">│   ├── </span><span class="file">bottom-bitch.md</span></div>
+    <div class="tree-line"><span class="tree-connector">│   ├── </span><span class="file">code-bitch.md</span></div>
+    <div class="tree-line"><span class="tree-connector">│   └── </span><span class="file">mac-mini-agent.md</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">projects/</span> <span class="comment">← Project documentation</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">tools/</span> <span class="comment">← Tool references</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">knowledge/</span> <span class="comment">← APIs, infra, credentials</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">prompts/</span> <span class="comment">← Useful prompts</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">scripts/</span> <span class="comment">← Shared scripts</span></div>
+    <div class="tree-line"><span class="tree-connector">├── </span><span class="folder">skills/</span> <span class="comment">← Skill documentation</span></div>
+    <div class="tree-line"><span class="tree-connector">└── </span><span class="folder">handoffs/</span> <span class="comment">← Task delegation</span></div>
+  </div>
+
+  <!-- Sync Commands -->
+  <div class="sync-commands">
+    <div class="command-box">
+      <h5>🍎 Mac / Linux</h5>
+      <div class="command-line">~/clawd/scripts/sync-shared-brain.sh pull</div>
+      <div class="command-line">~/clawd/scripts/sync-shared-brain.sh push</div>
+    </div>
+    <div class="command-box">
+      <h5>🪟 Dell (PowerShell)</h5>
+      <div class="command-line">.\scripts\sync-shared-brain.ps1 pull</div>
+      <div class="command-line">.\scripts\sync-shared-brain.ps1 push</div>
+    </div>
+  </div>
+
+  <!-- Agent Communication Flow -->
+  <div class="agent-flow">
+    <h4>🔄 Agent Communication Flow</h4>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <span class="step-badge">1</span>
+        <span class="step-text">Agent makes discovery</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="flow-step">
+        <span class="step-badge">2</span>
+        <span class="step-text">Updates local file</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="flow-step">
+        <span class="step-badge">3</span>
+        <span class="step-text">Push to Mac Pro</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="flow-step">
+        <span class="step-badge">4</span>
+        <span class="step-text">Others pull</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="flow-step">
+        <span class="step-badge">5</span>
+        <span class="step-text">Knowledge shared!</span>
+      </div>
+    </div>
+    <div class="agents-row">
+      <div class="agent-badge">
+        <span class="agent-icon">🤖</span>
+        <span class="agent-name">Bottom Bitch</span>
+        <span class="agent-file">agents/bottom-bitch.md</span>
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">💻</span>
+        <span class="agent-name">Code Bitch</span>
+        <span class="agent-file">agents/code-bitch.md</span>
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">🖥️</span>
+        <span class="agent-name">Mac Mini Agent</span>
+        <span class="agent-file">agents/mac-mini-agent.md</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,487 @@
+<!-- 08-security.html - Security Architecture Onion Defense -->
+<div class="section-card" id="security-section">
+  <div class="section-header">
+    <span class="section-icon">🔒</span>
+    <h2>SECURITY ARCHITECTURE</h2>
+    <span class="section-badge">Defense in Depth</span>
+  </div>
+
+  <style>
+    #security-section {
+      background: linear-gradient(135deg, #0d1321 0%, #1a1a2e 100%);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #security-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    }
+    
+    #security-section .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    #security-section .section-icon {
+      font-size: 28px;
+    }
+    
+    #security-section h2 {
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    #security-section .section-badge {
+      background: rgba(157, 78, 221, 0.3);
+      color: #9d4edd;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      border: 1px solid rgba(157, 78, 221, 0.5);
+    }
+    
+    /* Onion Layers Container */
+    .onion-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    /* External Threats */
+    .threat-cloud {
+      background: rgba(255, 51, 102, 0.1);
+      border: 1px dashed rgba(255, 51, 102, 0.5);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .threat-cloud h4 {
+      color: #ff3366;
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .threat-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    
+    .threat-tag {
+      background: rgba(255, 51, 102, 0.2);
+      color: #ff6b8a;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+    }
+    
+    /* Defense Layers */
+    .defense-layer {
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: -4px 0;
+      position: relative;
+    }
+    
+    .defense-layer::after {
+      content: '↓';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(0, 255, 255, 0.5);
+      font-size: 14px;
+      z-index: 10;
+    }
+    
+    .defense-layer:last-child::after {
+      display: none;
+    }
+    
+    .layer-1 {
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.15) 0%, rgba(0, 255, 255, 0.05) 100%);
+      border: 2px solid rgba(0, 255, 255, 0.4);
+      z-index: 4;
+    }
+    
+    .layer-2 {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.15) 0%, rgba(157, 78, 221, 0.05) 100%);
+      border: 2px solid rgba(157, 78, 221, 0.4);
+      z-index: 3;
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+    
+    .layer-3 {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 255, 136, 0.05) 100%);
+      border: 2px solid rgba(0, 255, 136, 0.4);
+      z-index: 2;
+      margin-left: 32px;
+      margin-right: 32px;
+    }
+    
+    .layer-4 {
+      background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 165, 0, 0.05) 100%);
+      border: 2px solid rgba(255, 165, 0, 0.4);
+      z-index: 1;
+      margin-left: 48px;
+      margin-right: 48px;
+    }
+    
+    .layer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    
+    .layer-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .layer-1 .layer-number { background: #00ffff; color: #0a0e17; }
+    .layer-2 .layer-number { background: #9d4edd; color: #fff; }
+    .layer-3 .layer-number { background: #00ff88; color: #0a0e17; }
+    .layer-4 .layer-number { background: #ffa500; color: #0a0e17; }
+    
+    .layer-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .layer-1 .layer-title { color: #00ffff; }
+    .layer-2 .layer-title { color: #9d4edd; }
+    .layer-3 .layer-title { color: #00ff88; }
+    .layer-4 .layer-title { color: #ffa500; }
+    
+    .layer-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .detail-item {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #a0aec0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .detail-item.check { color: #00ff88; }
+    .detail-item.warn { color: #ffa500; }
+    
+    /* Node Firewall Status */
+    .firewall-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(157, 78, 221, 0.3);
+    }
+    
+    .firewall-node {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .firewall-node.healthy {
+      border: 1px solid rgba(0, 255, 136, 0.4);
+    }
+    
+    .firewall-node.warning {
+      border: 2px solid #ff3366;
+      animation: pulse-warning 2s infinite;
+    }
+    
+    @keyframes pulse-warning {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
+      50% { box-shadow: 0 0 20px 5px rgba(255, 51, 102, 0.2); }
+    }
+    
+    .firewall-node h5 {
+      color: #fff;
+      margin: 0 0 4px 0;
+      font-size: 12px;
+    }
+    
+    .firewall-node .node-ip {
+      color: #a0aec0;
+      font-size: 10px;
+      font-family: monospace;
+      margin-bottom: 10px;
+    }
+    
+    .firewall-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    
+    .status-on {
+      background: rgba(0, 255, 136, 0.2);
+      color: #00ff88;
+    }
+    
+    .status-off {
+      background: rgba(255, 51, 102, 0.2);
+      color: #ff3366;
+    }
+    
+    .firewall-extras {
+      margin-top: 8px;
+      font-size: 10px;
+      color: #a0aec0;
+    }
+    
+    .firewall-extras .extra-badge {
+      display: inline-block;
+      background: rgba(157, 78, 221, 0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin: 2px;
+    }
+    
+    /* Warning Banner */
+    .warning-banner {
+      background: linear-gradient(90deg, rgba(255, 51, 102, 0.2) 0%, rgba(255, 51, 102, 0.1) 100%);
+      border: 1px solid rgba(255, 51, 102, 0.5);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .warning-icon {
+      font-size: 28px;
+      animation: shake 0.5s ease-in-out infinite;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+    
+    .warning-content h4 {
+      color: #ff3366;
+      margin: 0 0 4px 0;
+      font-size: 13px;
+    }
+    
+    .warning-content p {
+      color: #ff6b8a;
+      margin: 0;
+      font-size: 11px;
+    }
+    
+    /* Weekly Audit */
+    .audit-section {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 10px;
+    }
+    
+    .audit-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    
+    .audit-header h4 {
+      color: #00ffff;
+      margin: 0;
+      font-size: 13px;
+    }
+    
+    .audit-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .audit-item {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #a0aec0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .audit-item .cron {
+      font-family: monospace;
+      color: #00ffff;
+      background: rgba(0, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+
+  <!-- External Threats -->
+  <div class="threat-cloud">
+    <h4>🌐 EXTERNAL THREATS</h4>
+    <div class="threat-tags">
+      <span class="threat-tag">Port Scanners</span>
+      <span class="threat-tag">Brute Force</span>
+      <span class="threat-tag">Malware</span>
+      <span class="threat-tag">Phishing</span>
+      <span class="threat-tag">Zero-Days</span>
+    </div>
+  </div>
+
+  <!-- Onion Defense Layers -->
+  <div class="onion-container">
+    <!-- Layer 1: Network Perimeter -->
+    <div class="defense-layer layer-1">
+      <div class="layer-header">
+        <span class="layer-number">1</span>
+        <span class="layer-title">Network Perimeter — Tailscale VPN</span>
+      </div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ WireGuard 256-bit encryption</span>
+        <span class="detail-item check">✓ Zero-trust mesh</span>
+        <span class="detail-item check">✓ Only 100.x.x.x access</span>
+        <span class="detail-item check">✓ No open ports to internet</span>
+      </div>
+    </div>
+
+    <!-- Layer 2: Host Firewall -->
+    <div class="defense-layer layer-2">
+      <div class="layer-header">
+        <span class="layer-number">2</span>
+        <span class="layer-title">Host Firewalls</span>
+      </div>
+      <div class="firewall-grid">
+        <div class="firewall-node healthy">
+          <h5>MAC MINI</h5>
+          <div class="node-ip">100.88.105.106</div>
+          <div class="firewall-status status-on">✅ ON</div>
+          <div class="firewall-extras">
+            <span class="extra-badge">Stealth Mode</span>
+            <span class="extra-badge">Block Incoming</span>
+          </div>
+        </div>
+        <div class="firewall-node warning">
+          <h5>MAC PRO</h5>
+          <div class="node-ip">100.101.89.80</div>
+          <div class="firewall-status status-off">⚠️ OFF</div>
+          <div class="firewall-extras" style="color: #ff6b8a;">
+            NEEDS FIXING!
+          </div>
+        </div>
+        <div class="firewall-node healthy">
+          <h5>DELL</h5>
+          <div class="node-ip">100.119.87.108</div>
+          <div class="firewall-status status-on">✅ ON</div>
+          <div class="firewall-extras">
+            <span class="extra-badge" style="background: rgba(0,255,136,0.2); color: #00ff88;">CrowdStrike</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 3: Application Auth -->
+    <div class="defense-layer layer-3">
+      <div class="layer-header">
+        <span class="layer-number">3</span>
+        <span class="layer-title">Application Authentication</span>
+      </div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ SSH key-based auth (no passwords)</span>
+        <span class="detail-item check">✓ Telegram bot token validation</span>
+        <span class="detail-item check">✓ API keys rotated periodically</span>
+        <span class="detail-item check">✓ Browser relay requires tab attach</span>
+      </div>
+    </div>
+
+    <!-- Layer 4: Data Protection -->
+    <div class="defense-layer layer-4">
+      <div class="layer-header">
+        <span class="layer-number">4</span>
+        <span class="layer-title">Data Protection</span>
+      </div>
+      <div class="layer-details">
+        <span class="detail-item check">✓ Git version control (rollback)</span>
+        <span class="detail-item check">✓ Fort Knox backups (offsite)</span>
+        <span class="detail-item check">✓ Secrets in SOUL.md (not in git)</span>
+        <span class="detail-item check">✓ MEMORY.md only in main sessions</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning Banner -->
+  <div class="warning-banner">
+    <span class="warning-icon">⚠️</span>
+    <div class="warning-content">
+      <h4>CRITICAL: Mac Pro Firewall Disabled</h4>
+      <p>Fort Knox storage node has firewall OFF. Enable via System Preferences → Security & Privacy → Firewall → Turn On</p>
+    </div>
+  </div>
+
+  <!-- Weekly Audit -->
+  <div class="audit-section">
+    <div class="audit-header">
+      <span>🕵️</span>
+      <h4>Weekly Security Audit</h4>
+    </div>
+    <div class="audit-items">
+      <span class="audit-item"><span class="cron">0 3 * * 0</span> Firewall status check</span>
+      <span class="audit-item"><span class="cron">0 3 * * 0</span> SSH key rotation</span>
+      <span class="audit-item"><span class="cron">0 3 * * 0</span> API key audit</span>
+      <span class="audit-item"><span class="cron">0 3 * * 0</span> Backup integrity</span>
+    </div>
+  </div>
+</div>

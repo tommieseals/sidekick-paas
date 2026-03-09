@@ -7,9 +7,9 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scorer.features import extract_features, features_to_array
-from scorer.rules import RulesEngine
-from scorer.model_loader import get_model_loader
+from features import extract_features, features_to_array
+from rules import RulesEngine
+from model_loader import get_model_loader
 
 app = FastAPI(title="Fraud Scoring API", version="1.0.0")
 rules_engine = RulesEngine()

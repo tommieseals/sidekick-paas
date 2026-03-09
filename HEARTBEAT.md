@@ -17,7 +17,7 @@ wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /Value
 ### Mac Mini + Mac Pro (Batched SSH)
 ```bash
 # Single command checks both nodes efficiently
-for host in tommie@100.88.105.106 administrator@100.101.89.80; do
+for host in tommie@100.88.105.106 administrator@100.89.67.10; do
   ssh -o ConnectTimeout=10 $host 'echo "$(hostname):"; memory_pressure 2>/dev/null | grep "free percentage"; df -h / | tail -1; uptime' 2>/dev/null
 done
 ```
@@ -45,7 +45,7 @@ done
 ssh tommie@100.88.105.106 'pgrep -x ollama && pgrep -f clawdbot-gateway'
 
 # Mac Pro  
-ssh administrator@100.101.89.80 'pgrep -x ollama && pgrep -f openclaw'
+ssh administrator@100.89.67.10 'pgrep -x ollama && pgrep -f openclaw'
 ```
 
 **If service is down:** Run `bash ~/clawd/scripts/auto-restart-services.sh`
@@ -91,7 +91,7 @@ ssh tommie@100.88.105.106 'ls -la ~/clawd/memory/security-audit-*.md 2>/dev/null
 ssh tommie@100.88.105.106 'sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null || echo "needs sudo"'
 
 # Mac Pro (⚠️ CURRENTLY OFF - needs manual fix)
-ssh administrator@100.101.89.80 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
+ssh administrator@100.89.67.10 '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null'
 ```
 
 ---
@@ -116,6 +116,72 @@ Run these commands on Mac Pro with sudo password:
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 ```
+
+---
+
+---
+
+## PRIORITY FIVE: Trading P&L Check
+
+**TerminatorBot Paper Positions:**
+```powershell
+python C:\Users\tommi\clawd\TerminatorBot\track_resolved.py
+```
+
+**Project Vault (if market hours):**
+```bash
+ssh tommie@100.88.105.106 "cd ~/clawd/project-vault && source venv/bin/activate && python3 vault.py status"
+```
+
+**Track:**
+- Open positions count
+- Any resolved markets (check daily at 7 AM cron)
+- Realized P&L when markets close
+
+---
+
+## PRIORITY SIX: GitHub Portfolio Updates (3x Daily) 🔥
+
+**Goal:** Keep GitHub updated with successful projects to impress employers.
+
+**What to push (PUBLIC - employer-friendly):**
+- ✅ Infrastructure scripts (monitoring, automation, health checks)
+- ✅ React sites and web projects
+- ✅ Dashboard code
+- ✅ Automation tools
+- ✅ CLI utilities
+- ✅ Clean, documented code
+
+**What to NEVER push (PRIVATE - personal info):**
+- ❌ API keys, tokens, passwords
+- ❌ Personal data (emails, phone numbers, addresses)
+- ❌ Memory files with private conversations
+- ❌ Financial account info
+- ❌ Job application data with personal details
+
+**Check 3x daily:**
+1. **Morning (6 AM)** - Scan for new completions overnight
+2. **Midday (12 PM)** - Check for projects worked on
+3. **Evening (6 PM)** - End of day push
+
+**Actions:**
+```bash
+# SSH to Mac Mini where gh CLI is configured
+ssh tommie@100.88.105.106
+
+# Check what repos exist
+gh repo list tommieseals
+
+# Check local projects not yet on GitHub
+ls ~/clawd/ | grep -v memory | grep -v private
+
+# For each good project:
+# 1. Sanitize (remove secrets/personal data)
+# 2. Add README.md
+# 3. Push to GitHub
+```
+
+**Track in:** `memory/github-updates.md`
 
 ---
 

@@ -1,0 +1,16 @@
+{
+  "auc": 0.9917415241958853,
+  "best_threshold": 0.6605331225556658,
+  "feature_importances": {
+    "amount_log": 0.12720955846466248,
+    "amount_scaled": 0.10247379801466534,
+    "hour_sin": 0.06154918523837477,
+    "hour_cos": 0.08363462545752774,
+    "is_night": 0.07506537942767788,
+    "is_weekend": 0.006116977982340451,
+    "velocity_1h": 0.12193527155673214,
+    "velocity_high": 0.02642300273858281,
+    "is_new_device": 0.08930790028376416,
+    "amount_velocity_interaction": 0.30628430083567226
+  }
+}

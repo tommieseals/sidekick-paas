@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Vault - Trading System</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
+        }
+        .nav-brand h1 { font-size: 1.8rem; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .section-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.2); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+        .diagram-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .diagram-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .diagram-title h2 {
+            color: #1a365d;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .diagram-title p {
+            color: #718096;
+            font-size: 1rem;
+        }
+        .diagram-svg {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .status-dot.green { background: #48BB78; }
+        .status-dot.yellow { background: #ECC94B; }
+        .status-dot.red { background: #F56565; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @media (max-width: 768px) {
+            .nav-bar { flex-wrap: wrap; gap: 1rem; }
+            .nav-links { width: 100%; justify-content: center; }
+            .container { padding: 1rem; }
+            .diagram-card { padding: 1rem; }
+            .tab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-brand"><h1>💰 Project Vault</h1></div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/infrastructure-new.html">Infrastructure</a>
+            <a href="/agents.html">Agents</a>
+            <a href="/swarm-monitor.html">🐝 Swarm</a>
+            <a href="/project-vault.html" class="active">💰 Vault</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot green"></span>
+                <span>Tradier: Connected</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot green"></span>
+                <span>Redis: Active</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot yellow"></span>
+                <span>Mode: Sandbox</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot green"></span>
+                <span>Risk Controls: Armed</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function FlowingLine({ x1, y1, x2, y2, color = "#48BB78", delay = 0, curved = false, curveDir = "up" }) {
+            const midX = (x1 + x2) / 2;
+            const curveOffset = curveDir === "up" ? -40 : 40;
+            const midY = curved ? (y1 + y2) / 2 + curveOffset : (y1 + y2) / 2;
+            const pathD = curved 
+                ? `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`
+                : `M ${x1} ${y1} L ${x2} ${y2}`;
+
+            return (
+                <g>
+                    <path d={pathD} fill="none" stroke={color + "40"} strokeWidth="2" strokeDasharray="6,4" />
+                    <circle r="4" fill={color}>
+                        <animateMotion dur="2.5s" repeatCount="indefinite" begin={delay + "s"} path={pathD} />
+                    </circle>
+                    <circle cx={x1} cy={y1} r="3" fill={color} opacity="0.6" />
+                    <circle cx={x2} cy={y2} r="3" fill={color} opacity="0.6" />
+                </g>
+            );
+        }
+
+        function ArchNode({ x, y, w, h, title, subtitle, icon, color, small = false }) {
+            const titleY = small ? 48 : 58;
+            const subtitleY = small ? 62 : 76;
+            const iconSize = small ? 18 : 26;
+            
+            return (
+                <g>
+                    <rect x={x} y={y} width={w} height={h} rx={12} fill="white" stroke="#E2E8F0" strokeWidth="1" filter="url(#shadow)" />
+                    <rect x={x} y={y} width={w} height={6} rx={3} fill={color} />
+                    <circle cx={x + w/2} cy={y + 28} r={small ? 16 : 22} fill={color + "20"} />
+                    <text x={x + w/2} y={y + 33} textAnchor="middle" fontSize={iconSize} dominantBaseline="middle">{icon}</text>
+                    <text x={x + w/2} y={y + titleY} textAnchor="middle" fill="#1A202C" fontSize={small ? 10 : 12} fontWeight="600">{title}</text>
+                    {subtitle && <text x={x + w/2} y={y + subtitleY} textAnchor="middle" fill="#718096" fontSize={small ? 8 : 9}>{subtitle}</text>}
+                </g>
+            );
+        }
+
+        function TradingOverview() {
+            return (
+                <svg viewBox="0 0 950 600" style={{width: "100%", minWidth: 750, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    {/* Strategy Engine Header */}
+                    <rect x={50} y={20} width={850} height={45} rx={10} fill="#1a365d" />
+                    <text x={475} y={48} textAnchor="middle" fill="white" fontSize="16" fontWeight="600">📊 10 Trading Strategies Engine</text>
+                    
+                    {/* Strategy Row 1 */}
+                    <ArchNode x={50} y={80} w={100} h={75} title="Deep Value" subtitle="Fundamentals" icon="💎" color="#3182CE" small={true} />
+                    <ArchNode x={160} y={80} w={100} h={75} title="Volatility" subtitle="VIX Plays" icon="📈" color="#9F7AEA" small={true} />
+                    <ArchNode x={270} y={80} w={100} h={75} title="Macro" subtitle="Economic" icon="🌍" color="#38B2AC" small={true} />
+                    <ArchNode x={380} y={80} w={100} h={75} title="Momentum" subtitle="Trend Follow" icon="🚀" color="#ED8936" small={true} />
+                    <ArchNode x={490} y={80} w={100} h={75} title="Mean Rev" subtitle="Reversion" icon="↩️" color="#E53E3E" small={true} />
+                    
+                    {/* Strategy Row 2 */}
+                    <ArchNode x={50} y={165} w={100} h={75} title="Event Arb" subtitle="Catalyst" icon="📅" color="#667EEA" small={true} />
+                    <ArchNode x={160} y={165} w={100} h={75} title="Sector Rot" subtitle="Flow Chasing" icon="🔄" color="#48BB78" small={true} />
+                    <ArchNode x={270} y={165} w={100} h={75} title="Pairs" subtitle="Stat Arb" icon="⚖️" color="#D69E2E" small={true} />
+                    <ArchNode x={380} y={165} w={100} h={75} title="Options" subtitle="Vol Surface" icon="📊" color="#805AD5" small={true} />
+                    <ArchNode x={490} y={165} w={100} h={75} title="Sentiment" subtitle="NLP Signals" icon="🧠" color="#DD6B20" small={true} />
+                    
+                    {/* Signal Aggregator */}
+                    <ArchNode x={620} y={100} w={130} h={90} title="Signal" subtitle="Aggregator" icon="🔀" color="#2D3748" />
+                    
+                    {/* Lines from strategies to aggregator */}
+                    <FlowingLine x1={150} y1={117} x2={620} y2={145} color="#3182CE" delay={0} />
+                    <FlowingLine x1={260} y1={117} x2={620} y2={145} color="#9F7AEA" delay={0.2} />
+                    <FlowingLine x1={370} y1={117} x2={620} y2={145} color="#38B2AC" delay={0.4} />
+                    <FlowingLine x1={480} y1={117} x2={620} y2={145} color="#ED8936" delay={0.6} />
+                    <FlowingLine x1={540} y1={202} x2={620} y2={165} color="#DD6B20" delay={0.8} />
+                    
+                    {/* Risk Management Section */}
+                    <rect x={50} y={270} width={350} height={160} rx={15} fill="#FFF5F5" stroke="#FC8181" strokeWidth="2" />
+                    <text x={225} y={295} textAnchor="middle" fill="#C53030" fontSize="14" fontWeight="600">🛡️ Risk Management</text>
+                    
+                    <ArchNode x={70} y={310} w={95} h={70} title="3% Daily" subtitle="Loss Halt" icon="⚠️" color="#E53E3E" small={true} />
+                    <ArchNode x={175} y={310} w={95} h={70} title="15% DD" subtitle="Close All" icon="🚨" color="#C53030" small={true} />
+                    <ArchNode x={280} y={310} w={100} h={70} title="Position" subtitle="Size Limits" icon="📏" color="#9B2C2C" small={true} />
+                    
+                    <text x={225} y={405} textAnchor="middle" fill="#718096" fontSize="10">Circuit Breakers • Kill Switch • Exposure Limits</text>
+                    
+                    {/* Execution Section */}
+                    <rect x={430} y={270} width={250} height={160} rx={15} fill="#F0FFF4" stroke="#68D391" strokeWidth="2" />
+                    <text x={555} y={295} textAnchor="middle" fill="#276749" fontSize="14" fontWeight="600">⚡ Execution Layer</text>
+                    
+                    <ArchNode x={450} y={310} w={100} h={70} title="Tradier" subtitle="API Gateway" icon="🔌" color="#48BB78" small={true} />
+                    <ArchNode x={560} y={310} w={100} h={70} title="Orders" subtitle="Smart Route" icon="📤" color="#38A169" small={true} />
+                    
+                    <text x={555} y={405} textAnchor="middle" fill="#718096" fontSize="10">Sandbox → Production • Rate Limits</text>
+                    
+                    {/* State Management */}
+                    <rect x={710} y={270} width={190} height={160} rx={15} fill="#FAF5FF" stroke="#B794F4" strokeWidth="2" />
+                    <text x={805} y={295} textAnchor="middle" fill="#553C9A" fontSize="14" fontWeight="600">💾 State</text>
+                    
+                    <ArchNode x={735} y={310} w={140} h={70} title="Redis" subtitle="Position Cache" icon="🗄️" color="#9F7AEA" small={true} />
+                    
+                    <text x={805} y={405} textAnchor="middle" fill="#718096" fontSize="10">P&L Tracking • Order State</text>
+                    
+                    {/* Flow lines */}
+                    <FlowingLine x1={685} y1={190} x2={555} y2={270} color="#48BB78" delay={1} curved={true} curveDir="down" />
+                    <FlowingLine x1={620} y1={190} x2={225} y2={270} color="#E53E3E" delay={1.2} curved={true} curveDir="down" />
+                    <FlowingLine x1={750} y1={190} x2={805} y2={270} color="#9F7AEA" delay={1.4} curved={true} curveDir="down" />
+                    
+                    {/* P&L Output */}
+                    <ArchNode x={400} y={470} w={150} h={90} title="P&L Engine" subtitle="Real-time Tracking" icon="💰" color="#38A169" />
+                    
+                    <FlowingLine x1={555} y1={430} x2={475} y2={470} color="#38A169" delay={1.8} />
+                    <FlowingLine x1={805} y1={430} x2={500} y2={490} color="#9F7AEA" delay={2} curved={true} />
+                </svg>
+            );
+        }
+
+        function StrategyFlow() {
+            return (
+                <svg viewBox="0 0 950 450" style={{width: "100%", minWidth: 750, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    {/* Step Numbers */}
+                    {[1,2,3,4,5].map((n, i) => (
+                        <g key={n}>
+                            <circle cx={95 + i * 190} cy={35} r={18} fill="#1a365d" />
+                            <text x={95 + i * 190} y={41} textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">{n}</text>
+                        </g>
+                    ))}
+                    
+                    {/* Main Flow Row */}
+                    <ArchNode x={30} y={60} w={130} h={95} title="Signal Gen" subtitle="Strategy Analysis" icon="📡" color="#3182CE" />
+                    <ArchNode x={220} y={60} w={130} h={95} title="Risk Check" subtitle="Pre-trade Validation" icon="🛡️" color="#E53E3E" />
+                    <ArchNode x={410} y={60} w={130} h={95} title="Order Build" subtitle="Size & Route" icon="🔧" color="#ED8936" />
+                    <ArchNode x={600} y={60} w={130} h={95} title="Execute" subtitle="Tradier API" icon="⚡" color="#48BB78" />
+                    <ArchNode x={790} y={60} w={130} h={95} title="P&L Track" subtitle="Position Update" icon="💰" color="#9F7AEA" />
+                    
+                    {/* Flow lines */}
+                    <FlowingLine x1={160} y1={107} x2={220} y2={107} color="#3182CE" delay={0} />
+                    <FlowingLine x1={350} y1={107} x2={410} y2={107} color="#E53E3E" delay={0.5} />
+                    <FlowingLine x1={540} y1={107} x2={600} y2={107} color="#ED8936" delay={1} />
+                    <FlowingLine x1={730} y1={107} x2={790} y2={107} color="#48BB78" delay={1.5} />
+                    
+                    {/* Detail Boxes */}
+                    <rect x={30} y={180} width={130} height={110} rx={10} fill="#EBF8FF" stroke="#3182CE" strokeWidth="1" />
+                    <text x={95} y={200} textAnchor="middle" fill="#2C5282" fontSize="10" fontWeight="600">Signal Sources</text>
+                    <text x={95} y={220} textAnchor="middle" fill="#718096" fontSize="9">• Technical Indicators</text>
+                    <text x={95} y={235} textAnchor="middle" fill="#718096" fontSize="9">• Fundamental Data</text>
+                    <text x={95} y={250} textAnchor="middle" fill="#718096" fontSize="9">• Sentiment Scores</text>
+                    <text x={95} y={265} textAnchor="middle" fill="#718096" fontSize="9">• Event Triggers</text>
+                    
+                    <rect x={220} y={180} width={130} height={110} rx={10} fill="#FFF5F5" stroke="#E53E3E" strokeWidth="1" />
+                    <text x={285} y={200} textAnchor="middle" fill="#C53030" fontSize="10" fontWeight="600">Risk Checks</text>
+                    <text x={285} y={220} textAnchor="middle" fill="#718096" fontSize="9">• Daily Loss: 3%</text>
+                    <text x={285} y={235} textAnchor="middle" fill="#718096" fontSize="9">• Max Drawdown: 15%</text>
+                    <text x={285} y={250} textAnchor="middle" fill="#718096" fontSize="9">• Position Limits</text>
+                    <text x={285} y={265} textAnchor="middle" fill="#718096" fontSize="9">• Sector Exposure</text>
+                    
+                    <rect x={410} y={180} width={130} height={110} rx={10} fill="#FFFAF0" stroke="#ED8936" strokeWidth="1" />
+                    <text x={475} y={200} textAnchor="middle" fill="#C05621" fontSize="10" fontWeight="600">Order Logic</text>
+                    <text x={475} y={220} textAnchor="middle" fill="#718096" fontSize="9">• Kelly Criterion</text>
+                    <text x={475} y={235} textAnchor="middle" fill="#718096" fontSize="9">• Volatility Scaling</text>
+                    <text x={475} y={250} textAnchor="middle" fill="#718096" fontSize="9">• Slippage Model</text>
+                    <text x={475} y={265} textAnchor="middle" fill="#718096" fontSize="9">• Smart Routing</text>
+                    
+                    <rect x={600} y={180} width={130} height={110} rx={10} fill="#F0FFF4" stroke="#48BB78" strokeWidth="1" />
+                    <text x={665} y={200} textAnchor="middle" fill="#276749" fontSize="10" fontWeight="600">Execution</text>
+                    <text x={665} y={220} textAnchor="middle" fill="#718096" fontSize="9">• Tradier REST API</text>
+                    <text x={665} y={235} textAnchor="middle" fill="#718096" fontSize="9">• Order Types</text>
+                    <text x={665} y={250} textAnchor="middle" fill="#718096" fontSize="9">• Rate Limiting</text>
+                    <text x={665} y={265} textAnchor="middle" fill="#718096" fontSize="9">• Confirmation</text>
+                    
+                    <rect x={790} y={180} width={130} height={110} rx={10} fill="#FAF5FF" stroke="#9F7AEA" strokeWidth="1" />
+                    <text x={855} y={200} textAnchor="middle" fill="#553C9A" fontSize="10" fontWeight="600">Tracking</text>
+                    <text x={855} y={220} textAnchor="middle" fill="#718096" fontSize="9">• Redis State</text>
+                    <text x={855} y={235} textAnchor="middle" fill="#718096" fontSize="9">• P&L Calc</text>
+                    <text x={855} y={250} textAnchor="middle" fill="#718096" fontSize="9">• Position Book</text>
+                    <text x={855} y={265} textAnchor="middle" fill="#718096" fontSize="9">• Daily Summary</text>
+                    
+                    {/* Reject Path */}
+                    <path d="M 285 155 L 285 330 L 95 330 L 95 290" fill="none" stroke="#E53E3E40" strokeWidth="2" strokeDasharray="6,4" />
+                    <circle r="4" fill="#E53E3E">
+                        <animateMotion dur="3s" repeatCount="indefinite" begin="2s" path="M 285 155 L 285 330 L 95 330 L 95 290" />
+                    </circle>
+                    
+                    <rect x={200} y={315} width={100} height={30} rx={8} fill="#FED7D7" stroke="#E53E3E" />
+                    <text x={250} y={335} textAnchor="middle" fill="#C53030" fontSize="10" fontWeight="600">❌ REJECT</text>
+                    
+                    {/* Feedback Loop */}
+                    <path d="M 855 290 L 855 380 L 95 380 L 95 290" fill="none" stroke="#9F7AEA40" strokeWidth="2" strokeDasharray="6,4" />
+                    <circle r="4" fill="#9F7AEA">
+                        <animateMotion dur="4s" repeatCount="indefinite" begin="0.5s" path="M 855 290 L 855 380 L 95 380 L 95 290" />
+                    </circle>
+                    
+                    <rect x={400} y={365} width={150} height={30} rx={8} fill="#E9D8FD" stroke="#9F7AEA" />
+                    <text x={475} y={385} textAnchor="middle" fill="#553C9A" fontSize="10" fontWeight="600">🔄 Strategy Feedback</text>
+                </svg>
+            );
+        }
+
+        function DataSources() {
+            return (
+                <svg viewBox="0 0 950 520" style={{width: "100%", minWidth: 750, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    {/* Central Hub */}
+                    <circle cx={475} cy={260} r={70} fill="#1a365d" />
+                    <circle cx={475} cy={260} r={55} fill="#2D3748" />
+                    <text x={475} y={250} textAnchor="middle" fill="white" fontSize="24">🧠</text>
+                    <text x={475} y={275} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">Signal Engine</text>
+                    
+                    {/* Market Data */}
+                    <rect x={30} y={30} width={200} height={180} rx={15} fill="#EBF8FF" stroke="#3182CE" strokeWidth="2" />
+                    <text x={130} y={55} textAnchor="middle" fill="#2C5282" fontSize="14" fontWeight="600">📊 Market Data</text>
+                    
+                    <ArchNode x={50} y={70} w={75} h={60} title="Price" subtitle="OHLCV" icon="📈" color="#3182CE" small={true} />
+                    <ArchNode x={135} y={70} w={75} h={60} title="Volume" subtitle="Flow" icon="📊" color="#2B6CB0" small={true} />
+                    <ArchNode x={50} y={140} w={75} h={60} title="Options" subtitle="Greeks" icon="⚙️" color="#2C5282" small={true} />
+                    <ArchNode x={135} y={140} w={75} h={60} title="VIX" subtitle="Volatility" icon="🌊" color="#1A365D" small={true} />
+                    
+                    <FlowingLine x1={230} y1={120} x2={405} y2={230} color="#3182CE" delay={0} curved={true} curveDir="down" />
+                    
+                    {/* Sentiment */}
+                    <rect x={720} y={30} width={200} height={180} rx={15} fill="#FAF5FF" stroke="#9F7AEA" strokeWidth="2" />
+                    <text x={820} y={55} textAnchor="middle" fill="#553C9A" fontSize="14" fontWeight="600">🧠 Sentiment</text>
+                    
+                    <ArchNode x={740} y={70} w={75} h={60} title="News" subtitle="Headlines" icon="📰" color="#9F7AEA" small={true} />
+                    <ArchNode x={825} y={70} w={75} h={60} title="Social" subtitle="X/Reddit" icon="💬" color="#805AD5" small={true} />
+                    <ArchNode x={740} y={140} w={75} h={60} title="Analyst" subtitle="Ratings" icon="⭐" color="#6B46C1" small={true} />
+                    <ArchNode x={825} y={140} w={75} h={60} title="Fear" subtitle="Greed Idx" icon="😱" color="#553C9A" small={true} />
+                    
+                    <FlowingLine x1={720} y1={120} x2={545} y2={230} color="#9F7AEA" delay={0.5} curved={true} curveDir="down" />
+                    
+                    {/* Insider/Institutional */}
+                    <rect x={30} y={310} width={200} height={180} rx={15} fill="#FFFAF0" stroke="#ED8936" strokeWidth="2" />
+                    <text x={130} y={335} textAnchor="middle" fill="#C05621" fontSize="14" fontWeight="600">🏛️ Institutional</text>
+                    
+                    <ArchNode x={50} y={350} w={75} h={60} title="13F" subtitle="Holdings" icon="📋" color="#ED8936" small={true} />
+                    <ArchNode x={135} y={350} w={75} h={60} title="Insider" subtitle="Form 4" icon="👔" color="#DD6B20" small={true} />
+                    <ArchNode x={50} y={420} w={75} h={60} title="Dark" subtitle="Pool" icon="🌑" color="#C05621" small={true} />
+                    <ArchNode x={135} y={420} w={75} h={60} title="Flow" subtitle="Options" icon="🌊" color="#9C4221" small={true} />
+                    
+                    <FlowingLine x1={230} y1={400} x2={405} y2={290} color="#ED8936" delay={1} curved={true} curveDir="up" />
+                    
+                    {/* Technical */}
+                    <rect x={720} y={310} width={200} height={180} rx={15} fill="#F0FFF4" stroke="#48BB78" strokeWidth="2" />
+                    <text x={820} y={335} textAnchor="middle" fill="#276749" fontSize="14" fontWeight="600">📐 Technical</text>
+                    
+                    <ArchNode x={740} y={350} w={75} h={60} title="RSI" subtitle="Oscillator" icon="📉" color="#48BB78" small={true} />
+                    <ArchNode x={825} y={350} w={75} h={60} title="MACD" subtitle="Trend" icon="📈" color="#38A169" small={true} />
+                    <ArchNode x={740} y={420} w={75} h={60} title="BB" subtitle="Bands" icon="〰️" color="#2F855A" small={true} />
+                    <ArchNode x={825} y={420} w={75} h={60} title="EMA" subtitle="Averages" icon="➰" color="#276749" small={true} />
+                    
+                    <FlowingLine x1={720} y1={400} x2={545} y2={290} color="#48BB78" delay={1.5} curved={true} curveDir="up" />
+                    
+                    {/* Output */}
+                    <rect x={375} y={380} width={200} height={100} rx={15} fill="#1a365d" />
+                    <text x={475} y={410} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">Signal Output</text>
+                    <text x={475} y={430} textAnchor="middle" fill="#A0AEC0" fontSize="9">BUY • SELL • HOLD</text>
+                    <text x={475} y={450} textAnchor="middle" fill="#A0AEC0" fontSize="9">Confidence Score: 0-100%</text>
+                    
+                    <FlowingLine x1={475} y1={330} x2={475} y2={380} color="#48BB78" delay={2} />
+                </svg>
+            );
+        }
+
+        function AlertSystem() {
+            return (
+                <svg viewBox="0 0 950 480" style={{width: "100%", minWidth: 750, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    {/* Event Sources */}
+                    <text x={150} y={30} textAnchor="middle" fill="#2D3748" fontSize="14" fontWeight="600">📥 Event Sources</text>
+                    
+                    <ArchNode x={30} y={50} w={110} h={75} title="Trade" subtitle="Executions" icon="💹" color="#48BB78" small={true} />
+                    <ArchNode x={150} y={50} w={110} h={75} title="P&L" subtitle="Updates" icon="💰" color="#38A169" small={true} />
+                    <ArchNode x={30} y={135} w={110} h={75} title="Risk" subtitle="Breaches" icon="⚠️" color="#E53E3E" small={true} />
+                    <ArchNode x={150} y={135} w={110} h={75} title="System" subtitle="Health" icon="🔧" color="#ED8936" small={true} />
+                    
+                    {/* Alert Router */}
+                    <ArchNode x={350} y={85} w={160} h={100} title="Alert Router" subtitle="Priority & Filter" icon="🔀" color="#667EEA" />
+                    
+                    <FlowingLine x1={140} y1={87} x2={350} y2={120} color="#48BB78" delay={0} curved={true} />
+                    <FlowingLine x1={260} y1={87} x2={350} y2={130} color="#38A169" delay={0.3} />
+                    <FlowingLine x1={140} y1={172} x2={350} y2={150} color="#E53E3E" delay={0.6} curved={true} />
+                    <FlowingLine x1={260} y1={172} x2={350} y2={155} color="#ED8936" delay={0.9} />
+                    
+                    {/* Notification Channels */}
+                    <ArchNode x={600} y={40} w={130} h={85} title="Telegram" subtitle="@Dlowbands" icon="📱" color="#3182CE" />
+                    <ArchNode x={770} y={40} w={130} h={85} title="Dashboard" subtitle="Web UI" icon="🖥️" color="#38B2AC" />
+                    <ArchNode x={600} y={140} w={130} h={85} title="Email" subtitle="Critical Only" icon="📧" color="#9F7AEA" />
+                    <ArchNode x={770} y={140} w={130} h={85} title="Logs" subtitle="All Events" icon="📝" color="#718096" />
+                    
+                    <FlowingLine x1={510} y1={110} x2={600} y2={82} color="#3182CE" delay={1.2} curved={true} />
+                    <FlowingLine x1={510} y1={120} x2={770} y2={82} color="#38B2AC" delay={1.4} curved={true} />
+                    <FlowingLine x1={510} y1={150} x2={600} y2={182} color="#9F7AEA" delay={1.6} curved={true} />
+                    <FlowingLine x1={510} y1={160} x2={770} y2={182} color="#718096" delay={1.8} curved={true} />
+                    
+                    {/* Circuit Breakers Section */}
+                    <rect x={30} y={250} width={400} height={200} rx={15} fill="#FFF5F5" stroke="#E53E3E" strokeWidth="3" />
+                    <text x={230} y={280} textAnchor="middle" fill="#C53030" fontSize="16" fontWeight="700">🚨 Circuit Breakers</text>
+                    
+                    <ArchNode x={50} y={300} w={110} h={75} title="3% Daily" subtitle="Halt Trading" icon="🛑" color="#E53E3E" small={true} />
+                    <ArchNode x={175} y={300} w={110} h={75} title="15% DD" subtitle="Close All" icon="🔴" color="#C53030" small={true} />
+                    <ArchNode x={300} y={300} w={110} h={75} title="API Fail" subtitle="Fallback" icon="🔌" color="#9B2C2C" small={true} />
+                    
+                    <text x={230} y={410} textAnchor="middle" fill="#C53030" fontSize="12" fontWeight="600">Automatic Protection • No Manual Override</text>
+                    
+                    {/* Kill Switch */}
+                    <rect x={460} y={250} width={200} height={200} rx={15} fill="#1a365d" stroke="#E53E3E" strokeWidth="4" />
+                    <text x={560} y={290} textAnchor="middle" fill="white" fontSize="16" fontWeight="700">☠️ KILL SWITCH</text>
+                    
+                    <circle cx={560} cy={360} r={45} fill="#E53E3E" />
+                    <circle cx={560} cy={360} r={35} fill="#C53030" />
+                    <text x={560} y={368} textAnchor="middle" fill="white" fontSize="20" fontWeight="bold">STOP</text>
+                    
+                    <text x={560} y={425} textAnchor="middle" fill="#A0AEC0" fontSize="10">Telegram: /killswitch</text>
+                    
+                    {/* Recovery Actions */}
+                    <rect x={690} y={250} width={230} height={200} rx={15} fill="#F0FFF4" stroke="#48BB78" strokeWidth="2" />
+                    <text x={805} y={280} textAnchor="middle" fill="#276749" fontSize="14" fontWeight="600">🔄 Recovery Actions</text>
+                    
+                    <ArchNode x={710} y={300} w={95} h={65} title="Close" subtitle="All Pos" icon="❌" color="#E53E3E" small={true} />
+                    <ArchNode x={815} y={300} w={95} h={65} title="Cancel" subtitle="Orders" icon="🚫" color="#ED8936" small={true} />
+                    <ArchNode x={760} y={375} w={95} h={65} title="Report" subtitle="Generate" icon="📊" color="#48BB78" small={true} />
+                    
+                    {/* Flow from breakers to kill switch */}
+                    <FlowingLine x1={430} y1={350} x2={460} y2={350} color="#E53E3E" delay={2} />
+                    
+                    {/* Flow from kill switch to recovery */}
+                    <FlowingLine x1={660} y1={350} x2={690} y2={332} color="#48BB78" delay={2.5} />
+                </svg>
+            );
+        }
+
+        function App() {
+            const [activeTab, setActiveTab] = useState("overview");
+            
+            const tabs = [
+                { id: "overview", label: "📊 System Overview", component: TradingOverview },
+                { id: "flow", label: "🔄 Strategy Flow", component: StrategyFlow },
+                { id: "data", label: "📡 Data Sources", component: DataSources },
+                { id: "alerts", label: "🚨 Alert System", component: AlertSystem }
+            ];
+            
+            const ActiveDiagram = tabs.find(t => t.id === activeTab)?.component || TradingOverview;
+            
+            return (
+                <div className="container">
+                    <div className="section-tabs">
+                        {tabs.map(tab => (
+                            <button 
+                                key={tab.id}
+                                className={"tab-btn " + (activeTab === tab.id ? "active" : "")}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    <div className="diagram-card">
+                        <div className="diagram-title">
+                            <h2>{tabs.find(t => t.id === activeTab)?.label}</h2>
+                            <p>Project Vault Trading System Architecture</p>
+                        </div>
+                        <div className="diagram-svg">
+                            <ActiveDiagram />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>

@@ -37,3 +37,6 @@ node_modules/
 *.swp
 *.swo
 *~
+
+arbitrage-pharma/
+project-vault/

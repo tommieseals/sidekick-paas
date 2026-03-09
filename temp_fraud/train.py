@@ -7,8 +7,8 @@ import joblib
 import os
 import sys
 import json
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scorer.features import extract_features, features_to_array, FEATURE_NAMES
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from features import extract_features, features_to_array, FEATURE_NAMES
 
 def load_data(path):
     return pd.read_csv(path)

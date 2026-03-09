@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure - Clawd Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            flex-wrap: wrap;
+        }
+        .nav-brand h1 { font-size: 1.8rem; }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px; }
+        .hamburger span { width: 25px; height: 3px; background: white; border-radius: 2px; }
+        .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: all 0.3s; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.2); color: white; }
+        
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+        .updated { color: #fbbf24; font-size: 0.9rem; margin-bottom: 15px; }
+        
+        .node-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .node-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #10b981;
+        }
+        .node-card.warning { border-left-color: #f59e0b; }
+        .node-card.error { border-left-color: #ef4444; }
+        .node-card h3 { color: #fbbf24; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .node-card ul { list-style: none; }
+        .node-card li { padding: 5px 0; opacity: 0.9; }
+        .node-card li::before { content: "→ "; color: #fbbf24; }
+        
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .status-badge.online { background: rgba(16,185,129,0.3); color: #10b981; }
+        .status-badge.issues { background: rgba(239,68,68,0.3); color: #ef4444; }
+        .status-badge.new { background: rgba(59,130,246,0.3); color: #3b82f6; }
+        
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
+        .service-item { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; }
+        .service-item h4 { color: #fbbf24; margin-bottom: 8px; }
+        
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links { display: none; width: 100%; flex-direction: column; margin-top: 15px; }
+            .nav-links.active { display: flex; }
+            .nav-link { width: 100%; text-align: center; padding: 12px; }
+            .node-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <div class="nav-brand"><h1>🤖 Clawd Dashboard</h1></div>
+            <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+                        <div class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Dashboard</a>
+                <a href="/infrastructure.html" class="nav-link">Infrastructure</a>
+                <a href="/agents.html" class="nav-link">Agents</a>
+                <a href="/projects.html" class="nav-link">Projects</a>
+                <a href="/apis.html" class="nav-link">APIs</a>
+                <a href="/skills.html" class="nav-link">Skills</a>
+                <a href="/tools.html" class="nav-link">Tools</a>
+                <a href="/achievements.html" class="nav-link">Achievements</a>
+                <a href="/swarm-monitor.html" class="nav-link">🐝 Swarm</a>
+                <a href="/arbitrage-pharma.html" class="nav-link">💊 Pharma</a>
+                <a href="/project-vault.html" class="nav-link">💰 Vault</a>
+                <a href="/legion-tracker.html" class="nav-link">🏴 Legion</a>
+                <a href="/taskbot.html" class="nav-link">📋 TaskBot</a>
+                <a href="/fiverr.html" class="nav-link">💼 Fiverr</a>
+                <a href="/docs.html" class="nav-link">Docs</a>
+            </div>
+        </nav>
+
+        <div class="card">
+            <h2>🏗️ Multi-Node Infrastructure</h2>
+            <p class="updated">Last Updated: February 27, 2026 11:50 PM CT</p>
+            
+            <div class="node-grid">
+                <div class="node-card">
+                    <h3>Mac Mini <span class="status-badge online">ONLINE</span></h3>
+                    <ul>
+                        <li><strong>IP:</strong> 100.88.105.106</li>
+                        <li><strong>Role:</strong> Gateway Hub, Services Host</li>
+                        <li><strong>Disk:</strong> 19% used (61GB free) ✅</li>
+                        <li><strong>Uptime:</strong> 8+ days</li>
+                    </ul>
+                    <div class="service-grid">
+                        <div class="service-item">
+                            <h4>Services Running</h4>
+                            <ul style="list-style:none; padding:0; margin:0;">
+                                <li>✅ Clawdbot Gateway</li>
+                                <li>✅ Ollama (qwen2.5:3b)</li>
+                                <li>✅ Dashboard (:8080)</li>
+                                <li>✅ Legion Hub</li>
+                                <li>✅ Fort Knox (3 AM daily)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="node-card">
+                    <h3>Mac Pro <span class="status-badge online">ONLINE</span></h3>
+                    <ul>
+                        <li><strong>IP:</strong> 100.101.89.80</li>
+                        <li><strong>Role:</strong> Fort Knox Storage, Heavy Compute</li>
+                        <li><strong>Disk:</strong> 6% used (377GB free) ✅</li>
+                        <li><strong>Firewall:</strong> ✅ Enabled</li>
+                    </ul>
+                    <div class="service-grid">
+                        <div class="service-item">
+                            <h4>Services Running</h4>
+                            <ul style="list-style:none; padding:0; margin:0;">
+                                <li>✅ Fort Knox Storage</li>
+                                <li>✅ Shared Brain Hub</li>
+                                <li>✅ Legion Worker</li>
+                                <li>✅ Ollama (heavy models)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="node-card">
+                    <h3>Dell <span class="status-badge online">ONLINE</span></h3>
+                    <ul>
+                        <li><strong>IP:</strong> 100.119.87.108</li>
+                        <li><strong>Role:</strong> Primary Workspace</li>
+                        <li><strong>Agent:</strong> Bottom Bitch (Claude Opus 4)</li>
+                        <li><strong>OS:</strong> Windows 11</li>
+                    </ul>
+                    <div class="service-grid">
+                        <div class="service-item">
+                            <h4>Capabilities</h4>
+                            <ul style="list-style:none; padding:0; margin:0;">
+                                <li>✅ Clawdbot (Telegram)</li>
+                                <li>✅ Desktop Control (PyAutoGUI)</li>
+                                <li>✅ Browser Automation</li>
+                                <li>✅ SSH to all nodes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🆕 New Systems (Feb 27, 2026)</h2>
+            <div class="node-grid">
+                <div class="node-card">
+                    <h3>🏰 Fort Knox <span class="status-badge new">NEW</span></h3>
+                    <ul>
+                        <li><strong>Location:</strong> Mac Pro ~/fort-knox/</li>
+                        <li><strong>Policy:</strong> 0-7 days local, 7-30 days compressed, 30+ deleted</li>
+                        <li><strong>Schedule:</strong> Daily at 3 AM</li>
+                        <li><strong>Impact:</strong> Mac Mini 100% → 19% disk</li>
+                    </ul>
+                </div>
+                
+                <div class="node-card">
+                    <h3>🧠 Shared Brain <span class="status-badge new">NEW</span></h3>
+                    <ul>
+                        <li><strong>Location:</strong> Mac Pro ~/shared-brain/</li>
+                        <li><strong>Files:</strong> 18+ knowledge files</li>
+                        <li><strong>Features:</strong> Git versioned, HOT.md, INDEX.md</li>
+                        <li><strong>Purpose:</strong> All bots share knowledge</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏴 Project Legion <span class="status-badge issues">PIPELINE ISSUES</span></h2>
+            <p class="updated">Being fixed by another bot</p>
+            <div class="node-grid">
+                <div class="node-card warning">
+                    <h3>Current Status</h3>
+                    <ul>
+                        <li><strong>Jobs Stuck:</strong> 842 in "tailoring"</li>
+                        <li><strong>Can't Submit:</strong> 3,193 approved (no resumes)</li>
+                        <li><strong>Issue:</strong> Resume pipeline not generating documents</li>
+                        <li><strong>Fix:</strong> In progress by another bot</li>
+                    </ul>
+                </div>
+                <div class="node-card">
+                    <h3>Architecture (When Working)</h3>
+                    <ul>
+                        <li><strong>Hub:</strong> Mac Mini (100.88.105.106)</li>
+                        <li><strong>Worker:</strong> Mac Pro (100.101.89.80)</li>
+                        <li><strong>Departments:</strong> 8 active</li>
+                        <li><strong>Pipeline:</strong> Headhunting → Research → Resume → Submission</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔑 API Status</h2>
+            <div class="service-grid">
+                <div class="service-item">
+                    <h4>💰 Tradier</h4>
+                    <p>✅ Connected (Production + Sandbox)</p>
+                </div>
+                <div class="service-item">
+                    <h4>📧 Resend</h4>
+                    <p>✅ Active (Email API)</p>
+                </div>
+                <div class="service-item">
+                    <h4>💎 Gemini</h4>
+                    <p>✅ Paid subscription</p>
+                </div>
+                <div class="service-item">
+                    <h4>🟢 NVIDIA</h4>
+                    <p>✅ 50 calls/day (Kimi, Llama, Qwen)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+platform,market_id,title,category,yes_price,no_price,volume,close_date,outcome
+polymarket,pm_election_2024_trump,Will Trump win the 2024 Presidential Election?,politics,0.52,0.48,150000000,2024-11-06T00:00:00Z,yes
+polymarket,pm_election_2024_biden,Will Biden win the 2024 Presidential Election?,politics,0.35,0.65,85000000,2024-11-06T00:00:00Z,no
+kalshi,kalshi_fed_rate_jan2025,Will the Fed cut rates in January 2025?,finance,0.25,0.75,12500000,2025-01-30T00:00:00Z,no
+kalshi,kalshi_btc_100k,Will Bitcoin reach $100k in 2024?,crypto,0.65,0.35,45000000,2024-12-31T23:59:59Z,yes
+polymarket,pm_sb_chiefs,Will the Kansas City Chiefs win Super Bowl LVIII?,sports,0.55,0.45,35000000,2024-02-12T00:00:00Z,yes
+betfair,bf_premier_mancity,Manchester City to win Premier League 2023-24,sports,0.72,0.28,28000000,2024-05-20T00:00:00Z,yes
+kalshi,kalshi_ai_agi_2025,Will AGI be announced by a major lab in 2025?,technology,0.08,0.92,8500000,2025-12-31T23:59:59Z,no
+polymarket,pm_spacex_mars_2025,Will SpaceX land Starship on Mars by end of 2025?,technology,0.03,0.97,2500000,2025-12-31T23:59:59Z,no
+kalshi,kalshi_gdp_q4_2024,Will US Q4 2024 GDP growth exceed 3%?,finance,0.42,0.58,6000000,2025-01-25T00:00:00Z,no
+polymarket,pm_eth_merge_success,Will Ethereum 2.0 merge complete successfully?,crypto,0.88,0.12,55000000,2022-09-20T00:00:00Z,yes
+betfair,bf_wimbledon_alcaraz,Carlos Alcaraz to win Wimbledon 2024,sports,0.35,0.65,18000000,2024-07-14T00:00:00Z,yes
+kalshi,kalshi_inflation_dec2024,Will December 2024 CPI be above 3%?,finance,0.28,0.72,4200000,2025-01-10T00:00:00Z,no
+polymarket,pm_senate_gop_2024,Will Republicans control Senate after 2024?,politics,0.58,0.42,42000000,2024-11-06T00:00:00Z,yes
+kalshi,kalshi_unemployment_dec2024,Will December 2024 unemployment be under 4%?,finance,0.75,0.25,3800000,2025-01-10T00:00:00Z,yes
+polymarket,pm_trump_indicted_jan2024,Will Trump be indicted in January 2024?,politics,0.15,0.85,18000000,2024-02-01T00:00:00Z,no
+betfair,bf_oscars_oppenheimer,Oppenheimer to win Best Picture 2024,entertainment,0.65,0.35,8500000,2024-03-11T00:00:00Z,yes
+kalshi,kalshi_snow_nyc_dec2024,Will it snow in NYC in December 2024?,weather,0.82,0.18,1200000,2024-12-31T23:59:59Z,yes
+polymarket,pm_house_speaker_johnson,Will Mike Johnson remain Speaker through 2024?,politics,0.70,0.30,12000000,2024-12-31T23:59:59Z,yes
+kalshi,kalshi_apple_3t_2024,Will Apple reach $3T market cap in 2024?,finance,0.45,0.55,9500000,2024-12-31T23:59:59Z,yes
+polymarket,pm_world_series_dodgers,Will Dodgers win 2024 World Series?,sports,0.22,0.78,25000000,2024-11-01T00:00:00Z,yes

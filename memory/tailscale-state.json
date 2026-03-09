@@ -1,0 +1,29 @@
+﻿{
+    "uptimeStart":  "2026-03-07 09:03:30",
+    "incidents":  [
+
+                  ],
+    "nodeStatus":  {
+                       "Mac-Mini":  {
+                                        "lastCheck":  "2026-03-07 09:03:30",
+                                        "lastSeen":  "2026-03-07 09:03:30",
+                                        "online":  true
+                                    },
+                       "Google-Cloud":  {
+                                            "lastCheck":  "2026-03-07 09:03:30",
+                                            "lastSeen":  "2026-03-07 09:03:30",
+                                            "online":  false
+                                        },
+                       "Dell":  {
+                                    "lastCheck":  "2026-03-07 09:03:30",
+                                    "lastSeen":  "2026-03-07 09:03:30",
+                                    "online":  true
+                                },
+                       "Mac-Pro":  {
+                                       "lastCheck":  "2026-03-07 09:03:30",
+                                       "lastSeen":  "2026-03-07 09:03:30",
+                                       "online":  true
+                                   }
+                   },
+    "lastCheck":  "2026-03-07 09:03:30"
+}

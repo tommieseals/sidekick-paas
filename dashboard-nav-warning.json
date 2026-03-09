@@ -1,0 +1,14 @@
+{
+  "topic": "Dashboard post-deploy.py Bug",
+  "updated": "2026-03-01T17:50:00Z",
+  "severity": "warning",
+  "summary": "post-deploy.py has regex bug - fix_nav_links_div uses non-greedy regex which corrupts nested divs",
+  "symptoms": [
+    "Extra whitespace 190+ chars injected",
+    "Orphan div tags",
+    "Mobile nav broken"
+  ],
+  "workaround": "Script still works but adds whitespace. Mobile CSS scroll fix applied 2026-03-01.",
+  "fix_needed": "Replace regex with div-counting logic in fix_nav_links_div and fix_mobile_menu_div",
+  "docs": "~/clawd/memory/docs/DASHBOARD_INTEGRATION.md"
+}

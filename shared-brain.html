@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Shared Brain - Multi-Agent Knowledge Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        h1 span { color: #a78bfa; }
+        h2 { color: #a78bfa; margin: 30px 0 15px; border-bottom: 1px solid rgba(167,139,250,0.3); padding-bottom: 10px; }
+        .subtitle { color: #888; margin-bottom: 30px; }
+        
+        nav {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        nav a {
+            color: #a78bfa;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        nav a:hover { text-decoration: underline; }
+        
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .agent-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(167,139,250,0.2);
+        }
+        .agent-card h3 { 
+            color: #a78bfa; 
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .agent-card .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+        .agent-card .status-dot.offline { background: #666; }
+        .agent-card .meta { color: #888; font-size: 0.9em; margin-bottom: 10px; }
+        .agent-card .focus { 
+            background: rgba(167,139,250,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .knowledge-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .knowledge-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(167,139,250,0.4);
+        }
+        .knowledge-card h4 { color: #a78bfa; margin-bottom: 10px; }
+        .knowledge-card p { color: #888; font-size: 0.9em; }
+        .knowledge-card .file-count { 
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #4ade80;
+        }
+        
+        .project-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .project-table th, .project-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .project-table th { background: rgba(167,139,250,0.1); color: #a78bfa; }
+        .project-table tr:hover { background: rgba(255,255,255,0.03); }
+        .project-table .status { 
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+        .project-table .status.live { background: rgba(74,222,128,0.2); color: #4ade80; }
+        .project-table .status.active { background: rgba(251,191,36,0.2); color: #fbbf24; }
+        .project-table .status.ready { background: rgba(96,165,250,0.2); color: #60a5fa; }
+        
+        .sync-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .sync-section h3 { color: #a78bfa; margin-bottom: 15px; }
+        .sync-code {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .sync-code .comment { color: #6a737d; }
+        .sync-code .command { color: #79c0ff; }
+        
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .api-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .api-card h4 { color: #fbbf24; margin-bottom: 8px; }
+        .api-card .key { 
+            font-family: monospace;
+            font-size: 0.8em;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">← Dashboard</a>
+            <a href="/infrastructure.html">Infrastructure</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/fort-knox.html">Fort Knox</a>
+        </nav>
+        
+        <h1>🧠 <span>Shared Brain</span></h1>
+        <p class="subtitle">Multi-Agent Knowledge Hub — All bots share what they know</p>
+        
+        <h2>🤖 Active Agents</h2>
+        <div class="agent-grid">
+            <div class="agent-card">
+                <h3><span class="status-dot"></span> Bottom Bitch</h3>
+                <div class="meta">Dell (100.119.87.108) • Telegram ✅</div>
+                <p>Primary assistant, project lead. Handles most tasks, dashboard maintenance, and coordination.</p>
+                <div class="focus">
+                    <strong>Current:</strong> Fort Knox, Dashboard, Shared Brain setup
+                </div>
+            </div>
+            
+            <div class="agent-card">
+                <h3><span class="status-dot"></span> Mac Mini Agent</h3>
+                <div class="meta">Mac Mini (100.88.105.106) • Telegram ✅</div>
+                <p>Gateway hub, services host. Runs Clawdbot, Ollama, Dashboard server, Legion Hub.</p>
+                <div class="focus">
+                    <strong>Services:</strong> Gateway, Ollama, Dashboard, Legion
+                </div>
+            </div>
+            
+            <div class="agent-card">
+                <h3><span class="status-dot offline"></span> Code Bitch</h3>
+                <div class="meta">Mac Pro (100.101.89.80) • File-based only</div>
+                <p>Heavy compute, development tasks. Hosts Fort Knox and Shared Brain storage.</p>
+                <div class="focus">
+                    <strong>Role:</strong> Fort Knox storage, heavy inference, code tasks
+                </div>
+            </div>
+        </div>
+        
+        <h2>⚡ Quick Access (Read First!)</h2>
+        <div class="knowledge-grid">
+            <div class="knowledge-card" style="border-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.1);">
+                <h4>🔥 HOT.md</h4>
+                <p>Current priorities, warnings, who's doing what. READ THIS FIRST!</p>
+                <div class="file-count">Start every session here</div>
+            </div>
+            <div class="knowledge-card" style="border-color: rgba(96,165,250,0.5);">
+                <h4>📇 INDEX.md</h4>
+                <p>Quick lookup - find any file in seconds</p>
+                <div class="file-count">Find files fast</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>📋 CHANGELOG.md</h4>
+                <p>Who changed what, when. Track updates.</p>
+                <div class="file-count">See recent changes</div>
+            </div>
+        </div>
+        
+        <h2>📚 Knowledge Base</h2>
+        <div class="knowledge-grid">
+            <div class="knowledge-card">
+                <h4>🛠️ Tools</h4>
+                <p>Browser control, LLM Gateway, desktop automation, GitHub CLI, APIs</p>
+                <div class="file-count">tools/README.md</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>🔑 API Keys</h4>
+                <p>Tradier, Resend, Gemini, NVIDIA, OpenRouter, Telegram</p>
+                <div class="file-count">knowledge/api-keys.md</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>🏗️ Infrastructure</h4>
+                <p>Node topology, services, SSH shortcuts, launchd jobs</p>
+                <div class="file-count">knowledge/infrastructure.md</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>📝 Prompts</h4>
+                <p>FULL CODE, Swarm deployment, QA verification, handoffs</p>
+                <div class="file-count">prompts/README.md</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>📂 Projects</h4>
+                <p>Project Vault, Fort Knox, Legion, TaskBot documentation</p>
+                <div class="file-count">projects/*.md</div>
+            </div>
+            <div class="knowledge-card">
+                <h4>🤝 Handoffs</h4>
+                <p>Task delegation between agents</p>
+                <div class="file-count">handoffs/</div>
+            </div>
+        </div>
+        
+        <h2>📊 Project Status</h2>
+        <table class="project-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Lead</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>💰 Project Vault</td>
+                    <td>Bottom Bitch</td>
+                    <td><span class="status live">✅ Live</span></td>
+                    <td><code>project-vault/</code></td>
+                </tr>
+                <tr>
+                    <td>🏰 Fort Knox</td>
+                    <td>Bottom Bitch</td>
+                    <td><span class="status live">✅ Live</span></td>
+                    <td><code>~/fort-knox/</code> (Mac Pro)</td>
+                </tr>
+                <tr>
+                    <td>🏴 Legion</td>
+                    <td>Bottom Bitch</td>
+                    <td><span class="status live">✅ Live</span></td>
+                    <td><code>~/job-hunter-system/</code></td>
+                </tr>
+                <tr>
+                    <td>📋 TaskBot</td>
+                    <td>Bottom Bitch</td>
+                    <td><span class="status live">✅ Live</span></td>
+                    <td><code>taskbot/</code></td>
+                </tr>
+                <tr>
+                    <td>💊 Arbitrage Pharma</td>
+                    <td>Bottom Bitch</td>
+                    <td><span class="status active">🔄 Active</span></td>
+                    <td><code>arbitrage-pharma/</code></td>
+                </tr>
+                <tr>
+                    <td>💼 Fiverr Gigs</td>
+                    <td>—</td>
+                    <td><span class="status ready">⏳ Ready</span></td>
+                    <td><code>fiverr/</code></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>🔄 Sync Commands</h2>
+        <div class="sync-section">
+            <h3>Dell (PowerShell)</h3>
+            <div class="sync-code">
+                <span class="comment"># Pull latest from Mac Pro</span><br>
+                <span class="command">.\scripts\sync-shared-brain.ps1 pull</span><br><br>
+                <span class="comment"># Push changes to Mac Pro</span><br>
+                <span class="command">.\scripts\sync-shared-brain.ps1 push</span>
+            </div>
+        </div>
+        <div class="sync-section">
+            <h3>Mac Mini (Bash)</h3>
+            <div class="sync-code">
+                <span class="comment"># Pull latest from Mac Pro</span><br>
+                <span class="command">~/clawd/scripts/sync-shared-brain.sh pull</span><br><br>
+                <span class="comment"># Push changes to Mac Pro</span><br>
+                <span class="command">~/clawd/scripts/sync-shared-brain.sh push</span>
+            </div>
+        </div>
+        <div class="sync-section">
+            <h3>Mac Pro (Direct Access)</h3>
+            <div class="sync-code">
+                <span class="comment"># Shared Brain lives here</span><br>
+                <span class="command">cd ~/shared-brain</span><br>
+                <span class="command">ls -la</span>
+            </div>
+        </div>
+        
+        <h2>🔑 Quick API Reference</h2>
+        <div class="api-grid">
+            <div class="api-card">
+                <h4>💰 Tradier (Trading)</h4>
+                <div class="key">Production: 3tQd...ukk</div>
+                <div class="key" style="margin-top:5px">Sandbox: VA80461088</div>
+            </div>
+            <div class="api-card">
+                <h4>📧 Resend (Email)</h4>
+                <div class="key">re_f5Ti...4j9V</div>
+            </div>
+            <div class="api-card">
+                <h4>💎 Google Gemini</h4>
+                <div class="key">AIzaSy...QwuU</div>
+            </div>
+            <div class="api-card">
+                <h4>🟢 NVIDIA API</h4>
+                <div class="key">50 calls/day shared</div>
+            </div>
+        </div>
+        
+        <p class="last-updated">
+            Location: Mac Pro <code>~/shared-brain/</code> • 
+            Last sync: Feb 27, 2026 10:25 PM CT
+        </p>
+    </div>
+</body>
+</html>

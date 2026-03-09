@@ -1,0 +1,40 @@
+{
+  "description": "Sample price history data for time-series analysis testing",
+  "generated": "2026-03-01T12:00:00Z",
+  "price_series": {
+    "polymarket:pm_election_2024_trump": [
+      {"timestamp": "2024-09-01T12:00:00Z", "yes_price": 0.48, "no_price": 0.52, "volume": 120000000},
+      {"timestamp": "2024-09-15T12:00:00Z", "yes_price": 0.47, "no_price": 0.53, "volume": 125000000},
+      {"timestamp": "2024-10-01T12:00:00Z", "yes_price": 0.50, "no_price": 0.50, "volume": 135000000},
+      {"timestamp": "2024-10-15T12:00:00Z", "yes_price": 0.52, "no_price": 0.48, "volume": 140000000},
+      {"timestamp": "2024-10-25T12:00:00Z", "yes_price": 0.55, "no_price": 0.45, "volume": 145000000},
+      {"timestamp": "2024-11-01T12:00:00Z", "yes_price": 0.58, "no_price": 0.42, "volume": 148000000},
+      {"timestamp": "2024-11-05T12:00:00Z", "yes_price": 0.52, "no_price": 0.48, "volume": 150000000}
+    ],
+    "kalshi:kalshi_btc_100k": [
+      {"timestamp": "2024-06-01T12:00:00Z", "yes_price": 0.25, "no_price": 0.75, "volume": 15000000},
+      {"timestamp": "2024-07-01T12:00:00Z", "yes_price": 0.30, "no_price": 0.70, "volume": 20000000},
+      {"timestamp": "2024-08-01T12:00:00Z", "yes_price": 0.35, "no_price": 0.65, "volume": 25000000},
+      {"timestamp": "2024-09-01T12:00:00Z", "yes_price": 0.45, "no_price": 0.55, "volume": 30000000},
+      {"timestamp": "2024-10-01T12:00:00Z", "yes_price": 0.55, "no_price": 0.45, "volume": 38000000},
+      {"timestamp": "2024-11-01T12:00:00Z", "yes_price": 0.60, "no_price": 0.40, "volume": 42000000},
+      {"timestamp": "2024-12-01T12:00:00Z", "yes_price": 0.65, "no_price": 0.35, "volume": 45000000}
+    ],
+    "polymarket:pm_sb_chiefs": [
+      {"timestamp": "2024-01-01T12:00:00Z", "yes_price": 0.35, "no_price": 0.65, "volume": 10000000},
+      {"timestamp": "2024-01-15T12:00:00Z", "yes_price": 0.40, "no_price": 0.60, "volume": 15000000},
+      {"timestamp": "2024-01-22T12:00:00Z", "yes_price": 0.45, "no_price": 0.55, "volume": 22000000},
+      {"timestamp": "2024-01-28T12:00:00Z", "yes_price": 0.50, "no_price": 0.50, "volume": 28000000},
+      {"timestamp": "2024-02-05T12:00:00Z", "yes_price": 0.52, "no_price": 0.48, "volume": 32000000},
+      {"timestamp": "2024-02-11T12:00:00Z", "yes_price": 0.55, "no_price": 0.45, "volume": 35000000}
+    ],
+    "kalshi:kalshi_fed_rate_jan2025": [
+      {"timestamp": "2024-10-01T12:00:00Z", "yes_price": 0.45, "no_price": 0.55, "volume": 5000000},
+      {"timestamp": "2024-10-15T12:00:00Z", "yes_price": 0.40, "no_price": 0.60, "volume": 7000000},
+      {"timestamp": "2024-11-01T12:00:00Z", "yes_price": 0.35, "no_price": 0.65, "volume": 9000000},
+      {"timestamp": "2024-11-15T12:00:00Z", "yes_price": 0.30, "no_price": 0.70, "volume": 10500000},
+      {"timestamp": "2024-12-01T12:00:00Z", "yes_price": 0.28, "no_price": 0.72, "volume": 11500000},
+      {"timestamp": "2024-12-15T12:00:00Z", "yes_price": 0.25, "no_price": 0.75, "volume": 12500000}
+    ]
+  }
+}

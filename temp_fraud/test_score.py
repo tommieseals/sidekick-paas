@@ -4,8 +4,8 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scorer.features import extract_features, features_to_array, FEATURE_NAMES
-from scorer.rules import RulesEngine
+from features import extract_features, features_to_array, FEATURE_NAMES
+from rules import RulesEngine
 
 class TestFeatureExtraction:
     def test_extract_features_basic(self):

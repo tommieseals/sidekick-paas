@@ -1,0 +1,449 @@
+
+
+    <!-- Fort Knox Info Section - Added below diagrams -->
+    <style>
+        .info-section {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .info-section-title {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .info-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+        }
+        .info-card-bar {
+            height: 8px;
+            border-radius: 4px 4px 0 0;
+        }
+        .info-card-bar.gold { background: linear-gradient(135deg, #C6A052, #8B7355); }
+        .info-card-bar.green { background: linear-gradient(135deg, #48BB78, #38A169); }
+        .info-card-bar.blue { background: linear-gradient(135deg, #667EEA, #5A67D8); }
+        .info-card-bar.orange { background: linear-gradient(135deg, #ED8936, #DD6B20); }
+        .info-card-bar.purple { background: linear-gradient(135deg, #9F7AEA, #805AD5); }
+        .info-card-bar.red { background: linear-gradient(135deg, #E53E3E, #C53030); }
+        .info-card-content {
+            padding: 1.5rem;
+        }
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .info-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .info-card-icon.gold { background: rgba(198, 160, 82, 0.15); }
+        .info-card-icon.green { background: rgba(72, 187, 120, 0.15); }
+        .info-card-icon.blue { background: rgba(102, 126, 234, 0.15); }
+        .info-card-icon.orange { background: rgba(237, 137, 54, 0.15); }
+        .info-card-icon.purple { background: rgba(159, 122, 234, 0.15); }
+        .info-card-icon.red { background: rgba(229, 62, 62, 0.15); }
+        .info-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1A202C;
+        }
+        .info-card-subtitle {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+        .info-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .info-stat-row:last-child {
+            border-bottom: none;
+        }
+        .info-stat-label {
+            color: #4A5568;
+            font-size: 0.9rem;
+        }
+        .info-stat-value {
+            font-weight: 600;
+            color: #1A202C;
+            font-size: 0.9rem;
+        }
+        .info-stat-value.green { color: #48BB78; }
+        .info-stat-value.gold { color: #C6A052; }
+        .info-stat-value.red { color: #E53E3E; }
+        .info-stat-value.blue { color: #667EEA; }
+        .storage-bar {
+            height: 12px;
+            background: #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0.75rem 0;
+        }
+        .storage-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        .storage-bar-fill.low { background: linear-gradient(90deg, #48BB78, #38A169); }
+        .storage-bar-fill.medium { background: linear-gradient(90deg, #C6A052, #B8860B); }
+        .storage-bar-fill.high { background: linear-gradient(90deg, #E53E3E, #C53030); }
+        .backup-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #F7FAFC;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        .backup-item:last-child { margin-bottom: 0; }
+        .backup-item-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .backup-item-dot.success { background: #48BB78; }
+        .backup-item-dot.pending { background: #C6A052; }
+        .backup-item-dot.failed { background: #E53E3E; }
+        .backup-item-info {
+            flex: 1;
+        }
+        .backup-item-name {
+            font-weight: 600;
+            color: #1A202C;
+            font-size: 0.9rem;
+        }
+        .backup-item-time {
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        .backup-item-size {
+            font-weight: 600;
+            color: #4A5568;
+            font-size: 0.85rem;
+        }
+        .policy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .policy-badge.hot {
+            background: rgba(72, 187, 120, 0.15);
+            color: #22543D;
+        }
+        .policy-badge.warm {
+            background: rgba(198, 160, 82, 0.15);
+            color: #744210;
+        }
+        .policy-badge.cold {
+            background: rgba(229, 62, 62, 0.15);
+            color: #742A2A;
+        }
+        .quick-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .quick-action-btn.primary {
+            background: linear-gradient(135deg, #C6A052, #8B7355);
+            color: white;
+        }
+        .quick-action-btn.secondary {
+            background: #E2E8F0;
+            color: #4A5568;
+        }
+        .quick-action-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        @media (max-width: 768px) {
+            .info-section { padding: 0 1rem; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <div class="info-section">
+        <h2 class="info-section-title">📊 Backup Details & Statistics</h2>
+        
+        <div class="info-grid">
+            <!-- Mac Mini Backup Status -->
+            <div class="info-card">
+                <div class="info-card-bar blue"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon blue">🖥️</div>
+                        <div>
+                            <div class="info-card-title">Mac Mini</div>
+                            <div class="info-card-subtitle">100.88.105.106 • Orchestrator</div>
+                        </div>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Status</span>
+                        <span class="info-stat-value green">✓ Protected</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Last Backup</span>
+                        <span class="info-stat-value" id="mac-mini-last-backup">3:00 AM Today</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Total Backups</span>
+                        <span class="info-stat-value blue" id="mac-mini-backup-count">47 archives</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Data Size</span>
+                        <span class="info-stat-value" id="mac-mini-data-size">~12.4 GB</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Directories</span>
+                        <span class="info-stat-value">~/clawd/, ~/dta/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dell Backup Status -->
+            <div class="info-card">
+                <div class="info-card-bar orange"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon orange">💻</div>
+                        <div>
+                            <div class="info-card-title">Dell Workstation</div>
+                            <div class="info-card-subtitle">100.119.87.108 • Windows</div>
+                        </div>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Status</span>
+                        <span class="info-stat-value green">✓ Protected</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Last Backup</span>
+                        <span class="info-stat-value" id="dell-last-backup">4:00 AM Today</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Total Backups</span>
+                        <span class="info-stat-value blue" id="dell-backup-count">32 archives</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Data Size</span>
+                        <span class="info-stat-value" id="dell-data-size">~8.7 GB</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Directories</span>
+                        <span class="info-stat-value">C:\Users\tommi\clawd\</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mac Pro Storage -->
+            <div class="info-card">
+                <div class="info-card-bar gold"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon gold">🗄️</div>
+                        <div>
+                            <div class="info-card-title">Fort Knox Vault</div>
+                            <div class="info-card-subtitle">Mac Pro • 100.101.89.80</div>
+                        </div>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Total Capacity</span>
+                        <span class="info-stat-value">~2 TB</span>
+                    </div>
+                    <div class="storage-bar">
+                        <div class="storage-bar-fill low" style="width: 6%"></div>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Used Space</span>
+                        <span class="info-stat-value gold">~120 GB (6%)</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Available</span>
+                        <span class="info-stat-value green">~1.88 TB (94%)</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Compression Ratio</span>
+                        <span class="info-stat-value blue">~70% savings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Retention Policy -->
+            <div class="info-card">
+                <div class="info-card-bar purple"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon purple">📅</div>
+                        <div>
+                            <div class="info-card-title">Retention Policy</div>
+                            <div class="info-card-subtitle">Automated lifecycle management</div>
+                        </div>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <span class="policy-badge hot">🔥 0-7 days: Hot</span>
+                        <span class="policy-badge warm">🏦 7-30 days: Compressed</span>
+                        <span class="policy-badge cold">🗑️ 30+ days: Deleted</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Schedule</span>
+                        <span class="info-stat-value">Daily at 3:00 AM CT</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Automation</span>
+                        <span class="info-stat-value green">✓ launchd active</span>
+                    </div>
+                    <div class="info-stat-row">
+                        <span class="info-stat-label">Policy Script</span>
+                        <span class="info-stat-value blue">fort-knox-policy.sh</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Backups -->
+            <div class="info-card">
+                <div class="info-card-bar green"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon green">📦</div>
+                        <div>
+                            <div class="info-card-title">Recent Backups</div>
+                            <div class="info-card-subtitle">Latest backup archives</div>
+                        </div>
+                    </div>
+                    <div class="backup-item">
+                        <div class="backup-item-dot success"></div>
+                        <div class="backup-item-info">
+                            <div class="backup-item-name">mac-mini-clawd</div>
+                            <div class="backup-item-time">Today 3:00 AM</div>
+                        </div>
+                        <div class="backup-item-size">1.2 GB</div>
+                    </div>
+                    <div class="backup-item">
+                        <div class="backup-item-dot success"></div>
+                        <div class="backup-item-info">
+                            <div class="backup-item-name">dell-clawd</div>
+                            <div class="backup-item-time">Today 4:00 AM</div>
+                        </div>
+                        <div class="backup-item-size">890 MB</div>
+                    </div>
+                    <div class="backup-item">
+                        <div class="backup-item-dot success"></div>
+                        <div class="backup-item-info">
+                            <div class="backup-item-name">mac-mini-dta</div>
+                            <div class="backup-item-time">Today 3:15 AM</div>
+                        </div>
+                        <div class="backup-item-size">2.1 GB</div>
+                    </div>
+                    <div class="backup-item">
+                        <div class="backup-item-dot pending"></div>
+                        <div class="backup-item-info">
+                            <div class="backup-item-name">backup-2026-01-15.tar.gz</div>
+                            <div class="backup-item-time">Compressed (7+ days)</div>
+                        </div>
+                        <div class="backup-item-size">980 MB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="info-card">
+                <div class="info-card-bar red"></div>
+                <div class="info-card-content">
+                    <div class="info-card-header">
+                        <div class="info-card-icon red">⚡</div>
+                        <div>
+                            <div class="info-card-title">Quick Actions</div>
+                            <div class="info-card-subtitle">Manual operations & commands</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="quick-action-btn primary" onclick="alert('Run: ~/clawd/scripts/fort-knox-backup.sh')">
+                            🚀 Run Backup Now
+                        </button>
+                        <button class="quick-action-btn secondary" onclick="alert('Run: ~/clawd/scripts/fort-knox-policy.sh')">
+                            📦 Force Compress
+                        </button>
+                        <button class="quick-action-btn secondary" onclick="alert('SSH: ssh administrator@100.101.89.80')">
+                            🔗 SSH to Vault
+                        </button>
+                        <button class="quick-action-btn secondary" onclick="alert('Path: ~/fort-knox/')">
+                            📂 View Archives
+                        </button>
+                    </div>
+                    <div class="info-stat-row" style="margin-top: 1rem;">
+                        <span class="info-stat-label">Log Location</span>
+                        <span class="info-stat-value">~/clawd/memory/fort-knox.log</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Summary Bar -->
+    <div class="info-section" style="margin-top: 0;">
+        <div class="info-card" style="background: linear-gradient(135deg, #2D3748 0%, #1A202C 100%); border: 2px solid #C6A052;">
+            <div class="info-card-content">
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #48BB78;">✓</div>
+                        <div style="color: #A0AEC0; font-size: 0.9rem;">All Nodes Protected</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #C6A052;">79</div>
+                        <div style="color: #A0AEC0; font-size: 0.9rem;">Total Archives</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #667EEA;">~21 GB</div>
+                        <div style="color: #A0AEC0; font-size: 0.9rem;">Total Backup Size</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #9F7AEA;">30</div>
+                        <div style="color: #A0AEC0; font-size: 0.9rem;">Days Retention</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #48BB78;">94%</div>
+                        <div style="color: #A0AEC0; font-size: 0.9rem;">Storage Available</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -6,8 +6,8 @@
 - **What to call them:** Rusty
 - **Pronouns:** he/him
 - **Home Timezone:** America/Chicago (CST)
-- **Current Location:** Germany (for training)
-- **Current Timezone:** Europe/Berlin (CET/CEST)
+- **Current Location:** Houston, TX (home)
+- **Current Timezone:** America/Chicago (CST)
 - **Telegram:** @Dlowbands (ID: 939543801)
 - **Email:** tommieseals7700@gmail.com
 - **Machine:** Mac mini (ARM/Apple Silicon, macOS)

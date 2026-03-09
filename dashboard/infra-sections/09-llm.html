@@ -1,0 +1,523 @@
+<!-- 09-llm.html - LLM Smart Router Decision Tree -->
+<div class="section-card" id="llm-section">
+  <div class="section-header">
+    <span class="section-icon">🧠</span>
+    <h2>LLM SMART ROUTER</h2>
+    <span class="section-badge">Gateway on Mac Mini</span>
+  </div>
+
+  <style>
+    #llm-section {
+      background: linear-gradient(135deg, #0d1321 0%, #1a1a2e 100%);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #llm-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #9d4edd, transparent);
+    }
+    
+    #llm-section .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    #llm-section .section-icon {
+      font-size: 28px;
+    }
+    
+    #llm-section h2 {
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    #llm-section .section-badge {
+      background: rgba(0, 255, 255, 0.3);
+      color: #00ffff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      border: 1px solid rgba(0, 255, 255, 0.5);
+    }
+    
+    /* Decision Tree */
+    .decision-tree {
+      position: relative;
+    }
+    
+    /* Query Entry Point */
+    .query-entry {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.3) 0%, rgba(157, 78, 221, 0.1) 100%);
+      border: 2px solid #9d4edd;
+      border-radius: 50px;
+      padding: 14px 28px;
+      text-align: center;
+      max-width: 200px;
+      margin: 0 auto 30px auto;
+      position: relative;
+    }
+    
+    .query-entry h4 {
+      color: #9d4edd;
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .query-entry::after {
+      content: '▼';
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #9d4edd;
+      font-size: 16px;
+    }
+    
+    /* Decision Nodes */
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    @media (min-width: 900px) {
+      .decision-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .route-card {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .route-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .route-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    
+    /* Route Colors */
+    .route-code { border: 1px solid rgba(0, 255, 136, 0.4); }
+    .route-code::before { background: #00ff88; }
+    .route-code .route-icon { color: #00ff88; }
+    .route-code .model-name { color: #00ff88; }
+    
+    .route-vision { border: 1px solid rgba(0, 255, 255, 0.4); }
+    .route-vision::before { background: #00ffff; }
+    .route-vision .route-icon { color: #00ffff; }
+    .route-vision .model-name { color: #00ffff; }
+    
+    .route-screenshot { border: 1px solid rgba(255, 165, 0, 0.4); }
+    .route-screenshot::before { background: #ffa500; }
+    .route-screenshot .route-icon { color: #ffa500; }
+    .route-screenshot .model-name { color: #ffa500; }
+    
+    .route-simple { border: 1px solid rgba(0, 200, 100, 0.4); }
+    .route-simple::before { background: linear-gradient(90deg, #00ff88, #00ffff); }
+    .route-simple .route-icon { color: #00ff88; }
+    .route-simple .model-name { color: #00ff88; }
+    
+    .route-complex { border: 1px solid rgba(255, 51, 102, 0.4); }
+    .route-complex::before { background: #ff3366; }
+    .route-complex .route-icon { color: #ff3366; }
+    .route-complex .model-name { color: #ff3366; }
+    
+    .route-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    
+    .route-icon {
+      font-size: 24px;
+    }
+    
+    .route-title {
+      font-size: 12px;
+      color: #a0aec0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .model-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 8px 0;
+    }
+    
+    .model-size {
+      font-size: 11px;
+      color: #a0aec0;
+      margin-bottom: 10px;
+    }
+    
+    .route-triggers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    
+    .trigger-tag {
+      background: rgba(255, 255, 255, 0.1);
+      color: #a0aec0;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+    
+    .cost-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      margin-top: 10px;
+    }
+    
+    .cost-free {
+      background: rgba(0, 255, 136, 0.2);
+      color: #00ff88;
+    }
+    
+    .cost-paid {
+      background: rgba(255, 165, 0, 0.2);
+      color: #ffa500;
+    }
+    
+    .cost-expensive {
+      background: rgba(255, 51, 102, 0.2);
+      color: #ff3366;
+    }
+    
+    /* NVIDIA Warning */
+    .nvidia-warning {
+      background: linear-gradient(90deg, rgba(0, 200, 83, 0.15) 0%, rgba(0, 200, 83, 0.05) 100%);
+      border: 1px solid rgba(0, 200, 83, 0.5);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .nvidia-icon {
+      font-size: 32px;
+    }
+    
+    .nvidia-content h4 {
+      color: #00c853;
+      margin: 0 0 4px 0;
+      font-size: 13px;
+    }
+    
+    .nvidia-content p {
+      color: #a0aec0;
+      margin: 0;
+      font-size: 11px;
+    }
+    
+    .nvidia-counter {
+      margin-left: auto;
+      text-align: center;
+    }
+    
+    .nvidia-count {
+      font-size: 28px;
+      font-weight: 700;
+      color: #00c853;
+    }
+    
+    .nvidia-label {
+      font-size: 10px;
+      color: #a0aec0;
+      text-transform: uppercase;
+    }
+    
+    /* Routing Flow */
+    .flow-diagram {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+    }
+    
+    .flow-title {
+      color: #00ffff;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .flow-visual {
+      font-family: monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #a0aec0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    
+    .flow-visual .keyword {
+      color: #9d4edd;
+    }
+    
+    .flow-visual .model {
+      color: #00ffff;
+    }
+    
+    .flow-visual .free {
+      color: #00ff88;
+    }
+    
+    .flow-visual .expensive {
+      color: #ff3366;
+    }
+    
+    /* Models Table */
+    .models-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .model-stat {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    
+    .model-stat-name {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .model-stat-latency {
+      color: #a0aec0;
+      font-size: 11px;
+    }
+    
+    .latency-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    
+    .latency-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+    
+    .latency-fast { width: 15%; background: #00ff88; }
+    .latency-medium { width: 40%; background: #00ffff; }
+    .latency-slow { width: 70%; background: #ffa500; }
+    .latency-very-slow { width: 100%; background: #ff3366; }
+  </style>
+
+  <!-- Query Entry -->
+  <div class="query-entry">
+    <h4>📨 Query Arrives</h4>
+  </div>
+
+  <!-- Decision Tree Routes -->
+  <div class="decision-grid">
+    <!-- Code Tasks -->
+    <div class="route-card route-code">
+      <div class="route-header">
+        <span class="route-icon">💻</span>
+        <span class="route-title">Code Tasks</span>
+      </div>
+      <div class="model-name">Qwen Coder 32B</div>
+      <div class="model-size">32 billion parameters</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">python</span>
+        <span class="trigger-tag">javascript</span>
+        <span class="trigger-tag">bash</span>
+        <span class="trigger-tag">debug</span>
+        <span class="trigger-tag">refactor</span>
+      </div>
+      <div class="cost-badge cost-paid">🟢 NVIDIA API</div>
+    </div>
+
+    <!-- Vision Deep -->
+    <div class="route-card route-vision">
+      <div class="route-header">
+        <span class="route-icon">🦙</span>
+        <span class="route-title">Vision (Deep)</span>
+      </div>
+      <div class="model-name">Llama 90B Vision</div>
+      <div class="model-size">90 billion parameters</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">long docs</span>
+        <span class="trigger-tag">complex forms</span>
+        <span class="trigger-tag">deep analysis</span>
+      </div>
+      <div class="cost-badge cost-paid">🟢 NVIDIA API</div>
+    </div>
+
+    <!-- Vision Fast -->
+    <div class="route-card route-vision">
+      <div class="route-header">
+        <span class="route-icon">🦙⚡</span>
+        <span class="route-title">Vision (Fast)</span>
+      </div>
+      <div class="model-name">Llama 11B Vision</div>
+      <div class="model-size">11 billion parameters</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">quick images</span>
+        <span class="trigger-tag">simple OCR</span>
+      </div>
+      <div class="cost-badge cost-paid">🟢 NVIDIA API</div>
+    </div>
+
+    <!-- Screenshots -->
+    <div class="route-card route-screenshot">
+      <div class="route-header">
+        <span class="route-icon">📸</span>
+        <span class="route-title">Screenshots</span>
+      </div>
+      <div class="model-name">Kimi K2.5</div>
+      <div class="model-size">Multimodal + Thinking</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">error screens</span>
+        <span class="trigger-tag">UI bugs</span>
+        <span class="trigger-tag">debug visual</span>
+      </div>
+      <div class="cost-badge cost-paid">🟢 NVIDIA API</div>
+    </div>
+
+    <!-- Simple Queries -->
+    <div class="route-card route-simple">
+      <div class="route-header">
+        <span class="route-icon">🏠</span>
+        <span class="route-title">Simple Queries</span>
+      </div>
+      <div class="model-name">Ollama Local</div>
+      <div class="model-size">qwen2.5:3b • Mac Mini</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">quick Q&A</span>
+        <span class="trigger-tag">simple tasks</span>
+        <span class="trigger-tag">local ops</span>
+      </div>
+      <div class="cost-badge cost-free">✨ FREE</div>
+    </div>
+
+    <!-- Complex Reasoning -->
+    <div class="route-card route-complex">
+      <div class="route-header">
+        <span class="route-icon">🎭</span>
+        <span class="route-title">Complex Reasoning</span>
+      </div>
+      <div class="model-name">Claude Opus</div>
+      <div class="model-size">Anthropic's Best</div>
+      <div class="route-triggers">
+        <span class="trigger-tag">complex logic</span>
+        <span class="trigger-tag">long context</span>
+        <span class="trigger-tag">creative</span>
+      </div>
+      <div class="cost-badge cost-expensive">💰 $$$ Expensive</div>
+    </div>
+  </div>
+
+  <!-- NVIDIA API Warning -->
+  <div class="nvidia-warning">
+    <span class="nvidia-icon">🟢</span>
+    <div class="nvidia-content">
+      <h4>NVIDIA API Daily Limit</h4>
+      <p>Qwen Coder, Llama Vision, and Kimi share a pool of 50 calls/day. Use Ollama for simple queries to conserve!</p>
+    </div>
+    <div class="nvidia-counter">
+      <div class="nvidia-count">50</div>
+      <div class="nvidia-label">calls/day</div>
+    </div>
+  </div>
+
+  <!-- Routing Logic Flow -->
+  <div class="flow-diagram">
+    <div class="flow-title">📊 Routing Decision Logic</div>
+    <div class="flow-visual">
+<span class="keyword">IF</span> query contains [code, python, bash, debug] → <span class="model">Qwen Coder 32B</span>
+<span class="keyword">ELIF</span> has_image AND long_document → <span class="model">Llama 90B Vision</span>
+<span class="keyword">ELIF</span> has_image AND simple → <span class="model">Llama 11B Vision</span>
+<span class="keyword">ELIF</span> has_screenshot AND error → <span class="model">Kimi K2.5 + Thinking</span>
+<span class="keyword">ELIF</span> complex_reasoning → <span class="expensive">Claude Opus</span> (expensive!)
+<span class="keyword">ELSE</span> → <span class="free">Ollama Local</span> (FREE!)
+    </div>
+  </div>
+
+  <!-- Model Latency Comparison -->
+  <div class="models-summary">
+    <div class="model-stat">
+      <div class="model-stat-name">Ollama Local</div>
+      <div class="model-stat-latency">~185ms</div>
+      <div class="latency-bar"><div class="latency-fill latency-fast"></div></div>
+    </div>
+    <div class="model-stat">
+      <div class="model-stat-name">Llama 11B</div>
+      <div class="model-stat-latency">~500ms</div>
+      <div class="latency-bar"><div class="latency-fill latency-medium"></div></div>
+    </div>
+    <div class="model-stat">
+      <div class="model-stat-name">Kimi K2.5</div>
+      <div class="model-stat-latency">~800ms</div>
+      <div class="latency-bar"><div class="latency-fill latency-medium"></div></div>
+    </div>
+    <div class="model-stat">
+      <div class="model-stat-name">Qwen Coder</div>
+      <div class="model-stat-latency">~1.2s</div>
+      <div class="latency-bar"><div class="latency-fill latency-slow"></div></div>
+    </div>
+    <div class="model-stat">
+      <div class="model-stat-name">Llama 90B</div>
+      <div class="model-stat-latency">~2s</div>
+      <div class="latency-bar"><div class="latency-fill latency-slow"></div></div>
+    </div>
+    <div class="model-stat">
+      <div class="model-stat-name">Claude Opus</div>
+      <div class="model-stat-latency">~3s</div>
+      <div class="latency-bar"><div class="latency-fill latency-very-slow"></div></div>
+    </div>
+  </div>
+</div>

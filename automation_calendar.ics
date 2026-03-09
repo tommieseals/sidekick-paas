@@ -1,0 +1,128 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Bottom Bitch//Automation Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Rusty's Automation Schedule
+X-WR-TIMEZONE:America/Chicago
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T023000
+RRULE:FREQ=DAILY
+SUMMARY:🤖 TerminatorBot - Overnight Scan
+DESCRIPTION:Prediction market scan (Kalshi $10k). Check for 30%+ edge opportunities.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T060000
+RRULE:FREQ=DAILY
+SUMMARY:🔥 Arbitrage Pharma - Morning
+DESCRIPTION:Orphan drug opportunity harvest. PubMed + ClinicalTrials scraping.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T070000
+RRULE:FREQ=DAILY
+SUMMARY:🔍 Dashboard Audit
+DESCRIPTION:Check all projects on dashboard, fix gaps.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T083000
+RRULE:FREQ=DAILY
+SUMMARY:🤖 TerminatorBot - Morning Scan
+DESCRIPTION:Full prediction market scan. $10k Kalshi balance.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T083000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:💰 Vault - Market Open
+DESCRIPTION:Full strategy scan. $104k equity. 10 positions.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T090000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:💼 TaskBot Sales Outreach
+DESCRIPTION:Cold emails + LinkedIn. Goal: 5 demos/week. $99/mo SaaS.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T090000
+RRULE:FREQ=DAILY
+SUMMARY:🏥 Daily Health Report
+DESCRIPTION:Infrastructure health check across all nodes.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T100000
+RRULE:FREQ=HOURLY;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:💰 Vault - Hourly Check
+DESCRIPTION:Position and risk monitoring during market hours.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T110000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:💰 Vault - Midday Scan
+DESCRIPTION:Volatility and contrarian strategy scan.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T120000
+RRULE:FREQ=DAILY
+SUMMARY:🔥 Arbitrage Pharma - Midday
+DESCRIPTION:Competitive analysis. FDA ODD database check.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T143000
+RRULE:FREQ=DAILY
+SUMMARY:🤖 TerminatorBot - Afternoon Scan
+DESCRIPTION:Full prediction market scan and execute.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T143000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:💰 Vault - Close Review
+DESCRIPTION:Daily P&L summary. Winners/losers report.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T180000
+RRULE:FREQ=DAILY
+SUMMARY:🔥 Arbitrage Pharma - Evening
+DESCRIPTION:Outreach execution. Big Pharma BD contacts.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T203000
+RRULE:FREQ=DAILY
+SUMMARY:🤖 TerminatorBot - Evening Scan
+DESCRIPTION:Full prediction market scan and execute.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260307T100000
+RRULE:FREQ=WEEKLY;BYDAY=SA,SU
+SUMMARY:💰 Vault - Weekend Prep
+DESCRIPTION:Research catalysts, earnings, macro. Prep Monday watchlist.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260308T060000
+RRULE:FREQ=WEEKLY;BYDAY=SU
+SUMMARY:🛡️ Weekly Security Audit
+DESCRIPTION:Full security scan across all nodes.
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART;TZID=America/Chicago:20260303T000000
+RRULE:FREQ=HOURLY
+SUMMARY:🎯 Legion - Hourly Jobs
+DESCRIPTION:Job application automation (other bot handles).
+END:VEVENT
+
+END:VCALENDAR

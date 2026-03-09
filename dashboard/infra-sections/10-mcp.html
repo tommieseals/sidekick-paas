@@ -1,0 +1,1176 @@
+<!-- SECTION 10: MCP TOOLS & SERVER CONNECTIONS -->
+<section id="section-mcp" class="infra-section" data-section="10">
+  <div class="section-header">
+    <div class="section-icon mcp-glow">
+      <svg viewBox="0 0 64 64" class="icon-svg">
+        <defs>
+          <linearGradient id="mcpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00ffff"/>
+            <stop offset="100%" style="stop-color:#9d4edd"/>
+          </linearGradient>
+        </defs>
+        <rect x="8" y="8" width="48" height="48" rx="8" fill="none" stroke="url(#mcpGrad)" stroke-width="2"/>
+        <circle cx="20" cy="20" r="4" fill="#00ffff"/>
+        <circle cx="44" cy="20" r="4" fill="#9d4edd"/>
+        <circle cx="20" cy="44" r="4" fill="#00ff88"/>
+        <circle cx="44" cy="44" r="4" fill="#ffa500"/>
+        <path d="M24 20 L40 20 M24 44 L40 44 M20 24 L20 40 M44 24 L44 40" stroke="url(#mcpGrad)" stroke-width="1.5" stroke-dasharray="3,3">
+          <animate attributeName="stroke-dashoffset" from="0" to="6" dur="1s" repeatCount="indefinite"/>
+        </path>
+        <circle cx="32" cy="32" r="6" fill="none" stroke="#fff" stroke-width="2">
+          <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="section-title-block">
+      <h2 class="section-title">MCP Server Connections</h2>
+      <p class="section-subtitle">Model Context Protocol Tool System</p>
+    </div>
+    <div class="section-status">
+      <span class="status-badge status-online">
+        <span class="pulse-dot"></span>
+        ALL OPERATIONAL
+      </span>
+    </div>
+  </div>
+
+  <div class="mcp-dashboard">
+    <!-- Main Architecture Diagram -->
+    <div class="mcp-architecture">
+      <div class="arch-flow">
+        <div class="arch-node clawdbot-node">
+          <div class="node-icon">🤖</div>
+          <div class="node-label">CLAWDBOT</div>
+          <div class="node-detail">Gateway</div>
+        </div>
+        <div class="arch-connector">
+          <svg viewBox="0 0 100 20" class="connector-svg">
+            <defs>
+              <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1"/>
+                <stop offset="50%" style="stop-color:#9d4edd;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#00ffff;stop-opacity:1"/>
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="10" x2="100" y2="10" stroke="url(#flowGrad)" stroke-width="2"/>
+            <circle cx="0" cy="10" r="3" fill="#00ffff">
+              <animate attributeName="cx" from="0" to="100" dur="1.5s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+        <div class="arch-node mcp-hub-node">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">MCP HUB</div>
+          <div class="node-detail">Tool Router</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tool Cards Grid -->
+    <div class="mcp-tools-grid">
+      
+      <!-- Browser Control Card -->
+      <div class="tool-card browser-card">
+        <div class="tool-header">
+          <div class="tool-icon browser-icon">
+            <svg viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="14" fill="none" stroke="#00ffff" stroke-width="2"/>
+              <circle cx="16" cy="16" r="6" fill="#00ffff" opacity="0.3"/>
+              <path d="M16 2 L16 30 M2 16 L30 16" stroke="#00ffff" stroke-width="1" opacity="0.5"/>
+              <ellipse cx="16" cy="16" rx="14" ry="6" fill="none" stroke="#00ffff" stroke-width="1" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="tool-title-block">
+            <h3 class="tool-title">Browser Control</h3>
+            <span class="tool-badge">Chrome Relay</span>
+          </div>
+          <div class="tool-status online">
+            <span class="status-dot"></span>
+          </div>
+        </div>
+        
+        <div class="tool-body">
+          <div class="tool-description">
+            Full browser automation via Chrome Extension CDP relay
+          </div>
+          
+          <div class="capability-list">
+            <div class="capability-item">
+              <span class="cap-icon">📸</span>
+              <span class="cap-name">snapshot</span>
+              <span class="cap-desc">Extract DOM/accessibility tree</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">🧭</span>
+              <span class="cap-name">navigate</span>
+              <span class="cap-desc">Go to any URL</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">👆</span>
+              <span class="cap-name">click</span>
+              <span class="cap-desc">Element interaction</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">⌨️</span>
+              <span class="cap-name">type</span>
+              <span class="cap-desc">Fill inputs/forms</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">🖼️</span>
+              <span class="cap-name">screenshot</span>
+              <span class="cap-desc">Capture page state</span>
+            </div>
+          </div>
+          
+          <div class="profile-selector">
+            <div class="profile active" data-profile="chrome">
+              <span class="profile-icon">🔗</span>
+              <span>chrome</span>
+              <span class="profile-hint">Relay</span>
+            </div>
+            <div class="profile" data-profile="clawd">
+              <span class="profile-icon">🔒</span>
+              <span>clawd</span>
+              <span class="profile-hint">Isolated</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tool-footer">
+          <div class="tool-stat">
+            <span class="stat-value" id="browser-actions">--</span>
+            <span class="stat-label">Actions/hr</span>
+          </div>
+          <div class="tool-stat">
+            <span class="stat-value" id="browser-latency">~50ms</span>
+            <span class="stat-label">Latency</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exec/Shell Card -->
+      <div class="tool-card exec-card">
+        <div class="tool-header">
+          <div class="tool-icon exec-icon">
+            <svg viewBox="0 0 32 32">
+              <rect x="2" y="4" width="28" height="24" rx="3" fill="#0d1321" stroke="#00ff88" stroke-width="2"/>
+              <text x="6" y="16" fill="#00ff88" font-size="8" font-family="monospace">$_</text>
+              <rect x="14" y="12" width="8" height="2" fill="#00ff88">
+                <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+              </rect>
+            </svg>
+          </div>
+          <div class="tool-title-block">
+            <h3 class="tool-title">Exec/Shell</h3>
+            <span class="tool-badge">Commands</span>
+          </div>
+          <div class="tool-status online">
+            <span class="status-dot"></span>
+          </div>
+        </div>
+        
+        <div class="tool-body">
+          <div class="tool-description">
+            Execute shell commands with full environment control
+          </div>
+          
+          <div class="capability-list">
+            <div class="capability-item">
+              <span class="cap-icon">⏱️</span>
+              <span class="cap-name">timeout</span>
+              <span class="cap-desc">Auto-kill on expiry</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">🔄</span>
+              <span class="cap-name">background</span>
+              <span class="cap-desc">Async execution</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">🖥️</span>
+              <span class="cap-name">PTY</span>
+              <span class="cap-desc">TTY-required CLIs</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">🔧</span>
+              <span class="cap-name">env</span>
+              <span class="cap-desc">Custom variables</span>
+            </div>
+            <div class="capability-item">
+              <span class="cap-icon">📂</span>
+              <span class="cap-name">workdir</span>
+              <span class="cap-desc">Custom CWD</span>
+            </div>
+          </div>
+          
+          <div class="target-selector">
+            <div class="target active" data-target="sandbox">
+              <span>sandbox</span>
+            </div>
+            <div class="target" data-target="host">
+              <span>host</span>
+            </div>
+            <div class="target" data-target="node">
+              <span>node</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tool-footer">
+          <div class="tool-stat">
+            <span class="stat-value" id="exec-commands">--</span>
+            <span class="stat-label">Cmds/hr</span>
+          </div>
+          <div class="tool-stat">
+            <span class="stat-value">bash/pwsh</span>
+            <span class="stat-label">Shell</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- File System Card -->
+      <div class="tool-card file-card">
+        <div class="tool-header">
+          <div class="tool-icon file-icon">
+            <svg viewBox="0 0 32 32">
+              <path d="M4 6 L4 26 L28 26 L28 10 L18 10 L16 6 Z" fill="none" stroke="#ffa500" stroke-width="2"/>
+              <line x1="8" y1="16" x2="24" y2="16" stroke="#ffa500" stroke-width="1.5" opacity="0.6"/>
+              <line x1="8" y1="20" x2="20" y2="20" stroke="#ffa500" stroke-width="1.5" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="tool-title-block">
+            <h3 class="tool-title">File System</h3>
+            <span class="tool-badge">R/W/Edit</span>
+          </div>
+          <div class="tool-status online">
+            <span class="status-dot"></span>
+          </div>
+        </div>
+        
+        <div class="tool-body">
+          <div class="tool-description">
+            Full filesystem access with surgical edit capabilities
+          </div>
+          
+          <div class="file-ops">
+            <div class="file-op read-op">
+              <div class="op-icon">📖</div>
+              <div class="op-details">
+                <span class="op-name">Read</span>
+                <span class="op-limit">50KB/2000 lines</span>
+              </div>
+            </div>
+            <div class="file-op write-op">
+              <div class="op-icon">✍️</div>
+              <div class="op-details">
+                <span class="op-name">Write</span>
+                <span class="op-limit">Create/Overwrite</span>
+              </div>
+            </div>
+            <div class="file-op edit-op">
+              <div class="op-icon">🔧</div>
+              <div class="op-details">
+                <span class="op-name">Edit</span>
+                <span class="op-limit">Exact match patch</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="file-types">
+            <span class="file-type">📄 Text</span>
+            <span class="file-type">🖼️ Images</span>
+            <span class="file-type">📊 JSON</span>
+            <span class="file-type">📝 Markdown</span>
+          </div>
+        </div>
+        
+        <div class="tool-footer">
+          <div class="tool-stat">
+            <span class="stat-value" id="file-ops">--</span>
+            <span class="stat-label">Ops/hr</span>
+          </div>
+          <div class="tool-stat">
+            <span class="stat-value">Auto-create</span>
+            <span class="stat-label">Dirs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process Management Card -->
+      <div class="tool-card process-card">
+        <div class="tool-header">
+          <div class="tool-icon process-icon">
+            <svg viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="12" fill="none" stroke="#9d4edd" stroke-width="2"/>
+              <circle cx="16" cy="16" r="4" fill="#9d4edd"/>
+              <g stroke="#9d4edd" stroke-width="2">
+                <line x1="16" y1="4" x2="16" y2="8"/>
+                <line x1="16" y1="24" x2="16" y2="28"/>
+                <line x1="4" y1="16" x2="8" y2="16"/>
+                <line x1="24" y1="16" x2="28" y2="16"/>
+              </g>
+              <g transform="rotate(45 16 16)" stroke="#9d4edd" stroke-width="1.5" opacity="0.6">
+                <line x1="16" y1="4" x2="16" y2="8"/>
+                <line x1="16" y1="24" x2="16" y2="28"/>
+              </g>
+            </svg>
+          </div>
+          <div class="tool-title-block">
+            <h3 class="tool-title">Process Mgmt</h3>
+            <span class="tool-badge">Sessions</span>
+          </div>
+          <div class="tool-status online">
+            <span class="status-dot"></span>
+          </div>
+        </div>
+        
+        <div class="tool-body">
+          <div class="tool-description">
+            Manage running exec sessions and background processes
+          </div>
+          
+          <div class="process-actions">
+            <div class="process-action">
+              <span class="action-icon">📋</span>
+              <span class="action-name">list</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">🔍</span>
+              <span class="action-name">poll</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">📜</span>
+              <span class="action-name">log</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">✏️</span>
+              <span class="action-name">write</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">⌨️</span>
+              <span class="action-name">send-keys</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">📥</span>
+              <span class="action-name">paste</span>
+            </div>
+            <div class="process-action">
+              <span class="action-icon">💀</span>
+              <span class="action-name">kill</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tool-footer">
+          <div class="tool-stat">
+            <span class="stat-value" id="active-sessions">0</span>
+            <span class="stat-label">Active</span>
+          </div>
+          <div class="tool-stat">
+            <span class="stat-value">∞</span>
+            <span class="stat-label">Background</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capabilities Matrix -->
+    <div class="capabilities-matrix">
+      <h3 class="matrix-title">
+        <span class="matrix-icon">📊</span>
+        Capabilities Matrix
+      </h3>
+      
+      <div class="matrix-container">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th class="tool-col">Tool</th>
+              <th class="cap-col">Primary Use</th>
+              <th class="cap-col">Key Actions</th>
+              <th class="cap-col">Target</th>
+              <th class="status-col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">🌐</span> browser
+              </td>
+              <td>Web Automation</td>
+              <td><code>snapshot</code> <code>navigate</code> <code>click</code> <code>type</code></td>
+              <td>Chrome Relay / Isolated</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">💻</span> exec
+              </td>
+              <td>Shell Commands</td>
+              <td><code>run</code> <code>background</code> <code>pty</code></td>
+              <td>sandbox / host / node</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">📁</span> Read/Write/Edit
+              </td>
+              <td>File Operations</td>
+              <td><code>read</code> <code>write</code> <code>edit</code></td>
+              <td>Local filesystem</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">⚙️</span> process
+              </td>
+              <td>Session Control</td>
+              <td><code>list</code> <code>poll</code> <code>kill</code> <code>write</code></td>
+              <td>Background tasks</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">🔍</span> web_search
+              </td>
+              <td>Web Research</td>
+              <td><code>search</code> + region/lang filters</td>
+              <td>Brave API</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">📥</span> web_fetch
+              </td>
+              <td>Page Extraction</td>
+              <td><code>fetch</code> → markdown/text</td>
+              <td>Any URL</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">📱</span> message
+              </td>
+              <td>Telegram Actions</td>
+              <td><code>send</code> <code>delete</code> <code>react</code></td>
+              <td>Telegram channel</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">🎤</span> tts
+              </td>
+              <td>Voice Output</td>
+              <td><code>convert</code> text → speech</td>
+              <td>ElevenLabs API</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">👁️</span> image
+              </td>
+              <td>Vision Analysis</td>
+              <td><code>analyze</code> images</td>
+              <td>Vision model</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">🖼️</span> canvas
+              </td>
+              <td>UI Presentation</td>
+              <td><code>present</code> <code>eval</code> <code>snapshot</code></td>
+              <td>HTML display</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+            <tr class="matrix-row">
+              <td class="tool-cell">
+                <span class="tool-emoji">🖥️</span> nodes
+              </td>
+              <td>Remote Control</td>
+              <td><code>status</code> <code>camera</code> <code>screen</code> <code>run</code></td>
+              <td>Paired nodes</td>
+              <td><span class="status-chip online">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Additional Tools Row -->
+    <div class="additional-tools">
+      <h3 class="tools-subtitle">
+        <span class="subtitle-icon">🔧</span>
+        Additional MCP Tools
+      </h3>
+      
+      <div class="mini-tools-grid">
+        <div class="mini-tool-card">
+          <div class="mini-icon">🔍</div>
+          <div class="mini-name">web_search</div>
+          <div class="mini-desc">Brave Search API</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">📥</div>
+          <div class="mini-name">web_fetch</div>
+          <div class="mini-desc">URL → Markdown</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">📱</div>
+          <div class="mini-name">message</div>
+          <div class="mini-desc">Telegram Actions</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">🎤</div>
+          <div class="mini-name">tts</div>
+          <div class="mini-desc">Text to Speech</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">👁️</div>
+          <div class="mini-name">image</div>
+          <div class="mini-desc">Vision Analysis</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">🖼️</div>
+          <div class="mini-name">canvas</div>
+          <div class="mini-desc">HTML Presentation</div>
+          <div class="mini-status online"></div>
+        </div>
+        
+        <div class="mini-tool-card">
+          <div class="mini-icon">🖥️</div>
+          <div class="mini-name">nodes</div>
+          <div class="mini-desc">Remote Node Control</div>
+          <div class="mini-status online"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* MCP Section Specific Styles */
+#section-mcp {
+  background: linear-gradient(135deg, #0a0e17 0%, #0d1321 50%, #0a0e17 100%);
+}
+
+.mcp-glow {
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5));
+}
+
+.mcp-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Architecture Flow */
+.mcp-architecture {
+  background: rgba(13, 19, 33, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1rem;
+}
+
+.arch-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.arch-node {
+  background: rgba(0, 255, 255, 0.1);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.arch-node:hover {
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.arch-node .node-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.arch-node .node-label {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.arch-node .node-detail {
+  font-size: 0.75rem;
+  color: #a0aec0;
+}
+
+.clawdbot-node {
+  border-color: rgba(157, 78, 221, 0.5);
+  background: rgba(157, 78, 221, 0.1);
+}
+
+.mcp-hub-node {
+  border-color: rgba(0, 255, 136, 0.5);
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.arch-connector {
+  width: 150px;
+  height: 20px;
+}
+
+.connector-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Tools Grid */
+.mcp-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tool Card */
+.tool-card {
+  background: rgba(13, 19, 33, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.browser-card { border-top: 3px solid #00ffff; }
+.browser-card:hover { box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2); }
+
+.exec-card { border-top: 3px solid #00ff88; }
+.exec-card:hover { box-shadow: 0 8px 30px rgba(0, 255, 136, 0.2); }
+
+.file-card { border-top: 3px solid #ffa500; }
+.file-card:hover { box-shadow: 0 8px 30px rgba(255, 165, 0, 0.2); }
+
+.process-card { border-top: 3px solid #9d4edd; }
+.process-card:hover { box-shadow: 0 8px 30px rgba(157, 78, 221, 0.2); }
+
+/* Tool Header */
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tool-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.tool-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tool-title-block {
+  flex: 1;
+}
+
+.tool-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.tool-badge {
+  font-size: 0.7rem;
+  color: #a0aec0;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.tool-status {
+  width: 12px;
+  height: 12px;
+}
+
+.tool-status.online .status-dot {
+  width: 12px;
+  height: 12px;
+  background: #00ff88;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 0 8px #00ff88;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* Tool Body */
+.tool-body {
+  padding: 1.25rem;
+}
+
+.tool-description {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  margin-bottom: 1rem;
+}
+
+/* Capability List */
+.capability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.capability-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.capability-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cap-icon {
+  font-size: 0.9rem;
+}
+
+.cap-name {
+  font-family: 'JetBrains Mono', monospace;
+  color: #00ffff;
+  font-weight: 500;
+  min-width: 70px;
+}
+
+.cap-desc {
+  color: #718096;
+  font-size: 0.75rem;
+}
+
+/* Profile Selector */
+.profile-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.profile {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.profile:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+}
+
+.profile.active {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.profile-hint {
+  font-size: 0.65rem;
+  color: #718096;
+}
+
+/* Target Selector */
+.target-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.target {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.target:hover {
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.target.active {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+/* File Operations */
+.file-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.file-op {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem;
+  background: rgba(255, 165, 0, 0.05);
+  border-radius: 6px;
+  border-left: 3px solid rgba(255, 165, 0, 0.3);
+}
+
+.file-op .op-icon {
+  font-size: 1.2rem;
+}
+
+.file-op .op-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-op .op-name {
+  font-weight: 600;
+  color: #ffa500;
+  font-size: 0.85rem;
+}
+
+.file-op .op-limit {
+  font-size: 0.7rem;
+  color: #718096;
+}
+
+/* File Types */
+.file-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.file-type {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  color: #a0aec0;
+}
+
+/* Process Actions */
+.process-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.process-action {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(157, 78, 221, 0.1);
+  border: 1px solid rgba(157, 78, 221, 0.2);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.process-action:hover {
+  border-color: #9d4edd;
+  background: rgba(157, 78, 221, 0.2);
+}
+
+.process-action .action-icon {
+  font-size: 0.8rem;
+}
+
+.process-action .action-name {
+  font-family: 'JetBrains Mono', monospace;
+  color: #9d4edd;
+}
+
+/* Tool Footer */
+.tool-footer {
+  display: flex;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tool-stat {
+  flex: 1;
+  text-align: center;
+}
+
+.tool-stat .stat-value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.tool-stat .stat-label {
+  font-size: 0.65rem;
+  color: #718096;
+  text-transform: uppercase;
+}
+
+/* Capabilities Matrix */
+.capabilities-matrix {
+  background: rgba(13, 19, 33, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.matrix-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.matrix-icon {
+  font-size: 1.2rem;
+}
+
+.matrix-container {
+  overflow-x: auto;
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.matrix-table th {
+  text-align: left;
+  padding: 0.75rem;
+  background: rgba(0, 255, 255, 0.1);
+  color: #00ffff;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+}
+
+.matrix-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #a0aec0;
+}
+
+.matrix-row:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tool-cell {
+  font-weight: 500;
+  color: #fff;
+}
+
+.tool-emoji {
+  margin-right: 0.4rem;
+}
+
+.matrix-table code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  color: #00ffff;
+  margin-right: 0.3rem;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.status-chip.online {
+  background: rgba(0, 255, 136, 0.2);
+  color: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+/* Additional Tools */
+.additional-tools {
+  margin-top: 1rem;
+}
+
+.tools-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #a0aec0;
+}
+
+.subtitle-icon {
+  font-size: 1.1rem;
+}
+
+.mini-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.mini-tool-card {
+  background: rgba(13, 19, 33, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.mini-tool-card:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.mini-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mini-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.mini-desc {
+  font-size: 0.7rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+.mini-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.mini-status.online {
+  background: #00ff88;
+  box-shadow: 0 0 6px #00ff88;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mcp-tools-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .arch-flow {
+    flex-direction: column;
+  }
+  
+  .arch-connector {
+    transform: rotate(90deg);
+    width: 80px;
+  }
+  
+  .matrix-table {
+    font-size: 0.75rem;
+  }
+  
+  .matrix-table code {
+    display: block;
+    margin: 0.2rem 0;
+  }
+}
+</style>
+
+<script>
+// MCP Section initialization
+(function() {
+  // Simulated live stats (would connect to real endpoints)
+  function updateMCPStats() {
+    const now = new Date();
+    const hourOfDay = now.getHours();
+    
+    // Simulate usage based on time
+    const baseActivity = Math.max(5, Math.floor(Math.random() * 30) + 10);
+    
+    document.getElementById('browser-actions').textContent = baseActivity;
+    document.getElementById('exec-commands').textContent = Math.floor(baseActivity * 1.5);
+    document.getElementById('file-ops').textContent = Math.floor(baseActivity * 2);
+  }
+  
+  // Update stats every 30 seconds
+  updateMCPStats();
+  setInterval(updateMCPStats, 30000);
+  
+  // Profile/Target selection interactivity
+  document.querySelectorAll('.profile, .target').forEach(el => {
+    el.addEventListener('click', function() {
+      const siblings = this.parentElement.querySelectorAll('.profile, .target');
+      siblings.forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+})();
+</script>

@@ -1,25 +1,15 @@
 {
   "lastChecks": {
-    "fullHealth": "2025-02-17T14:52:00Z",
+    "fullHealth": "2026-02-28T18:16:00Z",
     "security": null,
-    "nvidia": null,
-    "groupChat": "2025-02-17T14:52:00Z"
+    "nvidia": null
   },
   "alerts": [],
-  "improvements": {
-    "date": "2025-02-17",
-    "completed": [
-      "check-all-nodes.sh - batched SSH health checks",
-      "track-nvidia-usage.sh - API budget tracking",
-      "HEARTBEAT.md - updated with efficient checks"
-    ],
-    "inProgress": [
-      "enhanced-monitor.sh - sub-agent working",
-      "auto-remediation scripts - sub-agent working", 
-      "documentation reorganization - sub-agent working"
-    ],
-    "pending": [
-      "Mac Pro firewall - needs Rusty's sudo password"
-    ]
+  "protocol": {
+    "version": "2.0",
+    "established": "2026-02-28",
+    "approach": "batched-parallel",
+    "autoSave": true,
+    "notes": "Always use memory_pressure for macOS, not raw pages free. Parallel SSH checks. Table format reporting. HEARTBEAT_OK if clean."
   }
 }

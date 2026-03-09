@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharma Arbitrage - Clawd Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 50%, #1a202c 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.2);
+        }
+        .nav-brand h1 { font-size: 1.8rem; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .container { max-width: 1500px; margin: 0 auto; padding: 2rem; }
+        
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #48BB78; }
+        .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.25rem; }
+        
+        .section-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.2); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            box-shadow: 0 4px 15px rgba(72,187,120,0.4);
+        }
+        .diagram-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .diagram-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .diagram-title h2 {
+            color: #1a365d;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .diagram-title p {
+            color: #718096;
+            font-size: 1rem;
+        }
+        .diagram-svg {
+            width: 100%;
+            overflow-x: auto;
+        }
+        @media (max-width: 768px) {
+            .nav-bar { flex-wrap: wrap; gap: 1rem; }
+            .nav-links { width: 100%; justify-content: center; }
+            .container { padding: 1rem; }
+            .diagram-card { padding: 1rem; }
+            .tab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+            .stats-bar { gap: 0.5rem; }
+            .stat-card { padding: 0.75rem 1rem; }
+            .stat-value { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-brand"><h1>💊 Pharma Arbitrage</h1></div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/infrastructure-new.html">Infrastructure</a>
+            <a href="/agents.html">Agents</a>
+            <a href="/swarm-monitor.html">🐝 Swarm</a>
+            <a href="/project-vault.html">💰 Vault</a>
+            <a href="/arbitrage-pharma.html" class="active">💊 Pharma</a>
+        </div>
+    </nav>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function FlowingLine({ x1, y1, x2, y2, color = "#48BB78", delay = 0, curved = false }) {
+            const midX = (x1 + x2) / 2;
+            const midY = curved ? Math.min(y1, y2) - 30 : (y1 + y2) / 2;
+            const pathD = curved 
+                ? "M " + x1 + " " + y1 + " Q " + midX + " " + midY + " " + x2 + " " + y2
+                : "M " + x1 + " " + y1 + " L " + x2 + " " + y2;
+
+            return (
+                <g>
+                    <path d={pathD} fill="none" stroke={color + "40"} strokeWidth="2" strokeDasharray="6,4" />
+                    <circle r="4" fill={color}>
+                        <animateMotion dur="2s" repeatCount="indefinite" begin={delay + "s"} path={pathD} />
+                    </circle>
+                </g>
+            );
+        }
+
+        function ArchNode({ x, y, w, h, title, subtitle, icon, color, small = false, highlight = false, badge = null }) {
+            const titleY = small ? 48 : 58;
+            const subtitleY = small ? 62 : 76;
+            const iconSize = small ? 18 : 26;
+            
+            return (
+                <g>
+                    <rect x={x} y={y} width={w} height={h} rx={12} fill={highlight ? "#FFFBEB" : "white"} stroke={highlight ? "#F6AD55" : "#E2E8F0"} strokeWidth={highlight ? 2 : 1} filter="url(#shadow)" />
+                    <rect x={x} y={y} width={w} height={6} rx={3} fill={color} />
+                    <circle cx={x + w/2} cy={y + 28} r={small ? 16 : 22} fill={color + "20"} />
+                    <text x={x + w/2} y={y + 33} textAnchor="middle" fontSize={iconSize} dominantBaseline="middle">{icon}</text>
+                    <text x={x + w/2} y={y + titleY} textAnchor="middle" fill="#1A202C" fontSize={small ? 10 : 12} fontWeight="600">{title}</text>
+                    {subtitle && <text x={x + w/2} y={y + subtitleY} textAnchor="middle" fill="#718096" fontSize={small ? 8 : 10}>{subtitle}</text>}
+                    {badge && (
+                        <g>
+                            <rect x={x + w - 35} y={y - 8} width={42} height={18} rx={9} fill="#48BB78" />
+                            <text x={x + w - 14} y={y + 2} textAnchor="middle" fill="white" fontSize="9" fontWeight="600">{badge}</text>
+                        </g>
+                    )}
+                </g>
+            );
+        }
+
+        function DataSource({ x, y, icon, label, count, color }) {
+            return (
+                <g>
+                    <rect x={x} y={y} width={90} height={65} rx={10} fill="white" stroke="#E2E8F0" filter="url(#shadow)" />
+                    <rect x={x} y={y} width={90} height={5} rx={2} fill={color} />
+                    <text x={x + 45} y={y + 30} textAnchor="middle" fontSize="20">{icon}</text>
+                    <text x={x + 45} y={y + 48} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">{label}</text>
+                    <text x={x + 45} y={y + 60} textAnchor="middle" fill={color} fontSize="8" fontWeight="500">{count}</text>
+                </g>
+            );
+        }
+
+        function DiscoveryPipeline() {
+            return (
+                <svg viewBox="0 0 1000 520" style={{width: "100%", minWidth: 800, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    <text x={120} y={30} textAnchor="middle" fill="#667EEA" fontSize="14" fontWeight="700">DATA SOURCES</text>
+                    <text x={380} y={30} textAnchor="middle" fill="#9F7AEA" fontSize="14" fontWeight="700">PROCESSING</text>
+                    <text x={650} y={30} textAnchor="middle" fill="#48BB78" fontSize="14" fontWeight="700">ANALYSIS</text>
+                    <text x={880} y={30} textAnchor="middle" fill="#ED8936" fontSize="14" fontWeight="700">OUTPUT</text>
+                    
+                    <DataSource x={30} y={50} icon="🔬" label="ClinicalTrials" count="900+ trials" color="#3182CE" />
+                    <DataSource x={130} y={50} icon="🏛️" label="FDA Orphan" count="95 designations" color="#9F7AEA" />
+                    <DataSource x={30} y={130} icon="📚" label="PubMed" count="79 articles" color="#48BB78" />
+                    <DataSource x={130} y={130} icon="📰" label="News APIs" count="Live feeds" color="#ED8936" />
+                    <DataSource x={80} y={210} icon="📊" label="SEC Filings" count="Insider data" color="#E53E3E" />
+                    
+                    <FlowingLine x1={120} y1={115} x2={280} y2={140} color="#3182CE" delay={0} curved={true} />
+                    <FlowingLine x1={175} y1={95} x2={280} y2={140} color="#9F7AEA" delay={0.3} curved={true} />
+                    <FlowingLine x1={75} y1={175} x2={280} y2={160} color="#48BB78" delay={0.6} curved={true} />
+                    <FlowingLine x1={175} y1={175} x2={280} y2={170} color="#ED8936" delay={0.9} curved={true} />
+                    <FlowingLine x1={125} y1={250} x2={280} y2={200} color="#E53E3E" delay={1.2} curved={true} />
+                    
+                    <ArchNode x={280} y={100} w={160} h={130} title="Data Harvester" subtitle="Scraping • Extraction" icon="🤖" color="#667EEA" />
+                    <text x={360} y={245} textAnchor="middle" fill="#718096" fontSize="9">Daily automated runs</text>
+                    
+                    <FlowingLine x1={440} y1={165} x2={520} y2={120} color="#667EEA" delay={1.5} />
+                    <FlowingLine x1={440} y1={165} x2={520} y2={220} color="#667EEA" delay={1.8} />
+                    
+                    <ArchNode x={520} y={60} w={140} h={100} title="Orphan Analyzer" subtitle="Rare disease focus" icon="🧬" color="#9F7AEA" small={true} />
+                    <ArchNode x={520} y={180} w={140} h={100} title="Trial Parser" subtitle="Phase extraction" icon="📋" color="#38B2AC" small={true} />
+                    
+                    <FlowingLine x1={660} y1={110} x2={730} y2={150} color="#9F7AEA" delay={2.1} curved={true} />
+                    <FlowingLine x1={660} y1={230} x2={730} y2={180} color="#38B2AC" delay={2.4} curved={true} />
+                    
+                    <ArchNode x={730} y={110} w={160} h={130} title="Scoring Engine" subtitle="ROI • Risk • Competition" icon="⚡" color="#48BB78" />
+                    
+                    <FlowingLine x1={810} y1={240} x2={810} y2={290} color="#48BB78" delay={2.7} />
+                    
+                    <ArchNode x={730} y={290} w={160} h={100} title="Opportunity List" subtitle="Ranked targets" icon="🎯" color="#ED8936" />
+                    <text x={810} y={405} textAnchor="middle" fill="#48BB78" fontSize="11" fontWeight="600">ROI: 900-10,000x</text>
+                    
+                    <rect x={280} y={320} width={380} height={150} rx={12} fill="#F7FAFC" stroke="#E2E8F0" />
+                    <text x={470} y={345} textAnchor="middle" fill="#1A202C" fontSize="13" fontWeight="700">📊 Pipeline Statistics</text>
+                    
+                    <text x={330} y={375} fill="#718096" fontSize="10">Total Trials Harvested:</text>
+                    <text x={580} y={375} textAnchor="end" fill="#48BB78" fontSize="11" fontWeight="600">900+</text>
+                    
+                    <text x={330} y={395} fill="#718096" fontSize="10">Orphan Designations:</text>
+                    <text x={580} y={395} textAnchor="end" fill="#9F7AEA" fontSize="11" fontWeight="600">95</text>
+                    
+                    <text x={330} y={415} fill="#718096" fontSize="10">PubMed References:</text>
+                    <text x={580} y={415} textAnchor="end" fill="#3182CE" fontSize="11" fontWeight="600">79</text>
+                    
+                    <text x={330} y={435} fill="#718096" fontSize="10">Active Opportunities:</text>
+                    <text x={580} y={435} textAnchor="end" fill="#ED8936" fontSize="11" fontWeight="600">15 high-priority</text>
+                    
+                    <text x={330} y={455} fill="#718096" fontSize="10">Last Pipeline Run:</text>
+                    <text x={580} y={455} textAnchor="end" fill="#718096" fontSize="11">Auto-daily</text>
+                </svg>
+            );
+        }
+
+        function OpportunityScoring() {
+            return (
+                <svg viewBox="0 0 1000 500" style={{width: "100%", minWidth: 800, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    <ArchNode x={40} y={180} w={140} h={100} title="Raw Opportunity" subtitle="From pipeline" icon="📥" color="#667EEA" />
+                    
+                    <FlowingLine x1={180} y1={230} x2={250} y2={100} color="#667EEA" delay={0} curved={true} />
+                    <FlowingLine x1={180} y1={230} x2={250} y2={230} color="#667EEA" delay={0.3} />
+                    <FlowingLine x1={180} y1={230} x2={250} y2={360} color="#667EEA" delay={0.6} curved={true} />
+                    
+                    <ArchNode x={250} y={50} w={180} h={100} title="ROI Calculator" subtitle="Market size × Success rate" icon="💰" color="#48BB78" />
+                    <text x={340} y={165} textAnchor="middle" fill="#48BB78" fontSize="10" fontWeight="500">Weight: 40%</text>
+                    
+                    <ArchNode x={250} y={180} w={180} h={100} title="Risk Assessment" subtitle="Clinical • Regulatory • IP" icon="⚠️" color="#E53E3E" />
+                    <text x={340} y={295} textAnchor="middle" fill="#E53E3E" fontSize="10" fontWeight="500">Weight: 35%</text>
+                    
+                    <ArchNode x={250} y={310} w={180} h={100} title="Competition Analysis" subtitle="Other acquirers • Patents" icon="🏁" color="#9F7AEA" />
+                    <text x={340} y={425} textAnchor="middle" fill="#9F7AEA" fontSize="10" fontWeight="500">Weight: 25%</text>
+                    
+                    <FlowingLine x1={430} y1={100} x2={520} y2={200} color="#48BB78" delay={1} curved={true} />
+                    <FlowingLine x1={430} y1={230} x2={520} y2={230} color="#E53E3E" delay={1.3} />
+                    <FlowingLine x1={430} y1={360} x2={520} y2={260} color="#9F7AEA" delay={1.6} curved={true} />
+                    
+                    <ArchNode x={520} y={160} w={180} h={140} title="Composite Scorer" subtitle="ML-enhanced ranking" icon="🧠" color="#3182CE" />
+                    
+                    <FlowingLine x1={700} y1={230} x2={780} y2={80} color="#3182CE" delay={2} curved={true} />
+                    <FlowingLine x1={700} y1={230} x2={780} y2={200} color="#3182CE" delay={2.2} />
+                    <FlowingLine x1={700} y1={230} x2={780} y2={320} color="#3182CE" delay={2.4} curved={true} />
+                    
+                    <rect x={780} y={40} width={180} height={80} rx={12} fill="#48BB78" filter="url(#shadow)" />
+                    <text x={870} y={65} textAnchor="middle" fill="white" fontSize="12" fontWeight="700">🔥 TIER 1: HOT</text>
+                    <text x={870} y={85} textAnchor="middle" fill="white" fontSize="10">Score 85-100</text>
+                    <text x={870} y={102} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">3 opportunities</text>
+                    
+                    <rect x={780} y={160} width={180} height={80} rx={12} fill="#ED8936" filter="url(#shadow)" />
+                    <text x={870} y={185} textAnchor="middle" fill="white" fontSize="12" fontWeight="700">⭐ TIER 2: WARM</text>
+                    <text x={870} y={205} textAnchor="middle" fill="white" fontSize="10">Score 70-84</text>
+                    <text x={870} y={222} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">7 opportunities</text>
+                    
+                    <rect x={780} y={280} width={180} height={80} rx={12} fill="#718096" filter="url(#shadow)" />
+                    <text x={870} y={305} textAnchor="middle" fill="white" fontSize="12" fontWeight="700">📋 TIER 3: WATCH</text>
+                    <text x={870} y={325} textAnchor="middle" fill="white" fontSize="10">Score 50-69</text>
+                    <text x={870} y={342} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">5 opportunities</text>
+                    
+                    <rect x={40} y={380} width={400} height={100} rx={12} fill="#F7FAFC" stroke="#E2E8F0" />
+                    <text x={240} y={405} textAnchor="middle" fill="#1A202C" fontSize="12" fontWeight="700">Scoring Factors</text>
+                    <text x={60} y={430} fill="#718096" fontSize="9">• Market Size (TAM)</text>
+                    <text x={60} y={445} fill="#718096" fontSize="9">• Clinical Phase</text>
+                    <text x={60} y={460} fill="#718096" fontSize="9">• Time to Approval</text>
+                    <text x={200} y={430} fill="#718096" fontSize="9">• Competition Level</text>
+                    <text x={200} y={445} fill="#718096" fontSize="9">• IP Protection</text>
+                    <text x={200} y={460} fill="#718096" fontSize="9">• Regulatory Path</text>
+                    <text x={340} y={430} fill="#718096" fontSize="9">• Acquisition Cost</text>
+                    <text x={340} y={445} fill="#718096" fontSize="9">• Strategic Fit</text>
+                    <text x={340} y={460} fill="#718096" fontSize="9">• Exit Multiples</text>
+                </svg>
+            );
+        }
+
+        function TargetTracking() {
+            return (
+                <svg viewBox="0 0 1000 550" style={{width: "100%", minWidth: 800, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                    </defs>
+                    
+                    <text x={150} y={30} textAnchor="middle" fill="#E53E3E" fontSize="14" fontWeight="700">🎯 PRIORITY TARGETS</text>
+                    
+                    <ArchNode x={30} y={50} w={240} h={110} title="OV101 (Angelman)" subtitle="Ovid Therapeutics • Phase 3" icon="🧬" color="#E53E3E" highlight={true} badge="10,000x" />
+                    <text x={150} y={175} textAnchor="middle" fill="#48BB78" fontSize="10" fontWeight="600">✓ High orphan potential</text>
+                    
+                    <ArchNode x={30} y={200} w={240} h={110} title="PD-0332334 (Pfizer)" subtitle="Deprioritized asset • Phase 2" icon="💊" color="#9F7AEA" highlight={true} badge="900x" />
+                    <text x={150} y={325} textAnchor="middle" fill="#48BB78" fontSize="10" fontWeight="600">✓ Acquisition opportunity</text>
+                    
+                    <ArchNode x={30} y={350} w={240} h={110} title="NNZ-2591 (Prader-Willi)" subtitle="Neuren • Orphan designated" icon="🔬" color="#3182CE" highlight={true} badge="5,000x" />
+                    <text x={150} y={475} textAnchor="middle" fill="#48BB78" fontSize="10" fontWeight="600">✓ Rare disease focus</text>
+                    
+                    <text x={550} y={30} textAnchor="middle" fill="#667EEA" fontSize="14" fontWeight="700">📊 DEAL PIPELINE</text>
+                    
+                    <rect x={340} y={50} width={130} height={30} rx={6} fill="#667EEA" />
+                    <text x={405} y={70} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">RESEARCH</text>
+                    
+                    <rect x={490} y={50} width={130} height={30} rx={6} fill="#9F7AEA" />
+                    <text x={555} y={70} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">OUTREACH</text>
+                    
+                    <rect x={640} y={50} width={130} height={30} rx={6} fill="#48BB78" />
+                    <text x={705} y={70} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">ENGAGED</text>
+                    
+                    <rect x={790} y={50} width={130} height={30} rx={6} fill="#ED8936" />
+                    <text x={855} y={70} textAnchor="middle" fill="white" fontSize="11" fontWeight="600">CLOSING</text>
+                    
+                    <rect x={340} y={90} width={130} height={380} rx={8} fill="#F7FAFC" stroke="#E2E8F0" />
+                    <rect x={490} y={90} width={130} height={380} rx={8} fill="#F7FAFC" stroke="#E2E8F0" />
+                    <rect x={640} y={90} width={130} height={380} rx={8} fill="#F7FAFC" stroke="#E2E8F0" />
+                    <rect x={790} y={90} width={130} height={380} rx={8} fill="#F7FAFC" stroke="#E2E8F0" />
+                    
+                    <rect x={350} y={100} width={110} height={55} rx={6} fill="white" stroke="#667EEA" strokeWidth="2" />
+                    <text x={405} y={120} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">Synlogic</text>
+                    <text x={405} y={135} textAnchor="middle" fill="#718096" fontSize="8">Synthetic bio</text>
+                    <text x={405} y={148} textAnchor="middle" fill="#667EEA" fontSize="8">Researching</text>
+                    
+                    <rect x={350} y={165} width={110} height={55} rx={6} fill="white" stroke="#667EEA" strokeWidth="2" />
+                    <text x={405} y={185} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">Rezolute</text>
+                    <text x={405} y={200} textAnchor="middle" fill="#718096" fontSize="8">Hypoglycemia</text>
+                    <text x={405} y={213} textAnchor="middle" fill="#667EEA" fontSize="8">Researching</text>
+                    
+                    <rect x={500} y={100} width={110} height={55} rx={6} fill="white" stroke="#9F7AEA" strokeWidth="2" />
+                    <text x={555} y={120} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">Ovid Therapeutics</text>
+                    <text x={555} y={135} textAnchor="middle" fill="#718096" fontSize="8">OV101 target</text>
+                    <text x={555} y={148} textAnchor="middle" fill="#9F7AEA" fontSize="8">Twitter DM sent</text>
+                    
+                    <rect x={500} y={165} width={110} height={55} rx={6} fill="white" stroke="#9F7AEA" strokeWidth="2" />
+                    <text x={555} y={185} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">Pfizer BD</text>
+                    <text x={555} y={200} textAnchor="middle" fill="#718096" fontSize="8">Asset licensing</text>
+                    <text x={555} y={213} textAnchor="middle" fill="#9F7AEA" fontSize="8">Email pending</text>
+                    
+                    <rect x={650} y={100} width={110} height={55} rx={6} fill="white" stroke="#48BB78" strokeWidth="2" />
+                    <text x={705} y={120} textAnchor="middle" fill="#1A202C" fontSize="9" fontWeight="600">Neuren Pharma</text>
+                    <text x={705} y={135} textAnchor="middle" fill="#718096" fontSize="8">NNZ-2591</text>
+                    <text x={705} y={148} textAnchor="middle" fill="#48BB78" fontSize="8">In discussion</text>
+                    
+                    <text x={855} y={200} textAnchor="middle" fill="#718096" fontSize="10">No active deals</text>
+                    <text x={855} y={220} textAnchor="middle" fill="#718096" fontSize="9">(yet)</text>
+                    
+                    <rect x={340} y={485} width={580} height={55} rx={10} fill="#1DA1F2" filter="url(#shadow)" />
+                    <text x={380} y={505} fill="white" fontSize="18">🐦</text>
+                    <text x={410} y={510} fill="white" fontSize="12" fontWeight="700">Twitter Outreach Strategy</text>
+                    <text x={410} y={528} fill="rgba(255,255,255,0.9)" fontSize="10">Current: 45 targets → Goal: 200 targets | Focus: BD leads, CSOs, VCs</text>
+                    
+                    <FlowingLine x1={270} y1={105} x2={340} y2={127} color="#E53E3E" delay={0} />
+                    <FlowingLine x1={270} y1={255} x2={490} y2={192} color="#9F7AEA" delay={0.5} curved={true} />
+                    <FlowingLine x1={270} y1={405} x2={640} y2={127} color="#3182CE" delay={1} curved={true} />
+                </svg>
+            );
+        }
+
+        function IntelligenceSources() {
+            return (
+                <svg viewBox="0 0 1000 450" style={{width: "100%", minWidth: 800, height: "auto"}}>
+                    <defs>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.1" />
+                        </filter>
+                        <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#48BB78" />
+                            <stop offset="100%" stopColor="#2F855A" />
+                        </radialGradient>
+                    </defs>
+                    
+                    <circle cx={500} cy={220} r={70} fill="url(#hubGrad)" filter="url(#shadow)" />
+                    <text x={500} y={210} textAnchor="middle" fill="white" fontSize="28">🧠</text>
+                    <text x={500} y={235} textAnchor="middle" fill="white" fontSize="11" fontWeight="700">INTEL HUB</text>
+                    <text x={500} y={250} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">Aggregation</text>
+                    
+                    <ArchNode x={80} y={30} w={150} h={90} title="ClinicalTrials.gov" subtitle="Active trials" icon="🔬" color="#3182CE" small={true} />
+                    <FlowingLine x1={230} y1={75} x2={430} y2={190} color="#3182CE" delay={0} curved={true} />
+                    
+                    <ArchNode x={280} y={30} w={150} h={90} title="FDA OOPD" subtitle="Orphan designations" icon="🏛️" color="#9F7AEA" small={true} />
+                    <FlowingLine x1={355} y1={120} x2={460} y2={170} color="#9F7AEA" delay={0.3} curved={true} />
+                    
+                    <ArchNode x={570} y={30} w={150} h={90} title="PubMed" subtitle="Research papers" icon="📚" color="#48BB78" small={true} />
+                    <FlowingLine x1={645} y1={120} x2={540} y2={170} color="#48BB78" delay={0.6} curved={true} />
+                    
+                    <ArchNode x={770} y={30} w={150} h={90} title="SEC EDGAR" subtitle="Insider filings" icon="📊" color="#E53E3E" small={true} />
+                    <FlowingLine x1={770} y1={100} x2={570} y2={190} color="#E53E3E" delay={0.9} curved={true} />
+                    
+                    <ArchNode x={30} y={170} w={140} h={85} title="BioPharmCatalyst" subtitle="News & events" icon="📰" color="#ED8936" small={true} />
+                    <FlowingLine x1={170} y1={210} x2={430} y2={220} color="#ED8936" delay={1.2} />
+                    
+                    <ArchNode x={30} y={280} w={140} h={85} title="Twitter/X" subtitle="BD leaders" icon="🐦" color="#1DA1F2" small={true} />
+                    <FlowingLine x1={170} y1={320} x2={430} y2={240} color="#1DA1F2" delay={1.5} />
+                    
+                    <ArchNode x={830} y={170} w={140} h={85} title="Crunchbase" subtitle="Funding rounds" icon="💰" color="#38B2AC" small={true} />
+                    <FlowingLine x1={830} y1={210} x2={570} y2={220} color="#38B2AC" delay={1.8} />
+                    
+                    <ArchNode x={830} y={280} w={140} h={85} title="Patent DBs" subtitle="IP landscape" icon="📜" color="#667EEA" small={true} />
+                    <FlowingLine x1={830} y1={320} x2={570} y2={240} color="#667EEA" delay={2.1} />
+                    
+                    <ArchNode x={180} y={370} w={140} h={70} title="Conferences" subtitle="ASCO, JPM" icon="🎤" color="#D53F8C" small={true} />
+                    <FlowingLine x1={250} y1={370} x2={460} y2={280} color="#D53F8C" delay={2.4} curved={true} />
+                    
+                    <ArchNode x={430} y={370} w={140} h={70} title="Expert Networks" subtitle="KOL insights" icon="👨‍⚕️" color="#805AD5" small={true} />
+                    <FlowingLine x1={500} y1={370} x2={500} y2={290} color="#805AD5" delay={2.7} />
+                    
+                    <ArchNode x={680} y={370} w={140} h={70} title="M&A Watch" subtitle="Competitor deals" icon="👁️" color="#2D3748" small={true} />
+                    <FlowingLine x1={750} y1={370} x2={540} y2={280} color="#2D3748" delay={3.0} curved={true} />
+                </svg>
+            );
+        }
+
+        function StatsBar() {
+            const stats = [
+                { value: "900+", label: "Trials Harvested" },
+                { value: "95", label: "Orphan Designations" },
+                { value: "79", label: "PubMed Articles" },
+                { value: "15", label: "Active Opportunities" },
+                { value: "10,000x", label: "Max ROI Potential" },
+                { value: "45→200", label: "Twitter Targets" }
+            ];
+            
+            return (
+                <div className="stats-bar">
+                    {stats.map((stat, i) => (
+                        <div key={i} className="stat-card">
+                            <div className="stat-value">{stat.value}</div>
+                            <div className="stat-label">{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        function App() {
+            const [activeTab, setActiveTab] = useState("discovery");
+            
+            const tabs = [
+                { id: "discovery", label: "🔬 Discovery Pipeline", component: DiscoveryPipeline, desc: "Data sourcing → Processing → Analysis → Opportunities" },
+                { id: "scoring", label: "📊 Opportunity Scoring", component: OpportunityScoring, desc: "ROI × Risk × Competition → Ranked targets" },
+                { id: "tracking", label: "🎯 Target Tracking", component: TargetTracking, desc: "Priority targets → Outreach → Deal pipeline" },
+                { id: "intel", label: "🕵️ Intelligence Sources", component: IntelligenceSources, desc: "10+ data feeds → Central aggregation" }
+            ];
+            
+            const ActiveDiagram = tabs.find(t => t.id === activeTab)?.component || DiscoveryPipeline;
+            const activeDesc = tabs.find(t => t.id === activeTab)?.desc || "";
+            
+            return (
+                <div className="container">
+                    <StatsBar />
+                    
+                    <div className="section-tabs">
+                        {tabs.map(tab => (
+                            <button 
+                                key={tab.id}
+                                className={"tab-btn " + (activeTab === tab.id ? "active" : "")}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    <div className="diagram-card">
+                        <div className="diagram-title">
+                            <h2>{tabs.find(t => t.id === activeTab)?.label}</h2>
+                            <p>{activeDesc}</p>
+                        </div>
+                        <div className="diagram-svg">
+                            <ActiveDiagram />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
